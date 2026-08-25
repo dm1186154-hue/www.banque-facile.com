@@ -1,185 +1,35 @@
-<!DOCTYPE html>
-<html lang="fr">
+// =====================================================
+// BANQUE FACILE
+// Tableau de bord
+// =====================================================
 
-<head>
+import {
+    onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+import {
+    auth
+} from "./firebase.js";
 
-<title>Tableau de bord | Banque Facile</title>
 
-<link rel="stylesheet" href="css/style.css">
+onAuthStateChanged(
+    auth,
+    function (user) {
 
-</head>
+        if (!user) {
 
-<body>
+            window.location.href =
+                "connexion.html";
 
-<header class="header">
+            return;
+        }
 
-<div class="container nav">
 
-<a href="index.html" class="logo">
+        console.log(
+            "Utilisateur connecté :",
+            user.email
+        );
 
-<img
-src="assets/banque-facile-logo.jpg"
-alt="Logo Banque Facile"
->
-
-<span>Banque Facile</span>
-
-</a>
-
-<nav class="navigation">
-
-<a href="tableau-de-bord.html" class="active">
-Tableau de bord
-</a>
-
-<a href="profil.html">
-Profil
-</a>
-
-<a href="index.html" class="btn-login">
-Déconnexion
-</a>
-
-</nav>
-
-</div>
-
-</header>
-
-
-<main>
-
-<section class="services">
-
-<div class="container">
-
-<div class="section-title">
-
-<span>MON ESPACE</span>
-
-<h1>
-Bonjour 👋
-</h1>
-
-<p>
-Bienvenue dans votre espace Banque Facile.
-</p>
-
-</div>
-
-
-<div class="services-grid">
-
-
-<article class="service-card">
-
-<div class="service-icon">
-💰
-</div>
-
-<h3>
-Solde disponible
-</h3>
-
-<p>
-0 FCFA
-</p>
-
-</article>
-
-
-<article class="service-card">
-
-<div class="service-icon">
-💸
-</div>
-
-<h3>
-Transfert
-</h3>
-
-<p>
-<a href="transfert.html">
-Envoyer de l'argent
-</a>
-</p>
-
-</article>
-
-
-<article class="service-card">
-
-<div class="service-icon">
-➕
-</div>
-
-<h3>
-Dépôt
-</h3>
-
-<p>
-<a href="depot.html">
-Faire un dépôt
-</a>
-</p>
-
-</article>
-
-
-<article class="service-card">
-
-<div class="service-icon">
-➖
-</div>
-
-<h3>
-Retrait
-</h3>
-
-<p>
-<a href="retrait.html">
-Effectuer un retrait
-</a>
-</p>
-
-</article>
-
-</div>
-
-
-<div style="margin-top:50px;text-align:center;">
-
-<a
-href="historique.html"
-class="btn-primary"
->
-Voir mes transactions
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-</main>
-
-
-<footer class="footer">
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Banque Facile - Tous droits réservés.
-</p>
-
-</div>
-
-</footer>
-
-</body>
-
-</html>
+    }
+);
