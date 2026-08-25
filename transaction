@@ -1,0 +1,141 @@
+// =====================================================
+// BANQUE FACILE
+// Gestion des transactions
+// =====================================================
+
+
+function validateAmount(amount) {
+
+    const value =
+        Number(amount);
+
+    if (!Number.isFinite(value)) {
+        return false;
+    }
+
+    if (value <= 0) {
+        return false;
+    }
+
+    return true;
+}
+
+
+// ================= TRANSFERT =================
+
+const transferForm =
+    document.getElementById("transferForm");
+
+
+if (transferForm) {
+
+    transferForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const amount =
+                document.getElementById("amount").value;
+
+
+            const message =
+                document.getElementById("transferMessage");
+
+
+            if (!validateAmount(amount)) {
+
+                message.textContent =
+                    "Veuillez entrer un montant valide.";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Demande de transfert enregistrée.";
+
+        }
+    );
+}
+
+
+// ================= DEPOT =================
+
+const depositForm =
+    document.getElementById("depositForm");
+
+
+if (depositForm) {
+
+    depositForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const amount =
+                document.getElementById("depositAmount").value;
+
+
+            const message =
+                document.getElementById("depositMessage");
+
+
+            if (!validateAmount(amount)) {
+
+                message.textContent =
+                    "Veuillez entrer un montant valide.";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Demande de dépôt enregistrée.";
+
+        }
+    );
+}
+
+
+// ================= RETRAIT =================
+
+const withdrawForm =
+    document.getElementById("withdrawForm");
+
+
+if (withdrawForm) {
+
+    withdrawForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const amount =
+                document.getElementById("withdrawAmount").value;
+
+
+            const message =
+                document.getElementById("withdrawMessage");
+
+
+            if (!validateAmount(amount)) {
+
+                message.textContent =
+                    "Veuillez entrer un montant valide.";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Demande de retrait enregistrée.";
+
+        }
+    );
+}
