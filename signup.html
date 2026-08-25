@@ -1,125 +1,259 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inscription - Banque App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #e3f2fd; /* bleu clair */
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      text-align: center;
-      width: 320px;
-    }
+    <title>Inscription | Banque Facile</title>
 
-    img.logo {
-      width: 120px;
-      margin-bottom: 20px;
-    }
+    <meta
+        name="description"
+        content="Créez votre compte Banque Facile."
+    >
 
-    h2 {
-      color: #1565c0;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #90caf9;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #1565c0;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0d47a1;
-    }
-
-    p {
-      margin-top: 10px;
-    }
-
-    a {
-      color: #1565c0;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div class="container">
-    <!-- Ton logo -->
-    <img src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png" alt="Logo" class="logo">
 
-    <h2>Créer un compte</h2>
-    <input type="email" id="email" placeholder="Adresse e-mail" required />
-    <input type="password" id="password" placeholder="Mot de passe" required />
-    <button onclick="signup()">S’inscrire</button>
+<header class="header">
 
-    <p>Déjà un compte ? <a href="login.html">Se connecter</a></p>
-  </div>
+    <div class="container nav">
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+        <a href="index.html" class="logo">
 
-  <script>
-    // Configuration Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAwGbQuv9EoIvBm7WC0OLTQ41cgleXd804",
-      authDomain: "banque-app-66bf9.firebaseapp.com",
-      projectId: "banque-app-66bf9",
-      storageBucket: "banque-app-66bf9.appspot.com",
-      messagingSenderId: "61613833199",
-      appId: "1:61613833199:web:5d4c81a1d8ecb6f7f3d6e0"
-    };
+            <img
+                src="assets/banque-facile-logo.jpg"
+                alt="Logo Banque Facile"
+            >
 
-    // Initialisation Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+            <span>Banque Facile</span>
 
-    // Fonction d’inscription
-    function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+        </a>
 
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          alert("Compte créé avec succès ✅");
-          window.location.href = "dashboard.html"; // redirige vers ton tableau de bord
-        })
-        .catch(error => {
-          alert("Erreur : " + error.message);
-        });
-    }
-  </script>
+        <nav class="navigation">
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="connexion.html">
+                Connexion
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="container">
+
+<div class="section-title">
+
+<span>BANQUE FACILE</span>
+
+<h1>Créer un compte</h1>
+
+<p>
+Rejoignez Banque Facile et créez votre espace bancaire.
+</p>
+
+</div>
+
+
+<div class="login-container">
+
+<div class="login-card">
+
+<div class="login-logo">
+
+<img
+    src="assets/banque-facile-logo.jpg"
+    alt="Logo officiel Banque Facile"
+>
+
+</div>
+
+
+<h2>Inscription</h2>
+
+<p class="login-subtitle">
+Remplissez les informations ci-dessous.
+</p>
+
+
+<form id="registerForm">
+
+
+<div class="form-group">
+
+<label for="fullname">
+Nom complet
+</label>
+
+<input
+    type="text"
+    id="fullname"
+    name="fullname"
+    placeholder="Votre nom complet"
+    autocomplete="name"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="email">
+Adresse e-mail
+</label>
+
+<input
+    type="email"
+    id="email"
+    name="email"
+    placeholder="exemple@email.com"
+    autocomplete="email"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="phone">
+Numéro de téléphone
+</label>
+
+<input
+    type="tel"
+    id="phone"
+    name="phone"
+    placeholder="+225 XX XX XX XX XX"
+    autocomplete="tel"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="password">
+Mot de passe
+</label>
+
+<input
+    type="password"
+    id="password"
+    name="password"
+    placeholder="Créer un mot de passe"
+    autocomplete="new-password"
+    minlength="8"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="confirmPassword">
+Confirmer le mot de passe
+</label>
+
+<input
+    type="password"
+    id="confirmPassword"
+    name="confirmPassword"
+    placeholder="Confirmer le mot de passe"
+    autocomplete="new-password"
+    minlength="8"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+
+<input
+    type="checkbox"
+    id="terms"
+    required
+>
+
+ J'accepte les conditions d'utilisation.
+
+</label>
+
+</div>
+
+
+<button
+    type="submit"
+    class="btn-primary login-button"
+>
+    Créer mon compte
+</button>
+
+
+<div
+    id="registerMessage"
+    class="form-message"
+    aria-live="polite"
+></div>
+
+
+</form>
+
+
+<div class="register-link">
+
+<p>
+Vous avez déjà un compte ?
+</p>
+
+<a href="connexion.html">
+Se connecter
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Banque Facile - Tous droits réservés.
+</p>
+
+</div>
+
+</footer>
+
 </body>
+
 </html>
