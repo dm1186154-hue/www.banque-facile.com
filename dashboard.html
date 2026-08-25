@@ -1,120 +1,185 @@
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
+<!DOCTYPE html>
+<html lang="fr">
 
-<script>
-  // 🔑 Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwGbQuv9EoIvBm7WC0OLTQ41cgleXd804",
-    authDomain: "banque-app-66bf9.firebaseapp.com",
-    projectId: "banque-app-66bf9",
-    storageBucket: "banque-app-66bf9.appspot.com",
-    messagingSenderId: "61613833199",
-    appId: "1:61613833199:web:5d4c81a1d8ecb6f7f3d6e0"
-  };
+<head>
 
-  // ⚙️ Initialisation Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  // 🧍 Vérifie la connexion utilisateur
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      alert("Veuillez vous connecter pour accéder au tableau de bord !");
-      window.location.href = "login.html";
-    } else {
-      // 🔄 Charger les infos utilisateur depuis Firestore
-      const userDoc = db.collection("users").doc(user.uid);
-      userDoc.get().then(doc => {
-        if (doc.exists) {
-          const data = doc.data();
-          document.getElementById("balance").textContent = data.balance + " FCFA";
-        } else {
-          // 🔰 Crée un nouveau compte avec 0 FCFA
-          userDoc.set({
-            email: user.email,
-            balance: 0,
-            transactions: []
-          });
-          document.getElementById("balance").textContent = "0 FCFA";
-        }
-      });
-    }
-  });
+<title>Tableau de bord | Banque Facile</title>
 
-  // 💸 Dépôt
-  function makeDeposit() {
-    const amount = prompt("Montant à déposer (FCFA) :");
-    if (amount && !isNaN(amount)) {
-      const user = auth.currentUser;
-      const userDoc = db.collection("users").doc(user.uid);
-      userDoc.update({
-        balance: firebase.firestore.FieldValue.increment(Number(amount))
-      }).then(() => {
-        alert("Dépôt de " + amount + " FCFA réussi ✅");
-        location.reload();
-      });
-    }
-  }
+<link rel="stylesheet" href="css/style.css">
 
-  // 💸 Transfert
-  function makeTransfer() {
-    const recipientEmail = prompt("Email du destinataire :");
-    const amount = parseFloat(prompt("Montant à transférer (FCFA) :"));
-    if (recipientEmail && amount && amount > 0) {
-      const sender = auth.currentUser;
-      const senderDoc = db.collection("users").doc(sender.uid);
+</head>
 
-      db.runTransaction(async (t) => {
-        const senderSnap = await t.get(senderDoc);
-        const senderBalance = senderSnap.data().balance;
+<body>
 
-        if (senderBalance < amount) throw "Solde insuffisant ⚠️";
+<header class="header">
 
-        const recipientSnap = await db.collection("users")
-          .where("email", "==", recipientEmail)
-          .get();
+<div class="container nav">
 
-        if (recipientSnap.empty) throw "Destinataire introuvable ❌";
+<a href="index.html" class="logo">
 
-        const recipientDoc = recipientSnap.docs[0].ref;
+<img
+src="assets/banque-facile-logo.jpg"
+alt="Logo Banque Facile"
+>
 
-        // 🔁 Effectue le transfert
-        t.update(senderDoc, { balance: senderBalance - amount });
-        t.update(recipientDoc, {
-          balance: firebase.firestore.FieldValue.increment(amount)
-        });
-      })
-      .then(() => {
-        alert("Transfert de " + amount + " FCFA effectué avec succès ✅");
-        location.reload();
-      })
-      .catch(error => alert("Erreur : " + error));
-    }
-  }
+<span>Banque Facile</span>
 
-  // 🏧 Retrait (simulation)
-  function makeWithdraw() {
-    const amount = prompt("Montant à retirer (FCFA) :");
-    if (amount && !isNaN(amount)) {
-      const user = auth.currentUser;
-      const userDoc = db.collection("users").doc(user.uid);
-      userDoc.update({
-        balance: firebase.firestore.FieldValue.increment(-Number(amount))
-      }).then(() => {
-        alert("Retrait de " + amount + " FCFA effectué ✅");
-        location.reload();
-      });
-    }
-  }
+</a>
 
-  // 🚪 Déconnexion
-  function logout() {
-    auth.signOut().then(() => {
-      alert("Déconnexion réussie ✅");
-      window.location.href = "login.html";
-    });
-  }
-          </script>
+<nav class="navigation">
+
+<a href="tableau-de-bord.html" class="active">
+Tableau de bord
+</a>
+
+<a href="profil.html">
+Profil
+</a>
+
+<a href="index.html" class="btn-login">
+Déconnexion
+</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="services">
+
+<div class="container">
+
+<div class="section-title">
+
+<span>MON ESPACE</span>
+
+<h1>
+Bonjour 👋
+</h1>
+
+<p>
+Bienvenue dans votre espace Banque Facile.
+</p>
+
+</div>
+
+
+<div class="services-grid">
+
+
+<article class="service-card">
+
+<div class="service-icon">
+💰
+</div>
+
+<h3>
+Solde disponible
+</h3>
+
+<p>
+0 FCFA
+</p>
+
+</article>
+
+
+<article class="service-card">
+
+<div class="service-icon">
+💸
+</div>
+
+<h3>
+Transfert
+</h3>
+
+<p>
+<a href="transfert.html">
+Envoyer de l'argent
+</a>
+</p>
+
+</article>
+
+
+<article class="service-card">
+
+<div class="service-icon">
+➕
+</div>
+
+<h3>
+Dépôt
+</h3>
+
+<p>
+<a href="depot.html">
+Faire un dépôt
+</a>
+</p>
+
+</article>
+
+
+<article class="service-card">
+
+<div class="service-icon">
+➖
+</div>
+
+<h3>
+Retrait
+</h3>
+
+<p>
+<a href="retrait.html">
+Effectuer un retrait
+</a>
+</p>
+
+</article>
+
+</div>
+
+
+<div style="margin-top:50px;text-align:center;">
+
+<a
+href="historique.html"
+class="btn-primary"
+>
+Voir mes transactions
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Banque Facile - Tous droits réservés.
+</p>
+
+</div>
+
+</footer>
+
+</body>
+
+</html>
