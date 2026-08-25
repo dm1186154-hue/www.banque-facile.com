@@ -1,81 +1,452 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transfert Sécurisé</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #70c1ff, #b3e0ff);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .container {
-      text-align: center;
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-    }
+    <title>Banque Facile | Votre banque digitale</title>
 
-    .logo {
-      width: 120px;
-      height: auto;
-      margin-bottom: 20px;
-      border-radius: 10px;
-    }
+    <meta
+        name="description"
+        content="Banque Facile, une solution bancaire digitale simple, rapide et sécurisée."
+    >
 
-    h1 {
-      color: #0078ff;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #555;
-      font-size: 16px;
-      margin-bottom: 25px;
-    }
-
-    button {
-      background-color: #0078ff;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #005fcc;
-    }
-
-    a {
-      color: #0078ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div class="container">
-    <img class="logo" src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png" alt="Logo Transfert Sécurisé">
-    <h1>Bienvenue sur<br>Transfert Sécurisé 💸</h1>
-    <p>Gérez facilement vos transferts d’argent avec<br>Mobile Money et Wave, en toute sécurité.</p>
-    <button onclick="window.location.href='login.html'">Se connecter</button>
-    <p>Pas encore de compte ? <a href="signup.html">Créer un compte</a></p>
-  </div>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="container nav">
+
+            <a href="index.html" class="logo">
+
+                <img
+                    src="assets/banque-facile-logo.jpg"
+                    alt="Logo officiel Banque Facile"
+                >
+
+                <span>Banque Facile</span>
+
+            </a>
+
+
+            <nav class="navigation">
+
+                <a href="index.html" class="active">
+                    Accueil
+                </a>
+
+                <a href="apropos.html">
+                    À propos
+                </a>
+
+                <a href="contact.html">
+                    Contact
+                </a>
+
+                <a href="connexion.html" class="btn-login">
+                    Connexion
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= CONTENU ================= -->
+
+    <main>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="container hero-content">
+
+                <div class="hero-text">
+
+                    <span class="badge">
+                        🏦 Banque digitale
+                    </span>
+
+
+                    <h1>
+                        Votre argent,
+                        <span>simplement.</span>
+                    </h1>
+
+
+                    <p>
+                        Bienvenue sur Banque Facile.
+                        Une solution digitale conçue pour vous permettre
+                        de gérer votre argent simplement, rapidement
+                        et en toute sécurité.
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a
+                            href="inscription.html"
+                            class="btn-primary"
+                        >
+                            Créer mon compte
+                        </a>
+
+
+                        <a
+                            href="connexion.html"
+                            class="btn-secondary"
+                        >
+                            Se connecter
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOGO -->
+
+                <div class="hero-logo">
+
+                    <div class="logo-card">
+
+                        <img
+                            src="assets/banque-facile-logo.jpg"
+                            alt="Banque Facile"
+                        >
+
+                        <h2>
+                            Banque Facile
+                        </h2>
+
+                        <p>
+                            Votre banque digitale
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SERVICES -->
+
+        <section class="services">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <span>
+                        NOS SERVICES
+                    </span>
+
+                    <h2>
+                        Tout ce dont vous avez besoin
+                    </h2>
+
+                    <p>
+                        Banque Facile vous permet de gérer
+                        vos opérations depuis un seul espace.
+                    </p>
+
+                </div>
+
+
+                <div class="services-grid">
+
+
+                    <article class="service-card">
+
+                        <div class="service-icon">
+                            💰
+                        </div>
+
+                        <h3>
+                            Votre solde
+                        </h3>
+
+                        <p>
+                            Consultez votre solde
+                            rapidement.
+                        </p>
+
+                    </article>
+
+
+                    <article class="service-card">
+
+                        <div class="service-icon">
+                            💸
+                        </div>
+
+                        <h3>
+                            Transfert
+                        </h3>
+
+                        <p>
+                            Envoyez de l'argent
+                            facilement.
+                        </p>
+
+                    </article>
+
+
+                    <article class="service-card">
+
+                        <div class="service-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Historique
+                        </h3>
+
+                        <p>
+                            Consultez toutes
+                            vos opérations.
+                        </p>
+
+                    </article>
+
+
+                    <article class="service-card">
+
+                        <div class="service-icon">
+                            🔐
+                        </div>
+
+                        <h3>
+                            Sécurité
+                        </h3>
+
+                        <p>
+                            Vos informations sont
+                            protégées.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- POURQUOI BANQUE FACILE -->
+
+        <section class="why-us">
+
+            <div class="container why-content">
+
+                <div>
+
+                    <span class="section-label">
+                        BANQUE FACILE
+                    </span>
+
+                    <h2>
+                        Une expérience bancaire pensée pour vous
+                    </h2>
+
+                    <p>
+                        Nous voulons rendre les services bancaires
+                        plus simples et accessibles grâce au numérique.
+                    </p>
+
+                </div>
+
+
+                <div class="advantages">
+
+
+                    <div class="advantage">
+
+                        <span>✓</span>
+
+                        <div>
+
+                            <h3>
+                                Simple
+                            </h3>
+
+                            <p>
+                                Une interface facile à utiliser.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="advantage">
+
+                        <span>✓</span>
+
+                        <div>
+
+                            <h3>
+                                Rapide
+                            </h3>
+
+                            <p>
+                                Accédez rapidement à vos services.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="advantage">
+
+                        <span>✓</span>
+
+                        <div>
+
+                            <h3>
+                                Sécurisé
+                            </h3>
+
+                            <p>
+                                Nous accordons une grande importance
+                                à la protection de votre compte.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CTA -->
+
+        <section class="cta">
+
+            <div class="container">
+
+                <img
+                    src="assets/banque-facile-logo.jpg"
+                    alt="Logo Banque Facile"
+                    class="cta-logo"
+                >
+
+                <h2>
+                    Rejoignez Banque Facile
+                </h2>
+
+                <p>
+                    Créez votre compte et découvrez
+                    votre espace bancaire digital.
+                </p>
+
+                <a
+                    href="inscription.html"
+                    class="btn-primary"
+                >
+                    Créer mon compte
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-content">
+
+            <div>
+
+                <img
+                    src="assets/banque-facile-logo.jpg"
+                    alt="Logo Banque Facile"
+                    class="footer-logo"
+                >
+
+                <h3>
+                    Banque Facile
+                </h3>
+
+                <p>
+                    Votre solution bancaire digitale.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h4>
+                    Navigation
+                </h4>
+
+                <a href="index.html">
+                    Accueil
+                </a>
+
+                <a href="apropos.html">
+                    À propos
+                </a>
+
+                <a href="contact.html">
+                    Contact
+                </a>
+
+            </div>
+
+
+            <div>
+
+                <h4>
+                    Mon compte
+                </h4>
+
+                <a href="connexion.html">
+                    Connexion
+                </a>
+
+                <a href="inscription.html">
+                    Inscription
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Banque Facile - Tous droits réservés.
+            </p>
+
+        </div>
+
+    </footer>
+
 </body>
+
 </html>
