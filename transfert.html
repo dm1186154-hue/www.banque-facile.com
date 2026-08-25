@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transfert | Banque Facile</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="container nav">
+
+<a href="index.html" class="logo">
+
+<img
+src="assets/banque-facile-logo.jpg"
+alt="Logo Banque Facile"
+>
+
+<span>Banque Facile</span>
+
+</a>
+
+<nav class="navigation">
+
+<a href="tableau-de-bord.html">
+Tableau de bord
+</a>
+
+<a href="historique.html">
+Historique
+</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="container">
+
+<div class="section-title">
+
+<span>OPÉRATION</span>
+
+<h1>Transfert d'argent</h1>
+
+<p>
+Envoyez de l'argent depuis votre espace Banque Facile.
+</p>
+
+</div>
+
+
+<div class="login-container">
+
+<div class="login-card">
+
+<form id="transferForm">
+
+
+<div class="form-group">
+
+<label for="recipient">
+Destinataire
+</label>
+
+<input
+type="text"
+id="recipient"
+placeholder="Nom ou numéro du destinataire"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="amount">
+Montant
+</label>
+
+<input
+type="number"
+id="amount"
+placeholder="Montant en FCFA"
+min="1"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="description">
+Motif
+</label>
+
+<input
+type="text"
+id="description"
+placeholder="Motif du transfert"
+>
+
+</div>
+
+
+<button
+type="submit"
+class="btn-primary login-button"
+>
+Continuer
+</button>
+
+
+<div
+id="transferMessage"
+class="form-message"
+></div>
+
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Banque Facile - Tous droits réservés.
+</p>
+
+</div>
+
+</footer>
+
+</body>
+
+</html>
