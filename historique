@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Historique | Banque Facile</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="container nav">
+
+<a href="index.html" class="logo">
+
+<img
+src="assets/banque-facile-logo.jpg"
+alt="Logo Banque Facile"
+>
+
+<span>Banque Facile</span>
+
+</a>
+
+<nav class="navigation">
+
+<a href="tableau-de-bord.html">
+Tableau de bord
+</a>
+
+<a href="profil.html">
+Profil
+</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="services">
+
+<div class="container">
+
+<div class="section-title">
+
+<span>MES OPÉRATIONS</span>
+
+<h1>Historique</h1>
+
+<p>
+Retrouvez ici vos opérations bancaires.
+</p>
+
+</div>
+
+
+<div class="service-card">
+
+<h3>
+Aucune transaction
+</h3>
+
+<p>
+Vos transactions apparaîtront ici lorsque
+vous effectuerez une opération.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Banque Facile - Tous droits réservés.
+</p>
+
+</div>
+
+</footer>
+
+</body>
+
+</html>
