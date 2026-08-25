@@ -1,21 +1,59 @@
-<!-- Firebase App (base SDK) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
+// =====================================================
+// BANQUE FACILE
+// Configuration Firebase
+// =====================================================
 
-<!-- Firebase Auth -->
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+// Importations Firebase
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-<script>
-  // Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwGbQuv9EoIvBm7WC0OLTQ41cgleXd804",
-    authDomain: "banque-app-66bf9.firebaseapp.com",
-    projectId: "banque-app-66bf9",
-    storageBucket: "banque-app-66bf9.appspot.com",
-    messagingSenderId: "61613833199",
-    appId: "1:61613833199:web:5d4c81a1d8ecb6f7f3d6e0"
-  };
+import { getAuth } from
+"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-  // Initialiser Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const auth = firebase.getAuth(app);
-</script>
+import { getFirestore } from
+"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+// Configuration Firebase
+// REMPLACER ces valeurs par celles de TON projet Firebase.
+
+const firebaseConfig = {
+
+    apiKey: "VOTRE_API_KEY",
+
+    authDomain:
+        "VOTRE_PROJET.firebaseapp.com",
+
+    projectId:
+        "VOTRE_PROJECT_ID",
+
+    storageBucket:
+        "VOTRE_PROJECT.firebasestorage.app",
+
+    messagingSenderId:
+        "VOTRE_MESSAGING_SENDER_ID",
+
+    appId:
+        "VOTRE_APP_ID"
+};
+
+
+// Initialisation
+
+const app = initializeApp(firebaseConfig);
+
+
+// Services
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+// Export
+
+export {
+    app,
+    auth,
+    db
+};
