@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>À propos | Banque Facile</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="container nav">
+
+<a href="index.html" class="logo">
+
+<img
+src="assets/banque-facile-logo.jpg"
+alt="Logo Banque Facile"
+>
+
+<span>Banque Facile</span>
+
+</a>
+
+<nav class="navigation">
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="apropos.html" class="active">
+À propos
+</a>
+
+<a href="contact.html">
+Contact
+</a>
+
+<a href="connexion.html" class="btn-login">
+Connexion
+</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="container">
+
+<div class="section-title">
+
+<span>BANQUE FACILE</span>
+
+<h1>À propos de nous</h1>
+
+<p>
+Découvrez la vision de Banque Facile.
+</p>
+
+</div>
+
+
+<div class="services-grid">
+
+
+<article class="service-card">
+
+<div class="service-icon">
+🎯
+</div>
+
+<h3>
+Notre vision
+</h3>
+
+<p>
+Rendre les services financiers plus simples,
+accessibles et pratiques grâce au numérique.
+</p>
+
+</article>
+
+
+<article class="service-card">
+
+<div class="service-icon">
+🔐
+</div>
+
+<h3>
+Notre priorité
+</h3>
+
+<p>
+Mettre la sécurité et la confiance au centre
+de l'expérience utilisateur.
+</p>
+
+</article>
+
+
+<article class="service-card">
+
+<div class="service-icon">
+🚀
+</div>
+
+<h3>
+Notre objectif
+</h3>
+
+<p>
+Construire une solution bancaire digitale
+adaptée aux besoins de nos utilisateurs.
+</p>
+
+</article>
+
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Banque Facile - Tous droits réservés.
+</p>
+
+</div>
+
+</footer>
+
+</body>
+
+</html>
