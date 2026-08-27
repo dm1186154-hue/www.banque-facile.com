@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Banque Facile | Votre banque digitale</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Banque Facile : une solution bancaire digitale simple, moderne et accessible."
-    >
+    <title>Banque Facile | Banque Digitale</title>
+
+    <meta name="description"
+          content="Banque Facile est une solution bancaire digitale simple, moderne et accessible.">
 
     <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
         * {
             margin: 0;
             padding: 0;
@@ -22,96 +28,120 @@
             font-family: Arial, Helvetica, sans-serif;
             background: #f4f7fb;
             color: #172033;
-            min-height: 100vh;
         }
 
-        /* NAVIGATION */
+
+        /* =========================
+           NAVIGATION
+        ========================= */
 
         .navbar {
             width: 100%;
             background: #ffffff;
-            border-bottom: 1px solid #e5eaf1;
-            padding: 15px 7%;
+            padding: 14px 7%;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
+            border-bottom: 1px solid #e5eaf1;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
+
             font-size: 22px;
             font-weight: 700;
             color: #0757a0;
         }
 
-        .brand img {
-            width: 48px;
-            height: 48px;
-            object-fit: cover;
+        /* TON LOGO */
+
+        .logo {
+            width: 52px;
+            height: 52px;
+
+            object-fit: contain;
+
             border-radius: 50%;
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
             align-items: center;
+            gap: 28px;
         }
 
         .nav-links a {
-            color: #172033;
             text-decoration: none;
+            color: #172033;
+
             font-weight: 600;
+
+            transition: 0.2s;
         }
 
         .nav-links a:hover {
             color: #087ee8;
         }
 
-        /* HERO */
+
+        /* =========================
+           HERO
+        ========================= */
 
         .hero {
-            width: 100%;
+
             min-height: 600px;
+
+            padding: 70px 7%;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 70px 7%;
+
             background:
                 linear-gradient(
                     135deg,
-                    #0757a0 0%,
-                    #087ee8 55%,
-                    #0ba4e8 100%
+                    #0757a0,
+                    #087ee8,
+                    #0ba4e8
                 );
         }
 
         .hero-content {
-            max-width: 1100px;
+
             width: 100%;
+            max-width: 1100px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 60px;
         }
 
         .hero-text {
-            color: white;
             max-width: 600px;
+            color: white;
         }
 
-        .hero-text .small-title {
+        .small-title {
+
             font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 18px;
-            opacity: 0.9;
+            font-weight: 700;
+
+            margin-bottom: 20px;
         }
 
         .hero-text h1 {
+
             font-size: 55px;
             line-height: 1.1;
-            margin-bottom: 22px;
+
+            margin-bottom: 25px;
         }
 
         .hero-text h1 span {
@@ -119,30 +149,41 @@
         }
 
         .hero-text p {
+
             font-size: 19px;
             line-height: 1.7;
+
             margin-bottom: 35px;
-            opacity: 0.95;
         }
 
-        /* BOUTONS */
+
+        /* =========================
+           BOUTONS
+        ========================= */
 
         .buttons {
+
             display: flex;
             gap: 15px;
+
             flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-block;
-            padding: 15px 27px;
+
+            padding: 15px 28px;
+
             border-radius: 10px;
+
             text-decoration: none;
+
             font-weight: 700;
+
             transition: 0.2s;
         }
 
         .btn-primary {
+
             background: white;
             color: #0757a0;
         }
@@ -152,104 +193,158 @@
         }
 
         .btn-secondary {
+
             border: 2px solid white;
             color: white;
         }
 
         .btn-secondary:hover {
+
             background: white;
             color: #0757a0;
         }
 
-        /* CARTE */
+
+        /* =========================
+           CARTE BANCAIRE
+        ========================= */
 
         .bank-card {
+
             width: 330px;
-            min-height: 205px;
+            min-height: 210px;
+
             padding: 28px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #ffffff, #eaf4ff);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-            color: #172033;
-            position: relative;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #eaf4ff
+                );
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.25);
+
             flex-shrink: 0;
         }
 
-        .bank-card .card-logo {
-            width: 55px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 30px;
+        .card-logo {
+
+            width: 65px;
+            height: 65px;
+
+            object-fit: contain;
+
+            margin-bottom: 25px;
         }
 
         .card-name {
-            font-size: 18px;
+
+            font-size: 19px;
             font-weight: 700;
+
             margin-bottom: 8px;
         }
 
         .card-text {
-            font-size: 13px;
+
+            font-size: 14px;
+
             color: #687386;
         }
 
-        /* SERVICES */
+
+        /* =========================
+           SERVICES
+        ========================= */
 
         .services {
+
             padding: 70px 7%;
-            background: #ffffff;
+
+            background: white;
+
             text-align: center;
         }
 
         .services h2 {
+
             font-size: 34px;
+
             margin-bottom: 12px;
-            color: #172033;
         }
 
         .services > p {
+
             color: #657083;
-            margin-bottom: 40px;
+
             font-size: 17px;
+
+            margin-bottom: 40px;
         }
 
         .service-grid {
+
             max-width: 1100px;
+
             margin: auto;
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 25px;
         }
 
         .service {
-            background: #f7faff;
-            border: 1px solid #e4ebf5;
+
             padding: 30px 22px;
+
             border-radius: 16px;
+
+            background: #f7faff;
+
+            border: 1px solid #e4ebf5;
         }
 
         .service-icon {
-            font-size: 35px;
+
+            font-size: 38px;
+
             margin-bottom: 15px;
         }
 
         .service h3 {
-            margin-bottom: 10px;
+
             color: #0757a0;
+
+            margin-bottom: 10px;
         }
 
         .service p {
+
             color: #687386;
+
             line-height: 1.6;
         }
 
-        /* FOOTER */
+
+        /* =========================
+           FOOTER
+        ========================= */
 
         footer {
+
             background: #101c2c;
+
             color: white;
+
             text-align: center;
+
             padding: 25px;
         }
 
@@ -257,7 +352,10 @@
             opacity: 0.8;
         }
 
-        /* MOBILE */
+
+        /* =========================
+           MOBILE
+        ========================= */
 
         @media (max-width: 800px) {
 
@@ -270,67 +368,104 @@
             }
 
             .hero {
-                padding: 50px 6%;
+
+                padding: 55px 6%;
             }
 
             .hero-content {
+
                 flex-direction: column;
+
                 text-align: center;
             }
 
             .hero-text h1 {
+
                 font-size: 40px;
             }
 
             .hero-text p {
+
                 font-size: 17px;
             }
 
             .buttons {
+
                 justify-content: center;
             }
 
             .bank-card {
+
                 width: 100%;
+
                 max-width: 330px;
             }
 
             .service-grid {
+
                 grid-template-columns: 1fr;
             }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <!-- NAVIGATION -->
+
+    <!-- =========================
+         MENU
+    ========================== -->
 
     <nav class="navbar">
 
         <div class="brand">
+
+            <!-- TON LOGO -->
+
             <img
-                src="banque_app_logo_final.jpg"
+                class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
                 alt="Logo Banque Facile"
             >
 
-            <span>Banque Facile</span>
+            <span>
+                Banque Facile
+            </span>
+
         </div>
 
+
         <div class="nav-links">
-            <a href="index.html">Accueil</a>
-            <a href="connexion.html">Connexion</a>
-            <a href="inscription.html">Créer un compte</a>
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="login.html">
+                Connexion
+            </a>
+
+            <a href="inscription.html">
+                Créer un compte
+            </a>
+
         </div>
 
     </nav>
 
 
-    <!-- ACCUEIL -->
+
+    <!-- =========================
+         ACCUEIL
+    ========================== -->
 
     <header class="hero">
 
         <div class="hero-content">
+
 
             <div class="hero-text">
 
@@ -338,25 +473,37 @@
                     BIENVENUE SUR BANQUE FACILE
                 </div>
 
+
                 <h1>
+
                     Votre banque,
-                    <span>simplement.</span>
+
+                    <span>
+                        simplement.
+                    </span>
+
                 </h1>
 
+
                 <p>
-                    Une expérience bancaire digitale moderne,
-                    simple et accessible pour vous accompagner
-                    dans la gestion de vos finances.
+
+                    Une expérience bancaire digitale
+                    moderne, simple et accessible
+                    pour vous accompagner dans la
+                    gestion de vos finances.
+
                 </p>
+
 
                 <div class="buttons">
 
                     <a
-                        href="connexion.html"
+                        href="login.html"
                         class="btn btn-primary"
                     >
                         Se connecter
                     </a>
+
 
                     <a
                         href="inscription.html"
@@ -370,19 +517,27 @@
             </div>
 
 
-            <!-- CARTE VISUELLE -->
+
+            <!-- =========================
+                 CARTE
+            ========================== -->
 
             <div class="bank-card">
 
+
+                <!-- TON LOGO -->
+
                 <img
-                    src="banque_app_logo_final.jpg"
-                    alt="Banque Facile"
                     class="card-logo"
+                    src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                    alt="Logo Banque Facile"
                 >
+
 
                 <div class="card-name">
                     BANQUE FACILE
                 </div>
+
 
                 <div class="card-text">
                     Votre espace bancaire digital
@@ -395,20 +550,28 @@
     </header>
 
 
-    <!-- SERVICES -->
+
+    <!-- =========================
+         SERVICES
+    ========================== -->
 
     <section class="services">
+
 
         <h2>
             Une banque pensée pour vous
         </h2>
 
+
         <p>
-            Découvrez les principales fonctionnalités de Banque Facile.
+            Des services simples pour faciliter
+            votre expérience bancaire.
         </p>
 
 
+
         <div class="service-grid">
+
 
             <article class="service">
 
@@ -421,11 +584,12 @@
                 </h3>
 
                 <p>
-                    Protégez votre espace personnel
-                    grâce à une connexion sécurisée.
+                    Un espace conçu pour protéger
+                    vos informations et votre compte.
                 </p>
 
             </article>
+
 
 
             <article class="service">
@@ -435,15 +599,16 @@
                 </div>
 
                 <h3>
-                    Gestion simple
+                    Gestion facile
                 </h3>
 
                 <p>
-                    Consultez et gérez facilement
-                    vos opérations depuis votre espace.
+                    Gérez simplement votre espace
+                    bancaire depuis votre appareil.
                 </p>
 
             </article>
+
 
 
             <article class="service">
@@ -457,18 +622,22 @@
                 </h3>
 
                 <p>
-                    Utilisez Banque Facile depuis votre
-                    ordinateur, tablette ou téléphone.
+                    Accédez à votre espace depuis
+                    votre ordinateur ou votre téléphone.
                 </p>
 
             </article>
+
 
         </div>
 
     </section>
 
 
-    <!-- FOOTER -->
+
+    <!-- =========================
+         PIED DE PAGE
+    ========================== -->
 
     <footer>
 
@@ -478,5 +647,7 @@
 
     </footer>
 
+
 </body>
+
 </html>
