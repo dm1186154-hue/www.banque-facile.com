@@ -1,127 +1,45 @@
 import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    auth,
+    createUserWithEmailAndPassword
+} from "./firebase.js";
 
-import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    updateProfile
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+const form = document.getElementById("registerForm");
+const message = document.getElementById("registerMessage");
 
-import {
-    getFirestore,
-    doc,
-    setDoc
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-// ==========================================
-// CONFIGURATION FIREBASE
-// ==========================================
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
-    authDomain: "banque-app-66bf9.firebaseapp.com",
-    projectId: "banque-app-66bf9",
-    storageBucket: "banque-app-66bf9.firebasestorage.app",
-    messagingSenderId: "833823730245",
-    appId: "1:833823730245:web:8141ce1171c93040f9912c"
-};
-
-
-// ==========================================
-// INITIALISATION FIREBASE
-// ==========================================
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-
-// ==========================================
-// FORMULAIRE
-// ==========================================
-
-const registerForm = document.getElementById("registerForm");
-const registerMessage = document.getElementById("registerMessage");
-
-
-// ==========================================
-// CREATION DU COMPTE
-// ==========================================
-
-registerForm.addEventListener("submit", async (event) => {
+form.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
+    const fullname = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
 
-    // Récupération des données
-    const fullname = document
-        .getElementById("fullname")
-        .value
-        .trim();
-
-    const email = document
-        .getElementById("email")
-        .value
-        .trim();
-
-    const phone = document
-        .getElementById("phone")
-        .value
-        .trim();
-
-    const password = document
-        .getElementById("password")
-        .value;
-
-    const confirmPassword = document
-        .getElementById("confirmPassword")
-        .value;
-
-
-    // ==========================================
-    // VERIFICATION DU MOT DE PASSE
-    // ==========================================
+    message.textContent = "";
+    message.style.color = "";
 
     if (password !== confirmPassword) {
-
-        registerMessage.textContent =
+        message.textContent =
             "❌ Les mots de passe ne correspondent pas.";
-
-        registerMessage.style.color = "red";
-
+        message.style.color = "red";
         return;
     }
-
 
     if (password.length < 6) {
-
-        registerMessage.textContent =
+        message.textContent =
             "❌ Le mot de passe doit contenir au moins 6 caractères.";
-
-        registerMessage.style.color = "red";
-
+        message.style.color = "red";
         return;
     }
 
+    message.textContent =
+        "⏳ Création de votre compte...";
 
-    // ==========================================
-    // MESSAGE DE CHARGEMENT
-    // ==========================================
-
-    registerMessage.textContent =
-        "Création du compte en cours...";
-
-    registerMessage.style.color = "#0066cc";
-
+    message.style.color = "#0066cc";
 
     try {
-
-        // ==========================================
-        // CREATION UTILISATEUR FIREBASE
-        // ==========================================
 
         const userCredential =
             await createUserWithEmailAndPassword(
@@ -130,95 +48,57 @@ registerForm.addEventListener("submit", async (event) => {
                 password
             );
 
-
         const user = userCredential.user;
 
+        console.log("Utilisateur créé :", user.uid);
 
-        // ==========================================
-        // AJOUT DU NOM
-        // ==========================================
-
-        await updateProfile(user, {
-            displayName: fullname
-        });
-
-
-        // ==========================================
-        // ENREGISTREMENT DES INFORMATIONS
-        // DANS FIRESTORE
-        // ==========================================
-
-        await setDoc(
-            doc(db, "users", user.uid),
-            {
-                uid: user.uid,
-                nomComplet: fullname,
-                email: email,
-                telephone: phone,
-                dateCreation: new Date().toISOString()
-            }
-        );
-
-
-        // ==========================================
-        // SUCCÈS
-        // ==========================================
-
-        registerMessage.textContent =
+        message.textContent =
             "✅ Compte créé avec succès !";
 
-        registerMessage.style.color = "green";
+        message.style.color = "green";
 
+        /*
+         * Pour le moment, nous ne faisons pas encore
+         * l'enregistrement Firestore.
+         *
+         * Nous vérifions d'abord que Firebase
+         * Authentication fonctionne correctement.
+         */
 
-        // Redirection après 2 secondes
         setTimeout(() => {
-
             window.location.href = "connexion.html";
-
         }, 2000);
-
 
     } catch (error) {
 
-        console.error(
-            "Erreur Firebase :",
-            error
-        );
-
-
-        // ==========================================
-        // MESSAGES D'ERREUR
-        // ==========================================
-
-        let message =
-            "❌ Une erreur est survenue.";
+        console.error("Erreur Firebase :", error);
 
         if (error.code === "auth/email-already-in-use") {
 
-            message =
+            message.textContent =
                 "❌ Cette adresse e-mail est déjà utilisée.";
 
         } else if (error.code === "auth/invalid-email") {
 
-            message =
-                "❌ Adresse e-mail invalide.";
+            message.textContent =
+                "❌ L'adresse e-mail est invalide.";
 
         } else if (error.code === "auth/weak-password") {
 
-            message =
+            message.textContent =
                 "❌ Le mot de passe est trop faible.";
 
         } else if (error.code === "auth/network-request-failed") {
 
-            message =
+            message.textContent =
                 "❌ Problème de connexion Internet.";
 
+        } else {
+
+            message.textContent =
+                "❌ Erreur Firebase : " + error.message;
         }
 
-
-        registerMessage.textContent = message;
-
-        registerMessage.style.color = "red";
+        message.style.color = "red";
     }
-
 });
