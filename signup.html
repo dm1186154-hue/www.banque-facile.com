@@ -1,163 +1,331 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Créer un compte | Banque Facile</title>
+  <title>Créer un compte | Banque Facile</title>
 
-    <link rel="stylesheet" href="css/style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0066b3, #09a9e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 560px;
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+      display: block;
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+      margin: 0 auto 15px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0066b3;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #667085;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      color: #172033;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #d6dce5;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #0789e8;
+      box-shadow: 0 0 0 3px rgba(7, 137, 232, 0.12);
+    }
+
+    .password-box {
+      position: relative;
+    }
+
+    .password-box input {
+      padding-right: 50px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 8px;
+      background: #0789e8;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #006fc5;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 22px;
+      color: #667085;
+    }
+
+    .login-link a,
+    .back-link {
+      color: #0078d7;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffe5e5;
+      color: #c62828;
+    }
+
+    .message.success {
+      display: block;
+      background: #e4f7e9;
+      color: #188038;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 28px 20px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <main class="page">
+  <main class="container">
 
-        <section class="welcome-card">
+    <!-- Logo Banque Facile -->
+    <img
+      class="logo"
+      src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+      alt="Logo Banque Facile"
+    >
 
-            <!-- LOGO -->
-            <img
-                src="banque_app_logo_final.jpg"
-                alt="Logo Banque Facile"
-                class="logo"
-            >
+    <h1>Créer un compte</h1>
 
-            <!-- TITRE -->
-            <h1>
-                Créer un compte<br>
-                <span>Banque Facile</span>
-            </h1>
+    <p class="subtitle">
+      Rejoignez Banque Facile et gérez votre espace bancaire digital.
+    </p>
 
-            <!-- DESCRIPTION -->
-            <p class="description">
-                Créez votre compte et commencez à gérer
-                vos opérations simplement.
-            </p>
+    <form id="registerForm">
 
-            <!-- FORMULAIRE -->
-            <form id="registerForm">
+      <div class="form-group">
+        <label for="fullname">Nom complet</label>
+        <input
+          type="text"
+          id="fullname"
+          name="fullname"
+          placeholder="Votre nom complet"
+          required
+        >
+      </div>
 
-                <div class="form-group">
-                    <label for="fullname">
-                        Nom complet
-                    </label>
+      <div class="form-group">
+        <label for="email">Adresse e-mail</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="exemple@email.com"
+          required
+        >
+      </div>
 
-                    <input
-                        type="text"
-                        id="fullname"
-                        name="fullname"
-                        placeholder="Votre nom complet"
-                        autocomplete="name"
-                        required
-                    >
-                </div>
+      <div class="form-group">
+        <label for="phone">Numéro de téléphone</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="+225 07 00 00 00 00"
+          required
+        >
+      </div>
 
-                <div class="form-group">
-                    <label for="email">
-                        Adresse e-mail
-                    </label>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Votre adresse e-mail"
-                        autocomplete="email"
-                        required
-                    >
-                </div>
+        <div class="password-box">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Votre mot de passe"
+            minlength="6"
+            required
+          >
 
-                <div class="form-group">
-                    <label for="phone">
-                        Numéro de téléphone
-                    </label>
+          <button
+            type="button"
+            class="show-password"
+            onclick="togglePassword('password', this)"
+          >
+            👁
+          </button>
+        </div>
+      </div>
 
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        placeholder="Votre numéro de téléphone"
-                        autocomplete="tel"
-                        required
-                    >
-                </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
 
-                <div class="form-group">
-                    <label for="password">
-                        Mot de passe
-                    </label>
+        <div class="password-box">
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirmez votre mot de passe"
+            minlength="6"
+            required
+          >
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Créer un mot de passe"
-                        minlength="6"
-                        autocomplete="new-password"
-                        required
-                    >
-                </div>
+          <button
+            type="button"
+            class="show-password"
+            onclick="togglePassword('confirmPassword', this)"
+          >
+            👁
+          </button>
+        </div>
+      </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">
-                        Confirmer le mot de passe
-                    </label>
+      <button type="submit" class="submit-btn">
+        Créer mon compte
+      </button>
 
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        placeholder="Confirmer votre mot de passe"
-                        minlength="6"
-                        autocomplete="new-password"
-                        required
-                    >
-                </div>
+      <div id="message" class="message"></div>
 
-                <button
-                    type="submit"
-                    class="btn-login"
-                >
-                    Créer mon compte
-                </button>
+    </form>
 
-                <div
-                    id="registerMessage"
-                    class="form-message"
-                    role="alert"
-                    aria-live="polite"
-                ></div>
+    <p class="login-link">
+      Vous avez déjà un compte ?
+      <a href="login.html">Se connecter</a>
+    </p>
 
-            </form>
+    <a href="index.html" class="back-link">
+      ← Retour à l'accueil
+    </a>
 
-            <!-- CONNEXION -->
-            <p class="register-text">
-                Vous avez déjà un compte ?
+  </main>
 
-                <a href="connexion.html">
-                    Se connecter
-                </a>
-            </p>
+  <script>
+    function togglePassword(id, button) {
+      const input = document.getElementById(id);
 
-            <!-- RETOUR -->
-            <a
-                href="index.html"
-                class="back-home"
-            >
-                ← Retour à l'accueil
-            </a>
+      if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "🙈";
+      } else {
+        input.type = "password";
+        button.textContent = "👁";
+      }
+    }
 
-        </section>
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", function(event) {
 
-    </main>
+        event.preventDefault();
 
-    <!-- JAVASCRIPT -->
-    <script
-        type="module"
-        src="inscription.js"
-    ></script>
+        const password =
+          document.getElementById("password").value;
+
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        const message =
+          document.getElementById("message");
+
+        if (password !== confirmPassword) {
+          message.className = "message error";
+          message.textContent =
+            "Les mots de passe ne correspondent pas.";
+          return;
+        }
+
+        message.className = "message success";
+        message.textContent =
+          "Votre formulaire est valide. Création du compte en cours...";
+      });
+  </script>
 
 </body>
-
 </html>
