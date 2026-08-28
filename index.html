@@ -3,42 +3,448 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Banque Facile | Votre banque digitale</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
+    <title>Banque Facile | Banque Digitale</title>
+
+    <meta name="description"
+          content="Banque Facile est une solution bancaire digitale simple, moderne et accessible.">
+
+    <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .navbar {
+            width: 100%;
+            background: #ffffff;
+            padding: 14px 7%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #e5eaf1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            font-size: 22px;
+            font-weight: 700;
+            color: #0757a0;
+        }
+
+        /* TON LOGO */
+
+        .logo {
+            width: 52px;
+            height: 52px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #172033;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #087ee8;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+
+            min-height: 600px;
+
+            padding: 70px 7%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0757a0,
+                    #087ee8,
+                    #0ba4e8
+                );
+        }
+
+        .hero-content {
+
+            width: 100%;
+            max-width: 1100px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 60px;
+        }
+
+        .hero-text {
+            max-width: 600px;
+            color: white;
+        }
+
+        .small-title {
+
+            font-size: 18px;
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 {
+
+            font-size: 55px;
+            line-height: 1.1;
+
+            margin-bottom: 25px;
+        }
+
+        .hero-text h1 span {
+            color: #ffd23f;
+        }
+
+        .hero-text p {
+
+            font-size: 19px;
+            line-height: 1.7;
+
+            margin-bottom: 35px;
+        }
+
+
+        /* =========================
+           BOUTONS
+        ========================= */
+
+        .buttons {
+
+            display: flex;
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .btn {
+
+            padding: 15px 28px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+
+            background: white;
+            color: #0757a0;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+
+            background: white;
+            color: #0757a0;
+        }
+
+
+        /* =========================
+           CARTE BANCAIRE
+        ========================= */
+
+        .bank-card {
+
+            width: 330px;
+            min-height: 210px;
+
+            padding: 28px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #eaf4ff
+                );
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.25);
+
+            flex-shrink: 0;
+        }
+
+        .card-logo {
+
+            width: 65px;
+            height: 65px;
+
+            object-fit: contain;
+
+            margin-bottom: 25px;
+        }
+
+        .card-name {
+
+            font-size: 19px;
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+
+            font-size: 14px;
+
+            color: #687386;
+        }
+
+
+        /* =========================
+           SERVICES
+        ========================= */
+
+        .services {
+
+            padding: 70px 7%;
+
+            background: white;
+
+            text-align: center;
+        }
+
+        .services h2 {
+
+            font-size: 34px;
+
+            margin-bottom: 12px;
+        }
+
+        .services > p {
+
+            color: #657083;
+
+            font-size: 17px;
+
+            margin-bottom: 40px;
+        }
+
+        .service-grid {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+        .service {
+
+            padding: 30px 22px;
+
+            border-radius: 16px;
+
+            background: #f7faff;
+
+            border: 1px solid #e4ebf5;
+        }
+
+        .service-icon {
+
+            font-size: 38px;
+
+            margin-bottom: 15px;
+        }
+
+        .service h3 {
+
+            color: #0757a0;
+
+            margin-bottom: 10px;
+        }
+
+        .service p {
+
+            color: #687386;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            background: #101c2c;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                padding: 12px 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+
+                padding: 55px 6%;
+            }
+
+            .hero-content {
+
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .hero-text h1 {
+
+                font-size: 40px;
+            }
+
+            .hero-text p {
+
+                font-size: 17px;
+            }
+
+            .buttons {
+
+                justify-content: center;
+            }
+
+            .bank-card {
+
+                width: 100%;
+
+                max-width: 330px;
+            }
+
+            .service-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
     <!-- =========================
-         BARRE DE NAVIGATION
+         MENU
     ========================== -->
 
-    <header class="navbar">
+    <nav class="navbar">
 
-        <div class="logo-container">
+        <div class="brand">
+
+            <!-- TON LOGO -->
 
             <img
-                src="banque_app_logo_final.jpg"
-                alt="Logo Banque Facile"
                 class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                alt="Logo Banque Facile"
             >
 
-            <span class="logo-text">
+            <span>
                 Banque Facile
             </span>
 
         </div>
 
-        <nav>
+
+        <div class="nav-links">
 
             <a href="index.html">
                 Accueil
             </a>
 
-            <a href="connexion.html">
+            <a href="login.html">
                 Connexion
             </a>
 
@@ -46,49 +452,62 @@
                 Créer un compte
             </a>
 
-        </nav>
+        </div>
 
-    </header>
+    </nav>
+
 
 
     <!-- =========================
-         SECTION PRINCIPALE
+         ACCUEIL
     ========================== -->
 
-    <main>
+    <header class="hero">
 
-        <section class="hero">
+        <div class="hero-content">
 
-            <div class="hero-content">
 
-                <p class="welcome">
+            <div class="hero-text">
+
+                <div class="small-title">
                     BIENVENUE SUR BANQUE FACILE
-                </p>
+                </div>
+
 
                 <h1>
+
                     Votre banque,
-                    <br>
-                    <span>simplement.</span>
+
+                    <span>
+                        simplement.
+                    </span>
+
                 </h1>
 
-                <p class="description">
-                    Une expérience bancaire digitale moderne,
-                    simple et accessible pour vous accompagner
-                    dans la gestion de vos finances.
+
+                <p>
+
+                    Une expérience bancaire digitale
+                    moderne, simple et accessible
+                    pour vous accompagner dans la
+                    gestion de vos finances.
+
                 </p>
 
-                <div class="hero-buttons">
+
+                <div class="buttons">
 
                     <a
-                        href="connexion.html"
-                        class="btn-primary"
+                        href="login.html"
+                        class="btn btn-primary"
                     >
                         Se connecter
                     </a>
 
+
                     <a
                         href="inscription.html"
-                        class="btn-secondary"
+                        class="btn btn-secondary"
                     >
                         Créer un compte
                     </a>
@@ -98,107 +517,122 @@
             </div>
 
 
+
             <!-- =========================
-                 CARTE BANQUE
+                 CARTE
             ========================== -->
 
             <div class="bank-card">
 
+
+                <!-- TON LOGO -->
+
                 <img
-                    src="banque_app_logo_final.jpg"
-                    alt="Banque Facile"
                     class="card-logo"
+                    src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                    alt="Logo Banque Facile"
                 >
 
-                <h2>
+
+                <div class="card-name">
                     BANQUE FACILE
-                </h2>
+                </div>
+
+
+                <div class="card-text">
+                    Votre espace bancaire digital
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         SERVICES
+    ========================== -->
+
+    <section class="services">
+
+
+        <h2>
+            Une banque pensée pour vous
+        </h2>
+
+
+        <p>
+            Des services simples pour faciliter
+            votre expérience bancaire.
+        </p>
+
+
+
+        <div class="service-grid">
+
+
+            <article class="service">
+
+                <div class="service-icon">
+                    🔐
+                </div>
+
+                <h3>
+                    Sécurité
+                </h3>
 
                 <p>
-                    Votre espace bancaire digital
+                    Un espace conçu pour protéger
+                    vos informations et votre compte.
                 </p>
 
-            </div>
-
-        </section>
+            </article>
 
 
-        <!-- =========================
-             SERVICES
-        ========================== -->
 
-        <section class="services">
+            <article class="service">
 
-            <h2>
-                Tout ce dont vous avez besoin
-            </h2>
-
-            <p class="services-description">
-                Banque Facile vous accompagne dans la gestion
-                simple et sécurisée de votre argent.
-            </p>
-
-
-            <div class="services-container">
-
-                <div class="service-card">
-
-                    <div class="service-icon">
-                        💳
-                    </div>
-
-                    <h3>
-                        Gestion du compte
-                    </h3>
-
-                    <p>
-                        Consultez facilement votre compte
-                        et suivez vos opérations bancaires.
-                    </p>
-
+                <div class="service-icon">
+                    💳
                 </div>
 
+                <h3>
+                    Gestion facile
+                </h3>
 
-                <div class="service-card">
+                <p>
+                    Gérez simplement votre espace
+                    bancaire depuis votre appareil.
+                </p>
 
-                    <div class="service-icon">
-                        🔒
-                    </div>
+            </article>
 
-                    <h3>
-                        Sécurité
-                    </h3>
 
-                    <p>
-                        Vos informations sont protégées
-                        grâce à des technologies modernes.
-                    </p>
 
+            <article class="service">
+
+                <div class="service-icon">
+                    📱
                 </div>
 
+                <h3>
+                    Accessible partout
+                </h3>
 
-                <div class="service-card">
+                <p>
+                    Accédez à votre espace depuis
+                    votre ordinateur ou votre téléphone.
+                </p>
 
-                    <div class="service-icon">
-                        📱
-                    </div>
+            </article>
 
-                    <h3>
-                        Accessible partout
-                    </h3>
 
-                    <p>
-                        Accédez à votre espace bancaire
-                        depuis votre ordinateur ou téléphone.
-                    </p>
+        </div>
 
-                </div>
+    </section>
 
-            </div>
-
-        </section>
-
-    </main>
 
 
     <!-- =========================
@@ -208,18 +642,11 @@
     <footer>
 
         <p>
-            © 2026 Banque Facile.
-            Tous droits réservés.
+            © 2026 Banque Facile — Tous droits réservés.
         </p>
 
     </footer>
 
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
-
-    <script type="module" src="js/main.js"></script>
 
 </body>
 
