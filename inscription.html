@@ -3,327 +3,611 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Créez votre compte Banque Facile et gérez votre espace bancaire digital simplement et rapidement.">
 
     <title>Créer un compte | Banque Facile</title>
 
     <style>
+
+        /* ==============================
+           RÉINITIALISATION
+        ============================== */
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
+
+        /* ==============================
+           PAGE
+        ============================== */
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
+
             min-height: 100vh;
-            background: linear-gradient(135deg, #0066cc, #00a8e8);
+
+            background: linear-gradient(
+                135deg,
+                #0066cc,
+                #008fe5,
+                #00a8e8
+            );
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             padding: 30px 15px;
         }
 
-        .container {
+
+        /* ==============================
+           CONTENEUR
+        ============================== */
+
+        .page {
             width: 100%;
-            max-width: 560px;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            max-width: 620px;
         }
+
+
+        /* ==============================
+           CARTE
+        ============================== */
+
+        .welcome-card {
+            width: 100%;
+
+            background: #ffffff;
+
+            border-radius: 25px;
+
+            padding: 40px;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.20);
+
+            text-align: center;
+        }
+
+
+        /* ==============================
+           LOGO BANQUE FACILE
+        ============================== */
 
         .logo {
-            display: block;
-            width: 75px;
-            height: 75px;
+            width: 95px;
+            height: 95px;
+
             object-fit: contain;
-            margin: 0 auto 15px;
+
+            display: block;
+
+            margin: 0 auto 20px;
+
+            border-radius: 18px;
         }
+
+
+        /* ==============================
+           TITRE
+        ============================== */
 
         h1 {
-            text-align: center;
             color: #0066b3;
+
             font-size: 36px;
+
             margin-bottom: 10px;
+
+            font-weight: 700;
         }
 
+
         .description {
-            text-align: center;
             color: #667085;
-            margin-bottom: 30px;
+
             font-size: 16px;
+
+            line-height: 1.6;
+
+            margin-bottom: 30px;
         }
+
+
+        /* ==============================
+           FORMULAIRE
+        ============================== */
+
+        form {
+            text-align: left;
+        }
+
 
         .form-group {
             margin-bottom: 20px;
         }
 
+
         label {
             display: block;
-            font-weight: bold;
-            color: #172033;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            color: #101828;
+
             margin-bottom: 8px;
         }
 
+
         input {
             width: 100%;
-            padding: 15px;
-            border: 1px solid #d0d7e2;
-            border-radius: 10px;
+
+            height: 56px;
+
+            border: 1px solid #d0d5dd;
+
+            border-radius: 12px;
+
+            padding: 0 17px;
+
             font-size: 16px;
+
             outline: none;
-            transition: 0.2s;
+
+            background: #ffffff;
+
+            color: #101828;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
         }
+
+
+        input::placeholder {
+            color: #98a2b3;
+        }
+
 
         input:focus {
-            border-color: #008ee8;
-            box-shadow: 0 0 0 3px rgba(0, 142, 232, 0.12);
+            border-color: #008fe5;
+
+            box-shadow:
+                0 0 0 4px rgba(0, 143, 229, 0.12);
         }
 
-        .password-container {
-            position: relative;
-        }
 
-        .password-container input {
-            padding-right: 50px;
-        }
+        /* ==============================
+           BOUTON
+        ============================== */
 
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 20px;
-            user-select: none;
-        }
-
-        button {
+        .btn-login {
             width: 100%;
+
+            height: 58px;
+
             border: none;
-            padding: 16px;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #0077cc, #009fe3);
-            color: white;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #0066cc,
+                #008fe5
+            );
+
+            color: #ffffff;
+
             font-size: 17px;
-            font-weight: bold;
+
+            font-weight: 700;
+
             cursor: pointer;
-            transition: 0.2s;
+
+            margin-top: 5px;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s,
+                opacity 0.2s;
         }
 
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0, 119, 204, 0.25);
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 102, 204, 0.25);
         }
 
-        button:disabled {
-            opacity: 0.7;
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+
+        .btn-login:disabled {
+            opacity: 0.65;
+
             cursor: not-allowed;
+
             transform: none;
+
+            box-shadow: none;
         }
 
-        .message {
-            display: none;
+
+        /* ==============================
+           MESSAGES
+        ============================== */
+
+        .form-message {
+            width: 100%;
+
             margin-top: 18px;
-            padding: 13px;
-            border-radius: 8px;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
             text-align: center;
-            font-weight: bold;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            display: none;
+
+            line-height: 1.5;
         }
 
-        .message.success {
+
+        .form-message.success {
             display: block;
-            background: #e8f7ed;
-            color: #16803c;
+
+            background: #ecfdf3;
+
+            color: #027a48;
+
+            border: 1px solid #abefc6;
         }
 
-        .message.error {
+
+        .form-message.error {
             display: block;
-            background: #fdecec;
-            color: #c62828;
+
+            background: #fef3f2;
+
+            color: #b42318;
+
+            border: 1px solid #fecdca;
         }
 
-        .login {
-            text-align: center;
+
+        .form-message.loading {
+            display: block;
+
+            background: #eff8ff;
+
+            color: #175cd3;
+
+            border: 1px solid #b2ddff;
+        }
+
+
+        /* ==============================
+           CONNEXION
+        ============================== */
+
+        .register-text {
             margin-top: 25px;
+
             color: #667085;
+
+            font-size: 15px;
+
+            text-align: center;
         }
 
-        .login a {
-            color: #006fc9;
-            font-weight: bold;
+
+        .register-text a {
+            color: #0066cc;
+
+            font-weight: 700;
+
             text-decoration: none;
         }
 
-        .login a:hover {
+
+        .register-text a:hover {
             text-decoration: underline;
         }
 
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #006fc9;
+
+        /* ==============================
+           RETOUR ACCUEIL
+        ============================== */
+
+        .back-home {
+            display: inline-block;
+
+            margin-top: 22px;
+
+            color: #0066cc;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
             text-decoration: none;
         }
 
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
         @media (max-width: 600px) {
-            .container {
-                padding: 25px 20px;
+
+            body {
+                padding: 15px;
+            }
+
+            .welcome-card {
+                padding: 28px 20px;
+
+                border-radius: 20px;
             }
 
             h1 {
-                font-size: 30px;
+                font-size: 29px;
+            }
+
+            .description {
+                font-size: 15px;
+            }
+
+            input {
+                height: 53px;
+            }
+
+            .btn-login {
+                height: 55px;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
             }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <main class="container">
+    <main class="page">
 
-        <img
-            src="banque_app_logo_final.jpg"
-            alt="Logo Banque Facile"
-            class="logo"
-        >
+        <section class="welcome-card">
 
-        <h1>Créer un compte</h1>
 
-        <p class="description">
-            Rejoignez Banque Facile et gérez votre espace bancaire digital
-            simplement et rapidement.
-        </p>
+            <!-- ==============================
+                 TON LOGO
+            ============================== -->
 
-        <form id="registerForm">
+            <img
+                class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                alt="Logo Banque Facile"
+            >
 
-            <!-- NOM -->
-            <div class="form-group">
-                <label for="fullname">Nom complet</label>
 
-                <input
-                    type="text"
-                    id="fullname"
-                    placeholder="Exemple : Diakité Moussa"
-                    autocomplete="name"
-                    required
-                >
-            </div>
+            <!-- ==============================
+                 TITRE
+            ============================== -->
 
-            <!-- EMAIL -->
-            <div class="form-group">
-                <label for="email">Adresse e-mail</label>
+            <h1>
+                Créer un compte
+            </h1>
 
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="exemple@gmail.com"
-                    autocomplete="email"
-                    required
-                >
-            </div>
 
-            <!-- TELEPHONE -->
-            <div class="form-group">
-                <label for="phone">Numéro de téléphone</label>
+            <p class="description">
+                Rejoignez Banque Facile et gérez votre espace
+                bancaire digital simplement et rapidement.
+            </p>
 
-                <input
-                    type="tel"
-                    id="phone"
-                    placeholder="Exemple : 0507192851"
-                    autocomplete="tel"
-                    required
-                >
-            </div>
 
-            <!-- MOT DE PASSE -->
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
+            <!-- ==============================
+                 FORMULAIRE
+            ============================== -->
 
-                <div class="password-container">
+            <form id="registerForm" novalidate>
+
+
+                <!-- NOM COMPLET -->
+
+                <div class="form-group">
+
+                    <label for="fullname">
+                        Nom complet
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Exemple : Diakité Moussa"
+                        autocomplete="name"
+                        minlength="2"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="exemple@gmail.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- TÉLÉPHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Numéro de téléphone
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Exemple : 0507192851"
+                        autocomplete="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MOT DE PASSE -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Mot de passe
+                    </label>
 
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         placeholder="Minimum 6 caractères"
                         autocomplete="new-password"
                         minlength="6"
                         required
                     >
 
-                    <span
-                        class="toggle-password"
-                        onclick="togglePassword('password', this)"
-                    >
-                        👁️
-                    </span>
-
                 </div>
-            </div>
 
-            <!-- CONFIRMATION -->
-            <div class="form-group">
-                <label for="confirmPassword">
-                    Confirmer le mot de passe
-                </label>
 
-                <div class="password-container">
+                <!-- CONFIRMATION MOT DE PASSE -->
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirmer le mot de passe
+                    </label>
 
                     <input
                         type="password"
                         id="confirmPassword"
+                        name="confirmPassword"
                         placeholder="Confirmez votre mot de passe"
                         autocomplete="new-password"
                         minlength="6"
                         required
                     >
 
-                    <span
-                        class="toggle-password"
-                        onclick="togglePassword('confirmPassword', this)"
-                    >
-                        👁️
-                    </span>
-
                 </div>
-            </div>
 
-            <!-- BOUTON -->
-            <button
-                type="submit"
-                id="registerButton"
+
+                <!-- BOUTON -->
+
+                <button
+                    type="submit"
+                    class="btn-login"
+                    id="registerButton"
+                >
+                    Créer mon compte
+                </button>
+
+
+                <!-- MESSAGE FIREBASE -->
+
+                <div
+                    id="registerMessage"
+                    class="form-message"
+                    aria-live="polite"
+                ></div>
+
+
+            </form>
+
+
+            <!-- ==============================
+                 CONNEXION
+            ============================== -->
+
+            <p class="register-text">
+
+                Vous avez déjà un compte ?
+
+                <a href="connexion.html">
+                    Se connecter
+                </a>
+
+            </p>
+
+
+            <!-- ==============================
+                 RETOUR ACCUEIL
+            ============================== -->
+
+            <a
+                href="index.html"
+                class="back-home"
             >
-                Créer mon compte
-            </button>
-
-            <!-- MESSAGE -->
-            <div
-                id="registerMessage"
-                class="message"
-            ></div>
-
-        </form>
-
-        <p class="login">
-            Vous avez déjà un compte ?
-            <a href="connexion.html">
-                Se connecter
+                ← Retour à l'accueil
             </a>
-        </p>
 
-        <a
-            href="index.html"
-            class="back"
-        >
-            ← Retour à l'accueil
-        </a>
+
+        </section>
 
     </main>
 
-    <!-- JAVASCRIPT -->
-    <script type="module" src="inscription.js"></script>
+
+    <!-- ==============================
+         FIREBASE / JAVASCRIPT
+    ============================== -->
+
+    <script
+        type="module"
+        src="inscription.js">
+    </script>
+
 
 </body>
 
