@@ -1,109 +1,130 @@
-// =============================
-//  IMPORTS FIREBASE
-// =============================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-    getAuth, 
-    RecaptchaVerifier, 
-    signInWithPhoneNumber,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+// ======================================================
+// BANQUE FACILE - MAIN.JS
+// Fonctionnement principal de l'application
+// ======================================================
 
-// =============================
-//  CONFIG FIREBASE (Ton code)
-// =============================
-const firebaseConfig = {
-    apiKey: "AIzaSyAwGbQuv9EoIvBm7WC0OLTQ41cgleXd804",
-    authDomain: "banque-app-66bf9.firebaseapp.com",
-    projectId: "banque-app-66bf9",
-    storageBucket: "banque-app-66bf9.firebasestorage.app",
-    messagingSenderId: "833823730245",
-    appId: "1:833823730245:web:64dd77db2f273d24f9912c"
-};
+document.addEventListener("DOMContentLoaded", () => {
 
-// =============================
-//  INITIALISATION
-// =============================
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+    console.log("Banque Facile : application démarrée");
 
-// Utiliser automatiquement la langue du téléphone
-auth.useDeviceLanguage();
+    // --------------------------------------------------
+    // AFFICHAGE DE LA DATE
+    // --------------------------------------------------
 
-// =============================
-//  RECAPTCHA INVISIBLE FIREBASE
-// =============================
-window.recaptchaVerifier = new RecaptchaVerifier(
-    auth, 
-    "recaptcha-container",
-    {
-        size: "invisible",
-        callback: (response) => {
-            console.log("reCAPTCHA validé 👍");
-        }
-    }
-);
+    const dateElements = document.querySelectorAll("[data-date]");
 
-// =============================
-//  INSCRIPTION / CONNEXION (même système)
-// =============================
-let confirmationResult;
+    if (dateElements.length > 0) {
+        const maintenant = new Date();
 
-// 📌 Bouton : envoyer le code OTP
-document.getElementById("sendCode").addEventListener("click", () => {
-    const phoneNumber = document.getElementById("phone").value;
-
-    if (!phoneNumber) {
-        alert("Veuillez entrer un numéro de téléphone !");
-        return;
-    }
-
-    const appVerifier = window.recaptchaVerifier;
-
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-        .then((result) => {
-            confirmationResult = result;
-            alert("Un code a été envoyé à votre numéro ✔️");
-            console.log("Code envoyé !");
-        })
-        .catch((error) => {
-            console.error(error);
-            alert(error.message);
+        const date = maintenant.toLocaleDateString("fr-FR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
         });
-});
 
-// 📌 Vérifier le code OTP
-document.getElementById("verifyCode").addEventListener("click", () => {
-    const code = document.getElementById("otp").value;
-
-    if (!code) {
-        alert("Veuillez entrer le code reçu !");
-        return;
+        dateElements.forEach(element => {
+            element.textContent =
+                date.charAt(0).toUpperCase() + date.slice(1);
+        });
     }
 
-    confirmationResult
-        .confirm(code)
-        .then((result) => {
-            const user = result.user;
-            alert("Connexion réussie ✔️");
-            window.location.href = "dashboard.html"; // Redirige vers le tableau de bord
-        })
-        .catch((error) => {
-            console.error(error);
-            alert("Code incorrect ❌");
-        });
-});
 
-// =============================
-//  DÉCONNEXION
-// =============================
-document.getElementById("logout")?.addEventListener("click", () => {
-    signOut(auth)
-        .then(() => {
-            alert("Déconnexion réussie ✔️");
+    // --------------------------------------------------
+    // BOUTONS DE NAVIGATION
+    // --------------------------------------------------
+
+    const boutonsConnexion =
+        document.querySelectorAll("[data-connexion]");
+
+    boutonsConnexion.forEach(bouton => {
+        bouton.addEventListener("click", () => {
+            window.location.href = "connexion.html";
+        });
+    });
+
+
+    const boutonsInscription =
+        document.querySelectorAll("[data-inscription]");
+
+    boutonsInscription.forEach(bouton => {
+        bouton.addEventListener("click", () => {
+            window.location.href = "inscription.html";
+        });
+    });
+
+
+    // --------------------------------------------------
+    // AFFICHER / MASQUER LE SOLDE
+    // --------------------------------------------------
+
+    const boutonSolde =
+        document.querySelector("[data-toggle-solde]");
+
+    const solde =
+        document.querySelector("[data-solde]");
+
+    if (boutonSolde && solde) {
+
+        let visible = true;
+
+        boutonSolde.addEventListener("click", () => {
+
+            visible = !visible;
+
+            if (visible) {
+                solde.textContent =
+                    solde.dataset.value || "0 FCFA";
+
+                boutonSolde.textContent =
+                    "Masquer le solde";
+            } else {
+                solde.textContent = "••••••••";
+
+                boutonSolde.textContent =
+                    "Afficher le solde";
+            }
+        });
+    }
+
+
+    // --------------------------------------------------
+    // ANIMATION DES CARTES
+    // --------------------------------------------------
+
+    const cartes =
+        document.querySelectorAll(".card, .dashboard-card, .feature-card");
+
+    cartes.forEach((carte, index) => {
+
+        carte.style.opacity = "0";
+        carte.style.transform = "translateY(15px)";
+
+        setTimeout(() => {
+
+            carte.style.transition =
+                "opacity 0.5s ease, transform 0.5s ease";
+
+            carte.style.opacity = "1";
+            carte.style.transform = "translateY(0)";
+
+        }, index * 100);
+    });
+
+
+    // --------------------------------------------------
+    // BOUTON RETOUR À L'ACCUEIL
+    // --------------------------------------------------
+
+    const retourAccueil =
+        document.querySelectorAll("[data-home]");
+
+    retourAccueil.forEach(bouton => {
+
+        bouton.addEventListener("click", () => {
             window.location.href = "index.html";
-        })
-        .catch((error) => {
-            console.error(error);
         });
+
+    });
+
 });
