@@ -1,378 +1,333 @@
-// ======================================================
+// =====================================================
 // BANQUE FACILE
-// SYSTÈME D'INSCRIPTION FIREBASE
-// ======================================================
+// SYSTÈME D'INSCRIPTION AVEC FIREBASE AUTHENTICATION
+// =====================================================
 
-// Firebase
-import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
     createUserWithEmailAndPassword,
     updateProfile
-} from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-// ======================================================
+// =====================================================
 // CONFIGURATION FIREBASE
-// ======================================================
+// =====================================================
 
 const firebaseConfig = {
-
     apiKey: "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
-
     authDomain: "banque-app-66bf9.firebaseapp.com",
-
     projectId: "banque-app-66bf9",
-
     storageBucket: "banque-app-66bf9.firebasestorage.app",
-
     messagingSenderId: "833823730245",
-
     appId: "1:833823730245:web:8141ce1171c93040f9912c"
 };
 
 
-// ======================================================
+// =====================================================
 // INITIALISATION FIREBASE
-// ======================================================
+// =====================================================
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
 
 
-// ======================================================
-// ELEMENTS HTML
-// ======================================================
+// =====================================================
+// FORMULAIRE D'INSCRIPTION
+// =====================================================
 
-const form = document.getElementById("registerForm");
-
-const fullnameInput =
-    document.getElementById("fullname");
-
-const emailInput =
-    document.getElementById("email");
-
-const phoneInput =
-    document.getElementById("phone");
-
-const passwordInput =
-    document.getElementById("password");
-
-const confirmPasswordInput =
-    document.getElementById("confirmPassword");
-
-const button =
-    document.getElementById("registerButton");
-
-const message =
-    document.getElementById("registerMessage");
+const registerForm = document.getElementById("registerForm");
+const registerMessage = document.getElementById("registerMessage");
 
 
-// ======================================================
-// AFFICHER UN MESSAGE
-// ======================================================
+// Vérification de l'existence du formulaire
+if (!registerForm) {
+    console.error("Le formulaire #registerForm est introuvable.");
+} else {
 
-function showMessage(text, type) {
+    registerForm.addEventListener("submit", async function (event) {
 
-    message.textContent = text;
-
-    message.className = "message " + type;
-}
+        event.preventDefault();
 
 
-// ======================================================
-// VALIDATION DU FORMULAIRE
-// ======================================================
+        // =================================================
+        // RÉCUPÉRATION DES INFORMATIONS
+        // =================================================
 
-form.addEventListener("submit", async function(event) {
+        const fullname = document
+            .getElementById("fullname")
+            .value
+            .trim();
 
-    event.preventDefault();
+        const email = document
+            .getElementById("email")
+            .value
+            .trim();
 
+        const phone = document
+            .getElementById("phone")
+            .value
+            .trim();
 
-    // --------------------------------------------------
-    // RECUPERATION DES VALEURS
-    // --------------------------------------------------
+        const password = document
+            .getElementById("password")
+            .value;
 
-    const fullname =
-        fullnameInput.value.trim();
-
-    const email =
-        emailInput.value.trim();
-
-    const phone =
-        phoneInput.value.trim();
-
-    const password =
-        passwordInput.value;
-
-    const confirmPassword =
-        confirmPasswordInput.value;
-
-
-    // --------------------------------------------------
-    // VALIDATION NOM
-    // --------------------------------------------------
-
-    if (fullname.length < 2) {
-
-        showMessage(
-            "Veuillez entrer votre nom complet.",
-            "error"
-        );
-
-        return;
-    }
+        const confirmPassword = document
+            .getElementById("confirmPassword")
+            .value;
 
 
-    // --------------------------------------------------
-    // VALIDATION TELEPHONE
-    // --------------------------------------------------
+        // =================================================
+        // VALIDATION
+        // =================================================
 
-    if (phone.length < 8) {
+        if (!fullname || !email || !phone || !password || !confirmPassword) {
 
-        showMessage(
-            "Veuillez entrer un numéro de téléphone valide.",
-            "error"
-        );
+            showMessage(
+                "⚠️ Veuillez remplir tous les champs.",
+                "error"
+            );
 
-        return;
-    }
-
-
-    // --------------------------------------------------
-    // VALIDATION MOT DE PASSE
-    // --------------------------------------------------
-
-    if (password.length < 6) {
-
-        showMessage(
-            "Le mot de passe doit contenir au moins 6 caractères.",
-            "error"
-        );
-
-        return;
-    }
+            return;
+        }
 
 
-    // --------------------------------------------------
-    // CONFIRMATION MOT DE PASSE
-    // --------------------------------------------------
+        // Vérification du mot de passe
 
-    if (password !== confirmPassword) {
+        if (password.length < 6) {
+
+            showMessage(
+                "⚠️ Le mot de passe doit contenir au moins 6 caractères.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Vérification des mots de passe
+
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "❌ Les mots de passe ne correspondent pas.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Vérification du téléphone
+
+        const phoneClean = phone.replace(/\s+/g, "");
+
+        if (!/^[0-9+()-]{8,20}$/.test(phoneClean)) {
+
+            showMessage(
+                "⚠️ Veuillez entrer un numéro de téléphone valide.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // =================================================
+        // MESSAGE DE CHARGEMENT
+        // =================================================
 
         showMessage(
-            "Les deux mots de passe ne correspondent pas.",
-            "error"
+            "⏳ Création de votre compte en cours...",
+            "loading"
         );
 
-        return;
-    }
+
+        const button = registerForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Création en cours...";
+        }
 
 
-    // --------------------------------------------------
-    // DESACTIVER LE BOUTON
-    // --------------------------------------------------
+        try {
 
-    button.disabled = true;
+            // =================================================
+            // CRÉATION DU COMPTE FIREBASE
+            // =================================================
 
-    button.textContent =
-        "Création du compte...";
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
 
-    showMessage(
-        "Création de votre compte en cours...",
-        "success"
-    );
+
+            const user = userCredential.user;
 
 
-    try {
+            // =================================================
+            // ENREGISTREMENT DU NOM
+            // =================================================
 
-        // ==================================================
-        // CREATION DU COMPTE FIREBASE
-        // ==================================================
+            await updateProfile(user, {
+                displayName: fullname
+            });
 
-        const userCredential =
-            await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
+
+            // =================================================
+            // SAUVEGARDE DU NUMÉRO
+            // =================================================
+
+            // Firebase Authentication ne stocke pas directement
+            // notre champ téléphone dans ce type d'inscription.
+            // On le conserve temporairement pour le profil.
+
+            localStorage.setItem(
+                "banqueFacilePhone",
+                phoneClean
             );
 
 
-        const user =
-            userCredential.user;
+            localStorage.setItem(
+                "banqueFacileFullname",
+                fullname
+            );
 
 
-        // ==================================================
-        // ENREGISTRER LE NOM DANS FIREBASE AUTH
-        // ==================================================
+            // =================================================
+            // SUCCÈS
+            // =================================================
 
-        await updateProfile(user, {
-
-            displayName: fullname
-
-        });
-
-
-        // ==================================================
-        // SAUVEGARDER LES INFORMATIONS LOCALEMENT
-        // ==================================================
-
-        localStorage.setItem(
-            "banqueFacile_fullname",
-            fullname
-        );
-
-        localStorage.setItem(
-            "banqueFacile_phone",
-            phone
-        );
-
-        localStorage.setItem(
-            "banqueFacile_email",
-            email
-        );
+            showMessage(
+                "✅ Compte créé avec succès ! Redirection...",
+                "success"
+            );
 
 
-        // ==================================================
-        // MESSAGE DE SUCCES
-        // ==================================================
+            // Nettoyage du formulaire
 
-        showMessage(
-            "✅ Compte créé avec succès ! Redirection...",
-            "success"
-        );
+            registerForm.reset();
 
 
-        // ==================================================
-        // REDIRECTION
-        // ==================================================
+            // =================================================
+            // REDIRECTION
+            // =================================================
 
-        setTimeout(function() {
+            setTimeout(function () {
 
-            window.location.href =
-                "tableau_de_bord.html";
+                window.location.href = "tableau_de_bord.html";
 
-        }, 1500);
-
-
-    } catch (error) {
-
-        console.error(
-            "Erreur Firebase :",
-            error
-        );
+            }, 1500);
 
 
-        // ==================================================
-        // MESSAGES D'ERREUR
-        // ==================================================
+        } catch (error) {
 
-        let errorMessage =
-            "Une erreur est survenue. Veuillez réessayer.";
+            console.error(
+                "Erreur Firebase :",
+                error
+            );
 
 
-        if (
-            error.code ===
-            "auth/email-already-in-use"
-        ) {
+            // =================================================
+            // GESTION DES ERREURS FIREBASE
+            // =================================================
 
-            errorMessage =
-                "❌ Cette adresse e-mail possède déjà un compte.";
+            let message =
+                "❌ Une erreur est survenue lors de la création du compte.";
 
+
+            switch (error.code) {
+
+                case "auth/email-already-in-use":
+
+                    message =
+                        "❌ Cette adresse e-mail est déjà utilisée.";
+
+                    break;
+
+
+                case "auth/invalid-email":
+
+                    message =
+                        "❌ L'adresse e-mail n'est pas valide.";
+
+                    break;
+
+
+                case "auth/weak-password":
+
+                    message =
+                        "❌ Le mot de passe est trop faible.";
+
+                    break;
+
+
+                case "auth/network-request-failed":
+
+                    message =
+                        "❌ Problème de connexion Internet.";
+
+                    break;
+
+
+                case "auth/operation-not-allowed":
+
+                    message =
+                        "❌ L'inscription par e-mail n'est pas activée dans Firebase.";
+
+                    break;
+
+
+                default:
+
+                    message =
+                        "❌ Erreur : " +
+                        (error.message || "veuillez réessayer.");
+
+                    break;
+            }
+
+
+            showMessage(
+                message,
+                "error"
+            );
+
+
+            if (button) {
+
+                button.disabled = false;
+                button.textContent = "Créer mon compte";
+
+            }
         }
 
-
-        else if (
-            error.code ===
-            "auth/invalid-email"
-        ) {
-
-            errorMessage =
-                "❌ Adresse e-mail invalide.";
-
-        }
+    });
+}
 
 
-        else if (
-            error.code ===
-            "auth/weak-password"
-        ) {
+// =====================================================
+// AFFICHAGE DES MESSAGES
+// =====================================================
 
-            errorMessage =
-                "❌ Le mot de passe est trop faible.";
+function showMessage(message, type) {
 
-        }
-
-
-        else if (
-            error.code ===
-            "auth/network-request-failed"
-        ) {
-
-            errorMessage =
-                "❌ Problème de connexion Internet.";
-
-        }
-
-
-        else if (
-            error.code ===
-            "auth/operation-not-allowed"
-        ) {
-
-            errorMessage =
-                "❌ La connexion par e-mail n'est pas activée dans Firebase.";
-
-        }
-
-
-        showMessage(
-            errorMessage,
-            "error"
-        );
-
-
-        // --------------------------------------------------
-        // REACTIVER LE BOUTON
-        // --------------------------------------------------
-
-        button.disabled = false;
-
-        button.textContent =
-            "Créer mon compte";
+    if (!registerMessage) {
+        return;
     }
 
-});
 
+    registerMessage.textContent = message;
 
-// ======================================================
-// AFFICHER / CACHER LE MOT DE PASSE
-// ======================================================
+    registerMessage.className =
+        "form-message " + type;
 
-window.togglePassword = function(
-    inputId,
-    element
-) {
-
-    const input =
-        document.getElementById(inputId);
-
-
-    if (input.type === "password") {
-
-        input.type = "text";
-
-        element.textContent = "🙈";
-
-    } else {
-
-        input.type = "password";
-
-        element.textContent = "👁️";
-    }
-
-};
+}
