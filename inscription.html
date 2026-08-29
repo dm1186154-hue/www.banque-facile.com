@@ -1,216 +1,153 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-          content="Connectez-vous à votre espace Banque Facile.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Connexion | Banque Facile</title>
 
+    <meta name="description"
+          content="Connectez-vous à votre espace Banque Facile pour accéder à vos services bancaires numériques.">
 
     <style>
-
-        /* =====================================================
-           RÉINITIALISATION
-        ===================================================== */
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
-
-        /* =====================================================
-           PAGE
-        ===================================================== */
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-
             min-height: 100vh;
 
-            background: linear-gradient(
-                135deg,
-                #0066cc,
-                #008fe5,
-                #00a8e8
-            );
+            background:
+                linear-gradient(135deg, #0066cc, #00a8e8);
 
             display: flex;
-
             justify-content: center;
-
             align-items: center;
 
-            padding: 30px 15px;
+            padding: 25px;
         }
 
-
-        /* =====================================================
-           CONTENEUR
-        ===================================================== */
-
-        .page {
+        .container {
             width: 100%;
-
-            max-width: 560px;
+            max-width: 620px;
         }
-
-
-        /* =====================================================
-           CARTE
-        ===================================================== */
 
         .login-card {
-            width: 100%;
-
             background: #ffffff;
 
-            border-radius: 25px;
+            border-radius: 24px;
 
-            padding: 40px;
+            padding: 45px 44px;
 
             box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.20);
+                0 20px 50px rgba(0, 0, 0, 0.18);
 
             text-align: center;
         }
 
-
-        /* =====================================================
-           LOGO
-        ===================================================== */
+        /* LOGO */
 
         .logo {
-            width: 95px;
-
-            height: 95px;
+            width: 90px;
+            height: 90px;
 
             object-fit: contain;
 
             display: block;
 
-            margin: 0 auto 20px;
-
-            border-radius: 18px;
+            margin: 0 auto 25px;
         }
 
-
-        /* =====================================================
-           TITRE
-        ===================================================== */
+        /* TITRE */
 
         h1 {
-            color: #0066b3;
+            color: #0068b7;
 
-            font-size: 36px;
+            font-size: 38px;
+
+            margin-bottom: 12px;
 
             font-weight: 700;
-
-            margin-bottom: 10px;
         }
 
+        .subtitle {
+            color: #65758b;
 
-        .description {
-            color: #667085;
+            font-size: 17px;
 
-            font-size: 16px;
+            line-height: 1.5;
 
-            line-height: 1.6;
-
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
-
-        /* =====================================================
-           FORMULAIRE
-        ===================================================== */
+        /* FORMULAIRE */
 
         form {
             text-align: left;
         }
 
-
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
-
 
         label {
             display: block;
 
-            color: #101828;
+            color: #172033;
 
             font-size: 16px;
 
             font-weight: 700;
 
-            margin-bottom: 8px;
+            margin-bottom: 9px;
         }
 
+        .input-wrapper {
+            position: relative;
+        }
 
         input {
             width: 100%;
 
-            height: 56px;
+            height: 60px;
 
-            padding: 0 17px;
-
-            border: 1px solid #d0d5dd;
+            border: 1px solid #d5dce5;
 
             border-radius: 12px;
 
-            background: #ffffff;
-
-            color: #101828;
+            padding: 0 18px;
 
             font-size: 16px;
 
+            color: #172033;
+
+            background: #ffffff;
+
             outline: none;
 
-            transition:
-                border-color 0.2s,
-                box-shadow 0.2s;
+            transition: 0.2s;
         }
-
-
-        input::placeholder {
-            color: #98a2b3;
-        }
-
 
         input:focus {
-            border-color: #008fe5;
+            border-color: #0077cc;
 
             box-shadow:
-                0 0 0 4px rgba(0, 143, 229, 0.12);
+                0 0 0 3px rgba(0, 119, 204, 0.12);
         }
 
-
-        /* =====================================================
-           MOT DE PASSE
-        ===================================================== */
-
-        .password-box {
-            position: relative;
+        input::placeholder {
+            color: #8995a5;
         }
 
-
-        .password-box input {
-            padding-right: 55px;
-        }
-
+        /* BOUTON AFFICHER MOT DE PASSE */
 
         .toggle-password {
             position: absolute;
 
-            right: 16px;
+            right: 18px;
 
             top: 50%;
 
@@ -220,90 +157,76 @@
 
             background: transparent;
 
-            font-size: 20px;
-
             cursor: pointer;
 
+            font-size: 21px;
+
             padding: 5px;
+
+            color: #65758b;
         }
 
+        /* MOT DE PASSE OUBLIE */
 
-        /* =====================================================
-           MOT DE PASSE OUBLIÉ
-        ===================================================== */
-
-        .forgot-password {
-            display: block;
-
+        .forgot-container {
             text-align: right;
 
             margin-top: -8px;
 
-            margin-bottom: 22px;
-
-            color: #0066cc;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            text-decoration: none;
+            margin-bottom: 25px;
         }
 
+        .forgot-password {
+            color: #0068c9;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 15px;
+        }
 
         .forgot-password:hover {
             text-decoration: underline;
         }
 
+        /* BOUTON CONNEXION */
 
-        /* =====================================================
-           BOUTON
-        ===================================================== */
-
-        .btn-login {
+        #loginButton {
             width: 100%;
 
-            height: 58px;
+            height: 62px;
 
             border: none;
 
             border-radius: 12px;
 
-            background: linear-gradient(
-                135deg,
-                #0066cc,
-                #008fe5
-            );
+            background:
+                linear-gradient(
+                    90deg,
+                    #006dcc,
+                    #009be6
+                );
 
-            color: #ffffff;
+            color: white;
 
-            font-size: 17px;
+            font-size: 18px;
 
             font-weight: 700;
 
             cursor: pointer;
 
-            transition:
-                transform 0.2s,
-                box-shadow 0.2s,
-                opacity 0.2s;
+            transition: 0.2s;
         }
 
-
-        .btn-login:hover {
-            transform: translateY(-2px);
+        #loginButton:hover {
+            transform: translateY(-1px);
 
             box-shadow:
-                0 10px 25px rgba(0, 102, 204, 0.25);
+                0 8px 20px rgba(0, 110, 210, 0.25);
         }
 
-
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-
-        .btn-login:disabled {
+        #loginButton:disabled {
             opacity: 0.65;
 
             cursor: not-allowed;
@@ -313,181 +236,141 @@
             box-shadow: none;
         }
 
-
-        /* =====================================================
-           MESSAGE
-        ===================================================== */
+        /* MESSAGE */
 
         .form-message {
-            width: 100%;
-
             margin-top: 18px;
 
-            padding: 14px;
+            padding: 13px 15px;
 
             border-radius: 10px;
 
-            text-align: center;
-
             font-size: 15px;
 
-            font-weight: 600;
+            line-height: 1.4;
 
-            line-height: 1.5;
+            text-align: center;
 
             display: none;
         }
 
-
-        .form-message.success {
+        .form-message:not(:empty) {
             display: block;
-
-            background: #ecfdf3;
-
-            color: #027a48;
-
-            border: 1px solid #abefc6;
         }
 
+        .form-message.success {
+            background: #e9f9ef;
+
+            color: #147a3d;
+
+            border: 1px solid #b9e8ca;
+        }
 
         .form-message.error {
-            display: block;
-
-            background: #fef3f2;
+            background: #fff0f0;
 
             color: #b42318;
 
-            border: 1px solid #fecdca;
+            border: 1px solid #f4c2c2;
         }
-
 
         .form-message.loading {
-            display: block;
+            background: #eef7ff;
 
-            background: #eff8ff;
+            color: #0068b7;
 
-            color: #175cd3;
-
-            border: 1px solid #b2ddff;
+            border: 1px solid #c9e5fa;
         }
 
-
-        /* =====================================================
-           INSCRIPTION
-        ===================================================== */
+        /* CREATION COMPTE */
 
         .register-text {
+            margin-top: 30px;
+
             text-align: center;
 
-            margin-top: 25px;
+            color: #65758b;
 
-            color: #667085;
-
-            font-size: 15px;
+            font-size: 16px;
         }
 
-
-        .register-text a {
-            color: #0066cc;
+        .register-link {
+            color: #0068c9;
 
             font-weight: 700;
 
             text-decoration: none;
         }
 
-
-        .register-text a:hover {
+        .register-link:hover {
             text-decoration: underline;
         }
 
-
-        /* =====================================================
-           RETOUR ACCUEIL
-        ===================================================== */
+        /* RETOUR ACCUEIL */
 
         .back-home {
             display: inline-block;
 
-            margin-top: 22px;
+            margin-top: 28px;
 
-            color: #0066cc;
-
-            font-size: 15px;
-
-            font-weight: 600;
+            color: #0068c9;
 
             text-decoration: none;
-        }
 
+            font-weight: 700;
+
+            font-size: 16px;
+        }
 
         .back-home:hover {
             text-decoration: underline;
         }
 
+        /* MOBILE */
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
 
             body {
                 padding: 15px;
             }
 
-
             .login-card {
-                padding: 28px 20px;
+                padding: 35px 25px;
 
                 border-radius: 20px;
             }
 
-
-            .logo {
-                width: 80px;
-
-                height: 80px;
-            }
-
-
             h1 {
-                font-size: 29px;
+                font-size: 31px;
             }
 
-
-            .description {
+            .subtitle {
                 font-size: 15px;
             }
 
-
             input {
-                height: 53px;
+                height: 56px;
             }
 
-
-            .btn-login {
-                height: 55px;
+            #loginButton {
+                height: 58px;
             }
 
         }
 
     </style>
-
 </head>
 
 
 <body>
 
-
-    <main class="page">
-
+    <main class="container">
 
         <section class="login-card">
 
-
             <!-- =================================================
                  LOGO BANQUE FACILE
-            ================================================== -->
+                 ================================================= -->
 
             <img
                 class="logo"
@@ -498,30 +381,26 @@
 
             <!-- =================================================
                  TITRE
-            ================================================== -->
+                 ================================================= -->
 
             <h1>
                 Connexion
             </h1>
 
-
-            <p class="description">
+            <p class="subtitle">
                 Connectez-vous à votre espace Banque Facile
                 pour accéder à vos services.
             </p>
 
 
             <!-- =================================================
-                 FORMULAIRE
-            ================================================== -->
+                 FORMULAIRE DE CONNEXION
+                 ================================================= -->
 
-            <form
-                id="loginForm"
-                novalidate
-            >
+            <form id="loginForm">
 
 
-                <!-- E-MAIL -->
+                <!-- EMAIL -->
 
                 <div class="form-group">
 
@@ -549,8 +428,7 @@
                         Mot de passe
                     </label>
 
-
-                    <div class="password-box">
+                    <div class="input-wrapper">
 
                         <input
                             type="password"
@@ -561,12 +439,12 @@
                             required
                         >
 
-
                         <button
                             type="button"
-                            class="toggle-password"
                             id="togglePassword"
+                            class="toggle-password"
                             aria-label="Afficher le mot de passe"
+                            title="Afficher / masquer le mot de passe"
                         >
                             👁️
                         </button>
@@ -576,48 +454,54 @@
                 </div>
 
 
-                <!-- MOT DE PASSE OUBLIÉ -->
+                <!-- MOT DE PASSE OUBLIE -->
 
-                <a
-                    href="mot_de_passe_oublie.html"
-                    class="forgot-password"
-                >
-                    Mot de passe oublié ?
-                </a>
+                <div class="forgot-container">
+
+                    <a
+                        href="mot-de-passe-oublie.html"
+                        class="forgot-password"
+                    >
+                        Mot de passe oublié ?
+                    </a>
+
+                </div>
 
 
                 <!-- BOUTON -->
 
                 <button
                     type="submit"
-                    class="btn-login"
                     id="loginButton"
                 >
                     Se connecter
                 </button>
 
 
-                <!-- MESSAGE -->
+                <!-- MESSAGE FIREBASE -->
 
                 <div
                     id="loginMessage"
                     class="form-message"
+                    role="alert"
                     aria-live="polite"
                 ></div>
-
 
             </form>
 
 
             <!-- =================================================
-                 INSCRIPTION
-            ================================================== -->
+                 CREATION DE COMPTE
+                 ================================================= -->
 
             <p class="register-text">
 
                 Vous n'avez pas encore de compte ?
 
-                <a href="inscription.html">
+                <a
+                    href="inscription.html"
+                    class="register-link"
+                >
                     Créer un compte
                 </a>
 
@@ -626,7 +510,7 @@
 
             <!-- =================================================
                  RETOUR ACCUEIL
-            ================================================== -->
+                 ================================================= -->
 
             <a
                 href="index.html"
@@ -635,22 +519,16 @@
                 ← Retour à l'accueil
             </a>
 
-
         </section>
-
 
     </main>
 
 
     <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+         JAVASCRIPT FIREBASE
+         ===================================================== -->
 
-    <script
-        type="module"
-        src="connexion.js">
-    </script>
-
+    <script type="module" src="connexion.js"></script>
 
 </body>
 
