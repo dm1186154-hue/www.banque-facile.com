@@ -1,14 +1,13 @@
 // =====================================================
 // BANQUE FACILE
-// SYSTÈME D'INSCRIPTION AVEC FIREBASE AUTHENTICATION
+// CONNEXION AVEC FIREBASE AUTHENTICATION
 // =====================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
-    createUserWithEmailAndPassword,
-    updateProfile
+    signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
@@ -31,286 +30,62 @@ const firebaseConfig = {
 // =====================================================
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 
 
 // =====================================================
-// FORMULAIRE D'INSCRIPTION
+// ÉLÉMENTS DE LA PAGE
 // =====================================================
 
-const registerForm = document.getElementById("registerForm");
-const registerMessage = document.getElementById("registerMessage");
+const loginForm = document.getElementById("loginForm");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const togglePassword =
+    document.getElementById("togglePassword");
+
+const passwordInput =
+    document.getElementById("password");
 
 
-// Vérification de l'existence du formulaire
-if (!registerForm) {
-    console.error("Le formulaire #registerForm est introuvable.");
-} else {
+// =====================================================
+// AFFICHER / MASQUER LE MOT DE PASSE
+// =====================================================
 
-    registerForm.addEventListener("submit", async function (event) {
+if (togglePassword && passwordInput) {
 
-        event.preventDefault();
+    togglePassword.addEventListener("click", function () {
 
+        if (passwordInput.type === "password") {
 
-        // =================================================
-        // RÉCUPÉRATION DES INFORMATIONS
-        // =================================================
+            passwordInput.type = "text";
 
-        const fullname = document
-            .getElementById("fullname")
-            .value
-            .trim();
+            togglePassword.textContent = "🙈";
 
-        const email = document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const phone = document
-            .getElementById("phone")
-            .value
-            .trim();
-
-        const password = document
-            .getElementById("password")
-            .value;
-
-        const confirmPassword = document
-            .getElementById("confirmPassword")
-            .value;
-
-
-        // =================================================
-        // VALIDATION
-        // =================================================
-
-        if (!fullname || !email || !phone || !password || !confirmPassword) {
-
-            showMessage(
-                "⚠️ Veuillez remplir tous les champs.",
-                "error"
+            togglePassword.setAttribute(
+                "aria-label",
+                "Masquer le mot de passe"
             );
 
-            return;
-        }
+        } else {
 
+            passwordInput.type = "password";
 
-        // Vérification du mot de passe
+            togglePassword.textContent = "👁️";
 
-        if (password.length < 6) {
-
-            showMessage(
-                "⚠️ Le mot de passe doit contenir au moins 6 caractères.",
-                "error"
+            togglePassword.setAttribute(
+                "aria-label",
+                "Afficher le mot de passe"
             );
-
-            return;
-        }
-
-
-        // Vérification des mots de passe
-
-        if (password !== confirmPassword) {
-
-            showMessage(
-                "❌ Les mots de passe ne correspondent pas.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        // Vérification du téléphone
-
-        const phoneClean = phone.replace(/\s+/g, "");
-
-        if (!/^[0-9+()-]{8,20}$/.test(phoneClean)) {
-
-            showMessage(
-                "⚠️ Veuillez entrer un numéro de téléphone valide.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        // =================================================
-        // MESSAGE DE CHARGEMENT
-        // =================================================
-
-        showMessage(
-            "⏳ Création de votre compte en cours...",
-            "loading"
-        );
-
-
-        const button = registerForm.querySelector(
-            'button[type="submit"]'
-        );
-
-        if (button) {
-            button.disabled = true;
-            button.textContent = "Création en cours...";
-        }
-
-
-        try {
-
-            // =================================================
-            // CRÉATION DU COMPTE FIREBASE
-            // =================================================
-
-            const userCredential =
-                await createUserWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            const user = userCredential.user;
-
-
-            // =================================================
-            // ENREGISTREMENT DU NOM
-            // =================================================
-
-            await updateProfile(user, {
-                displayName: fullname
-            });
-
-
-            // =================================================
-            // SAUVEGARDE DU NUMÉRO
-            // =================================================
-
-            // Firebase Authentication ne stocke pas directement
-            // notre champ téléphone dans ce type d'inscription.
-            // On le conserve temporairement pour le profil.
-
-            localStorage.setItem(
-                "banqueFacilePhone",
-                phoneClean
-            );
-
-
-            localStorage.setItem(
-                "banqueFacileFullname",
-                fullname
-            );
-
-
-            // =================================================
-            // SUCCÈS
-            // =================================================
-
-            showMessage(
-                "✅ Compte créé avec succès ! Redirection...",
-                "success"
-            );
-
-
-            // Nettoyage du formulaire
-
-            registerForm.reset();
-
-
-            // =================================================
-            // REDIRECTION
-            // =================================================
-
-            setTimeout(function () {
-
-                window.location.href = "tableau_de_bord.html";
-
-            }, 1500);
-
-
-        } catch (error) {
-
-            console.error(
-                "Erreur Firebase :",
-                error
-            );
-
-
-            // =================================================
-            // GESTION DES ERREURS FIREBASE
-            // =================================================
-
-            let message =
-                "❌ Une erreur est survenue lors de la création du compte.";
-
-
-            switch (error.code) {
-
-                case "auth/email-already-in-use":
-
-                    message =
-                        "❌ Cette adresse e-mail est déjà utilisée.";
-
-                    break;
-
-
-                case "auth/invalid-email":
-
-                    message =
-                        "❌ L'adresse e-mail n'est pas valide.";
-
-                    break;
-
-
-                case "auth/weak-password":
-
-                    message =
-                        "❌ Le mot de passe est trop faible.";
-
-                    break;
-
-
-                case "auth/network-request-failed":
-
-                    message =
-                        "❌ Problème de connexion Internet.";
-
-                    break;
-
-
-                case "auth/operation-not-allowed":
-
-                    message =
-                        "❌ L'inscription par e-mail n'est pas activée dans Firebase.";
-
-                    break;
-
-
-                default:
-
-                    message =
-                        "❌ Erreur : " +
-                        (error.message || "veuillez réessayer.");
-
-                    break;
-            }
-
-
-            showMessage(
-                message,
-                "error"
-            );
-
-
-            if (button) {
-
-                button.disabled = false;
-                button.textContent = "Créer mon compte";
-
-            }
         }
 
     });
+
 }
 
 
@@ -318,16 +93,249 @@ if (!registerForm) {
 // AFFICHAGE DES MESSAGES
 // =====================================================
 
-function showMessage(message, type) {
+function showMessage(text, type) {
 
-    if (!registerMessage) {
+    if (!loginMessage) {
         return;
     }
 
+    loginMessage.textContent = text;
 
-    registerMessage.textContent = message;
-
-    registerMessage.className =
+    loginMessage.className =
         "form-message " + type;
+}
 
+
+// =====================================================
+// CONNEXION
+// =====================================================
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            // -------------------------------------------------
+            // RÉCUPÉRATION DES DONNÉES
+            // -------------------------------------------------
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+            const password =
+                passwordInput.value;
+
+
+            // -------------------------------------------------
+            // VALIDATION
+            // -------------------------------------------------
+
+            if (!email || !password) {
+
+                showMessage(
+                    "⚠️ Veuillez remplir tous les champs.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            // -------------------------------------------------
+            // CHARGEMENT
+            // -------------------------------------------------
+
+            if (loginButton) {
+
+                loginButton.disabled = true;
+
+                loginButton.textContent =
+                    "Connexion en cours...";
+
+            }
+
+
+            showMessage(
+                "⏳ Connexion à votre espace...",
+                "loading"
+            );
+
+
+            try {
+
+                // =============================================
+                // CONNEXION FIREBASE
+                // =============================================
+
+                const userCredential =
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    userCredential.user;
+
+
+                // =============================================
+                // SAUVEGARDE DES INFORMATIONS
+                // =============================================
+
+                localStorage.setItem(
+                    "banqueFacileEmail",
+                    user.email || ""
+                );
+
+
+                localStorage.setItem(
+                    "banqueFacileFullname",
+                    user.displayName || ""
+                );
+
+
+                // =============================================
+                // SUCCÈS
+                // =============================================
+
+                showMessage(
+                    "✅ Connexion réussie ! Redirection...",
+                    "success"
+                );
+
+
+                // =============================================
+                // REDIRECTION
+                // =============================================
+
+                setTimeout(function () {
+
+                    window.location.href =
+                        "tableau_de_bord.html";
+
+                }, 1200);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur de connexion Firebase :",
+                    error
+                );
+
+
+                // =============================================
+                // ERREURS FIREBASE
+                // =============================================
+
+                let errorMessage =
+                    "❌ Impossible de vous connecter.";
+
+
+                switch (error.code) {
+
+                    case "auth/invalid-credential":
+
+                        errorMessage =
+                            "❌ E-mail ou mot de passe incorrect.";
+
+                        break;
+
+
+                    case "auth/invalid-email":
+
+                        errorMessage =
+                            "❌ L'adresse e-mail n'est pas valide.";
+
+                        break;
+
+
+                    case "auth/user-not-found":
+
+                        errorMessage =
+                            "❌ Aucun compte ne correspond à cette adresse e-mail.";
+
+                        break;
+
+
+                    case "auth/wrong-password":
+
+                        errorMessage =
+                            "❌ Mot de passe incorrect.";
+
+                        break;
+
+
+                    case "auth/too-many-requests":
+
+                        errorMessage =
+                            "⚠️ Trop de tentatives. Réessayez plus tard.";
+
+                        break;
+
+
+                    case "auth/network-request-failed":
+
+                        errorMessage =
+                            "❌ Vérifiez votre connexion Internet.";
+
+                        break;
+
+
+                    case "auth/user-disabled":
+
+                        errorMessage =
+                            "❌ Ce compte a été désactivé.";
+
+                        break;
+
+
+                    default:
+
+                        errorMessage =
+                            "❌ " +
+                            (error.message ||
+                             "Une erreur est survenue.");
+
+                        break;
+                }
+
+
+                showMessage(
+                    errorMessage,
+                    "error"
+                );
+
+
+                // -------------------------------------------------
+                // RÉACTIVER LE BOUTON
+                // -------------------------------------------------
+
+                if (loginButton) {
+
+                    loginButton.disabled = false;
+
+                    loginButton.textContent =
+                        "Se connecter";
+
+                }
+
+            }
+
+        }
+    );
+
+} else {
+
+    console.error(
+        "Le formulaire #loginForm est introuvable."
+    );
 }
