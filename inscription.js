@@ -3,11 +3,15 @@
 // CONNEXION AVEC FIREBASE AUTHENTICATION
 // =====================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+// Import Firebase
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
@@ -35,22 +39,43 @@ const auth = getAuth(app);
 
 
 // =====================================================
-// ÉLÉMENTS DE LA PAGE
+// RÉCUPÉRATION DES ÉLÉMENTS HTML
 // =====================================================
 
-const loginForm = document.getElementById("loginForm");
+const loginForm =
+    document.getElementById("loginForm");
 
-const loginMessage =
-    document.getElementById("loginMessage");
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
 
 const loginButton =
     document.getElementById("loginButton");
 
+const loginMessage =
+    document.getElementById("loginMessage");
+
 const togglePassword =
     document.getElementById("togglePassword");
 
-const passwordInput =
-    document.getElementById("password");
+
+// =====================================================
+// FONCTION POUR AFFICHER UN MESSAGE
+// =====================================================
+
+function showMessage(message, type) {
+
+    if (!loginMessage) {
+        return;
+    }
+
+    loginMessage.textContent = message;
+
+    loginMessage.className =
+        "form-message " + type;
+}
 
 
 // =====================================================
@@ -59,50 +84,88 @@ const passwordInput =
 
 if (togglePassword && passwordInput) {
 
-    togglePassword.addEventListener("click", function () {
+    togglePassword.addEventListener(
+        "click",
+        function () {
 
-        if (passwordInput.type === "password") {
+            if (
+                passwordInput.type === "password"
+            ) {
 
-            passwordInput.type = "text";
+                passwordInput.type = "text";
 
-            togglePassword.textContent = "🙈";
+                togglePassword.textContent = "🙈";
 
-            togglePassword.setAttribute(
-                "aria-label",
-                "Masquer le mot de passe"
-            );
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Masquer le mot de passe"
+                );
 
-        } else {
+            } else {
 
-            passwordInput.type = "password";
+                passwordInput.type = "password";
 
-            togglePassword.textContent = "👁️";
+                togglePassword.textContent = "👁️";
 
-            togglePassword.setAttribute(
-                "aria-label",
-                "Afficher le mot de passe"
-            );
+                togglePassword.setAttribute(
+                    "aria-label",
+                    "Afficher le mot de passe"
+                );
+
+            }
+
         }
-
-    });
+    );
 
 }
 
 
 // =====================================================
-// AFFICHAGE DES MESSAGES
+// VÉRIFICATION DES CHAMPS
 // =====================================================
 
-function showMessage(text, type) {
+function validateForm(email, password) {
 
-    if (!loginMessage) {
-        return;
+    if (!email) {
+
+        showMessage(
+            "⚠️ Veuillez entrer votre adresse e-mail.",
+            "error"
+        );
+
+        emailInput.focus();
+
+        return false;
     }
 
-    loginMessage.textContent = text;
 
-    loginMessage.className =
-        "form-message " + type;
+    if (!email.includes("@")) {
+
+        showMessage(
+            "⚠️ Veuillez entrer une adresse e-mail valide.",
+            "error"
+        );
+
+        emailInput.focus();
+
+        return false;
+    }
+
+
+    if (!password) {
+
+        showMessage(
+            "⚠️ Veuillez entrer votre mot de passe.",
+            "error"
+        );
+
+        passwordInput.focus();
+
+        return false;
+    }
+
+
+    return true;
 }
 
 
@@ -116,18 +179,17 @@ if (loginForm) {
         "submit",
         async function (event) {
 
+            // Empêche le navigateur
+            // d'envoyer le formulaire dans l'URL
             event.preventDefault();
 
 
             // -------------------------------------------------
-            // RÉCUPÉRATION DES DONNÉES
+            // RÉCUPÉRATION DES INFORMATIONS
             // -------------------------------------------------
 
             const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim();
+                emailInput.value.trim();
 
             const password =
                 passwordInput.value;
@@ -137,29 +199,25 @@ if (loginForm) {
             // VALIDATION
             // -------------------------------------------------
 
-            if (!email || !password) {
-
-                showMessage(
-                    "⚠️ Veuillez remplir tous les champs.",
-                    "error"
-                );
+            if (
+                !validateForm(
+                    email,
+                    password
+                )
+            ) {
 
                 return;
             }
 
 
             // -------------------------------------------------
-            // CHARGEMENT
+            // BOUTON EN CHARGEMENT
             // -------------------------------------------------
 
-            if (loginButton) {
+            loginButton.disabled = true;
 
-                loginButton.disabled = true;
-
-                loginButton.textContent =
-                    "Connexion en cours...";
-
-            }
+            loginButton.textContent =
+                "Connexion en cours...";
 
 
             showMessage(
@@ -182,17 +240,33 @@ if (loginForm) {
                     );
 
 
+                // =============================================
+                // UTILISATEUR CONNECTÉ
+                // =============================================
+
                 const user =
                     userCredential.user;
 
 
+                console.log(
+                    "Utilisateur connecté :",
+                    user.uid
+                );
+
+
                 // =============================================
-                // SAUVEGARDE DES INFORMATIONS
+                // STOCKAGE DES INFORMATIONS NON SENSIBLES
                 // =============================================
 
                 localStorage.setItem(
                     "banqueFacileEmail",
                     user.email || ""
+                );
+
+
+                localStorage.setItem(
+                    "banqueFacileUID",
+                    user.uid || ""
                 );
 
 
@@ -203,11 +277,11 @@ if (loginForm) {
 
 
                 // =============================================
-                // SUCCÈS
+                // MESSAGE DE SUCCÈS
                 // =============================================
 
                 showMessage(
-                    "✅ Connexion réussie ! Redirection...",
+                    "✅ Connexion réussie !",
                     "success"
                 );
 
@@ -216,51 +290,54 @@ if (loginForm) {
                 // REDIRECTION
                 // =============================================
 
-                setTimeout(function () {
+                setTimeout(
+                    function () {
 
-                    window.location.href =
-                        "tableau_de_bord.html";
+                        window.location.href =
+                            "tableau_de_bord.html";
 
-                }, 1200);
+                    },
+                    1000
+                );
 
 
             } catch (error) {
 
                 console.error(
-                    "Erreur de connexion Firebase :",
+                    "Erreur Firebase :",
                     error
                 );
 
 
                 // =============================================
-                // ERREURS FIREBASE
+                // MESSAGE D'ERREUR
                 // =============================================
 
-                let errorMessage =
+                let message =
                     "❌ Impossible de vous connecter.";
 
 
                 switch (error.code) {
 
-                    case "auth/invalid-credential":
+                    case "auth/invalid-email":
 
-                        errorMessage =
-                            "❌ E-mail ou mot de passe incorrect.";
+                        message =
+                            "❌ L'adresse e-mail n'est pas valide.";
 
                         break;
 
 
-                    case "auth/invalid-email":
+                    case "auth/invalid-credential":
 
-                        errorMessage =
-                            "❌ L'adresse e-mail n'est pas valide.";
+                        message =
+                            "❌ E-mail ou mot de passe incorrect.";
 
                         break;
 
 
                     case "auth/user-not-found":
 
-                        errorMessage =
+                        message =
                             "❌ Aucun compte ne correspond à cette adresse e-mail.";
 
                         break;
@@ -268,49 +345,47 @@ if (loginForm) {
 
                     case "auth/wrong-password":
 
-                        errorMessage =
+                        message =
                             "❌ Mot de passe incorrect.";
-
-                        break;
-
-
-                    case "auth/too-many-requests":
-
-                        errorMessage =
-                            "⚠️ Trop de tentatives. Réessayez plus tard.";
-
-                        break;
-
-
-                    case "auth/network-request-failed":
-
-                        errorMessage =
-                            "❌ Vérifiez votre connexion Internet.";
 
                         break;
 
 
                     case "auth/user-disabled":
 
-                        errorMessage =
+                        message =
                             "❌ Ce compte a été désactivé.";
+
+                        break;
+
+
+                    case "auth/too-many-requests":
+
+                        message =
+                            "⚠️ Trop de tentatives. Veuillez réessayer plus tard.";
+
+                        break;
+
+
+                    case "auth/network-request-failed":
+
+                        message =
+                            "❌ Problème de connexion Internet.";
 
                         break;
 
 
                     default:
 
-                        errorMessage =
-                            "❌ " +
-                            (error.message ||
-                             "Une erreur est survenue.");
+                        message =
+                            "❌ Une erreur est survenue. Veuillez réessayer.";
 
                         break;
                 }
 
 
                 showMessage(
-                    errorMessage,
+                    message,
                     "error"
                 );
 
@@ -319,14 +394,10 @@ if (loginForm) {
                 // RÉACTIVER LE BOUTON
                 // -------------------------------------------------
 
-                if (loginButton) {
+                loginButton.disabled = false;
 
-                    loginButton.disabled = false;
-
-                    loginButton.textContent =
-                        "Se connecter";
-
-                }
+                loginButton.textContent =
+                    "Se connecter";
 
             }
 
@@ -336,6 +407,34 @@ if (loginForm) {
 } else {
 
     console.error(
-        "Le formulaire #loginForm est introuvable."
+        "❌ Le formulaire #loginForm est introuvable."
     );
+
 }
+
+
+// =====================================================
+// SURVEILLANCE DE LA SESSION FIREBASE
+// =====================================================
+
+onAuthStateChanged(
+    auth,
+    function (user) {
+
+        if (user) {
+
+            console.log(
+                "Session Firebase active :",
+                user.email
+            );
+
+        } else {
+
+            console.log(
+                "Aucun utilisateur connecté."
+            );
+
+        }
+
+    }
+);
