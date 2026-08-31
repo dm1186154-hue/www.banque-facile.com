@@ -2,21 +2,22 @@
 <html lang="fr">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Tableau de bord | Banque Facile</title>
 
     <meta
         name="description"
-        content="Espace personnel Banque Facile"
+        content="Votre espace personnel Banque Facile."
     >
 
     <style>
-
-        /* =====================================================
-           RESET
-        ===================================================== */
 
         * {
             margin: 0;
@@ -24,52 +25,31 @@
             box-sizing: border-box;
         }
 
-
-        /* =====================================================
-           BODY
-        ===================================================== */
-
         body {
             font-family: Arial, Helvetica, sans-serif;
-
             min-height: 100vh;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #0066cc,
-                    #00a8e8
-                );
-
+            background: linear-gradient(135deg, #0066cc, #00a8e8);
             color: #172033;
         }
 
-
-        /* =====================================================
-           LAYOUT
-        ===================================================== */
-
         .dashboard {
             min-height: 100vh;
-
             display: flex;
         }
 
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
+        /* =========================
+           MENU
+        ========================= */
 
         .sidebar {
             position: fixed;
-
             left: 0;
             top: 0;
             bottom: 0;
 
             width: 260px;
 
-            background: white;
+            background: #ffffff;
 
             padding: 25px 18px;
 
@@ -78,23 +58,15 @@
                 rgba(0, 0, 0, 0.12);
 
             display: flex;
-
             flex-direction: column;
 
             z-index: 100;
         }
 
-
-        /* =====================================================
-           LOGO
-        ===================================================== */
-
         .logo-container {
             text-align: center;
-
             margin-bottom: 30px;
         }
-
 
         .logo {
             width: 85px;
@@ -107,88 +79,68 @@
             margin: 0 auto 10px;
         }
 
-
         .brand {
             color: #006dcc;
-
             font-size: 21px;
-
             font-weight: 800;
         }
 
-
-        /* =====================================================
-           NAVIGATION
-        ===================================================== */
-
         .nav {
             display: flex;
-
             flex-direction: column;
-
             gap: 8px;
         }
 
-
-        .nav-link {
+        .nav a {
             display: flex;
-
             align-items: center;
-
             gap: 12px;
 
             padding: 14px;
 
             border-radius: 12px;
 
-            text-decoration: none;
-
             color: #475569;
 
+            text-decoration: none;
+
+            font-size: 15px;
             font-weight: 600;
 
-            transition: 0.2s;
-
             cursor: pointer;
+
+            transition: 0.2s;
         }
 
-
-        .nav-link:hover {
+        .nav a:hover {
             background: #eff8ff;
-
             color: #006dcc;
         }
 
-
-        .nav-link.active {
-            color: white;
-
+        .nav a.active {
             background:
                 linear-gradient(
                     90deg,
                     #006dcc,
                     #008fe5
                 );
-        }
 
+            color: white;
+        }
 
         .nav-icon {
             width: 25px;
-
             text-align: center;
-
             font-size: 20px;
         }
 
-
-        /* =====================================================
-           LOGOUT
-        ===================================================== */
+        /* =========================
+           DECONNEXION
+        ========================= */
 
         .logout-area {
             margin-top: auto;
         }
-
 
         #logoutButton {
             width: 100%;
@@ -212,15 +164,13 @@
             transition: 0.2s;
         }
 
-
         #logoutButton:hover {
             background: #fee4e2;
         }
 
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* =========================
+           CONTENU
+        ========================= */
 
         .main {
             width: calc(100% - 260px);
@@ -232,10 +182,9 @@
             padding: 30px;
         }
 
-
-        /* =====================================================
-           TOPBAR
-        ===================================================== */
+        /* =========================
+           HEADER
+        ========================= */
 
         .topbar {
             background: white;
@@ -246,9 +195,9 @@
 
             display: flex;
 
-            align-items: center;
-
             justify-content: space-between;
+
+            align-items: center;
 
             margin-bottom: 25px;
 
@@ -256,7 +205,6 @@
                 0 10px 30px
                 rgba(0, 0, 0, 0.10);
         }
-
 
         .welcome h1 {
             color: #0067b9;
@@ -266,38 +214,22 @@
             margin-bottom: 5px;
         }
 
-
         .welcome p {
             color: #64748b;
 
             font-size: 14px;
         }
 
-
-        /* =====================================================
-           AVATAR
-        ===================================================== */
-
         .user-area {
             display: flex;
-
             align-items: center;
-
-            gap: 12px;
         }
 
-
         .avatar {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
 
             border-radius: 50%;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
 
             background:
                 linear-gradient(
@@ -308,15 +240,19 @@
 
             color: white;
 
-            font-size: 19px;
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
 
             font-weight: 800;
         }
 
-
-        /* =====================================================
+        /* =========================
            MESSAGE
-        ===================================================== */
+        ========================= */
 
         #dashboardMessage {
             display: none;
@@ -336,10 +272,9 @@
             font-weight: 600;
         }
 
-
-        /* =====================================================
-           BALANCE
-        ===================================================== */
+        /* =========================
+           SOLDE
+        ========================= */
 
         .balance-card {
             position: relative;
@@ -366,25 +301,23 @@
                 rgba(0, 80, 180, 0.30);
         }
 
-
         .balance-card::after {
             content: "";
 
             position: absolute;
 
-            width: 230px;
-            height: 230px;
+            width: 240px;
+            height: 240px;
 
-            border: 35px solid
+            border:
+                35px solid
                 rgba(255,255,255,0.08);
 
             border-radius: 50%;
 
-            right: -80px;
-
-            top: -100px;
+            right: -90px;
+            top: -110px;
         }
-
 
         .balance-label {
             font-size: 14px;
@@ -394,7 +327,6 @@
             margin-bottom: 8px;
         }
 
-
         .balance {
             font-size: 40px;
 
@@ -403,17 +335,15 @@
             margin-bottom: 10px;
         }
 
-
         .status {
             font-size: 14px;
 
             opacity: 0.9;
         }
 
-
-        /* =====================================================
-           TITRES
-        ===================================================== */
+        /* =========================
+           ACTIONS
+        ========================= */
 
         .section-title {
             color: white;
@@ -422,11 +352,6 @@
 
             margin-bottom: 15px;
         }
-
-
-        /* =====================================================
-           ACTIONS
-        ===================================================== */
 
         .actions {
             display: grid;
@@ -438,7 +363,6 @@
 
             margin-bottom: 25px;
         }
-
 
         .action {
             background: white;
@@ -453,11 +377,10 @@
 
             box-shadow:
                 0 10px 25px
-                rgba(0, 0, 0, 0.10);
+                rgba(0,0,0,0.10);
 
             transition: 0.2s;
         }
-
 
         .action:hover {
             transform: translateY(-4px);
@@ -467,13 +390,11 @@
                 rgba(0,0,0,0.15);
         }
 
-
         .action-icon {
             font-size: 32px;
 
             margin-bottom: 10px;
         }
-
 
         .action h3 {
             color: #006dcc;
@@ -483,17 +404,15 @@
             margin-bottom: 5px;
         }
 
-
         .action p {
             color: #64748b;
 
             font-size: 12px;
         }
 
-
-        /* =====================================================
+        /* =========================
            PANELS
-        ===================================================== */
+        ========================= */
 
         .panels {
             display: grid;
@@ -504,7 +423,6 @@
             gap: 20px;
         }
 
-
         .panel {
             background: white;
 
@@ -514,9 +432,8 @@
 
             box-shadow:
                 0 10px 25px
-                rgba(0, 0, 0, 0.10);
+                rgba(0,0,0,0.10);
         }
-
 
         .panel h2 {
             color: #006dcc;
@@ -525,11 +442,6 @@
 
             margin-bottom: 18px;
         }
-
-
-        /* =====================================================
-           INFORMATIONS
-        ===================================================== */
 
         .info-row {
             display: flex;
@@ -544,18 +456,15 @@
                 1px solid #eef2f6;
         }
 
-
         .info-row:last-child {
             border-bottom: none;
         }
-
 
         .info-label {
             color: #64748b;
 
             font-size: 14px;
         }
-
 
         .info-value {
             font-size: 14px;
@@ -567,12 +476,7 @@
             word-break: break-word;
         }
 
-
-        /* =====================================================
-           HISTORIQUE
-        ===================================================== */
-
-        .empty {
+        .empty-history {
             text-align: center;
 
             padding: 25px 10px;
@@ -580,12 +484,13 @@
             color: #64748b;
 
             font-size: 14px;
+
+            line-height: 1.5;
         }
 
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+        /* =========================
+           RESPONSIVE
+        ========================= */
 
         @media (max-width: 950px) {
 
@@ -597,16 +502,13 @@
             .panels {
                 grid-template-columns: 1fr;
             }
-
         }
-
 
         @media (max-width: 700px) {
 
             .dashboard {
                 display: block;
             }
-
 
             .sidebar {
                 position: relative;
@@ -618,17 +520,14 @@
                 padding: 15px;
             }
 
-
             .logo {
                 width: 65px;
                 height: 65px;
             }
 
-
             .logo-container {
                 margin-bottom: 15px;
             }
-
 
             .nav {
                 display: grid;
@@ -637,8 +536,7 @@
                     repeat(2, 1fr);
             }
 
-
-            .nav-link {
+            .nav a {
                 justify-content: center;
 
                 padding: 11px 5px;
@@ -646,16 +544,13 @@
                 font-size: 12px;
             }
 
-
             .nav-icon {
                 font-size: 17px;
             }
 
-
             .logout-area {
                 margin-top: 15px;
             }
-
 
             .main {
                 width: 100%;
@@ -665,23 +560,26 @@
                 padding: 15px;
             }
 
-
             .topbar {
                 padding: 17px;
 
                 border-radius: 16px;
             }
 
-
             .welcome h1 {
                 font-size: 21px;
             }
-
 
             .welcome p {
                 font-size: 12px;
             }
 
+            .avatar {
+                width: 42px;
+                height: 42px;
+
+                font-size: 17px;
+            }
 
             .balance-card {
                 padding: 25px;
@@ -689,21 +587,17 @@
                 border-radius: 18px;
             }
 
-
             .balance {
                 font-size: 31px;
             }
-
 
             .actions {
                 gap: 10px;
             }
 
-
             .action {
                 padding: 18px 8px;
             }
-
         }
 
     </style>
@@ -718,7 +612,7 @@
 
 
     <!-- =====================================================
-         SIDEBAR
+         MENU
     ===================================================== -->
 
     <aside class="sidebar">
@@ -743,7 +637,7 @@
 
             <a
                 href="tableau_de_bord.html"
-                class="nav-link active"
+                class="active"
             >
                 <span class="nav-icon">🏠</span>
                 Tableau de bord
@@ -752,7 +646,6 @@
 
             <a
                 href="#"
-                class="nav-link"
                 id="sendNav"
             >
                 <span class="nav-icon">💸</span>
@@ -762,7 +655,6 @@
 
             <a
                 href="#"
-                class="nav-link"
                 id="receiveNav"
             >
                 <span class="nav-icon">📥</span>
@@ -772,7 +664,6 @@
 
             <a
                 href="#"
-                class="nav-link"
                 id="historyNav"
             >
                 <span class="nav-icon">📊</span>
@@ -782,7 +673,6 @@
 
             <a
                 href="#"
-                class="nav-link"
                 id="profileNav"
             >
                 <span class="nav-icon">👤</span>
@@ -792,7 +682,6 @@
 
             <a
                 href="#"
-                class="nav-link"
                 id="settingsNav"
             >
                 <span class="nav-icon">⚙️</span>
@@ -815,13 +704,13 @@
 
 
     <!-- =====================================================
-         CONTENU
+         CONTENU PRINCIPAL
     ===================================================== -->
 
     <main class="main">
 
 
-        <!-- TOPBAR -->
+        <!-- HEADER -->
 
         <header class="topbar">
 
@@ -861,6 +750,7 @@
         <div id="dashboardMessage"></div>
 
 
+
         <!-- =================================================
              SOLDE
         ================================================== -->
@@ -890,7 +780,7 @@
 
 
         <!-- =================================================
-             ACTIONS
+             ACTIONS RAPIDES
         ================================================== -->
 
         <h2 class="section-title">
@@ -986,7 +876,7 @@
 
 
         <!-- =================================================
-             PANELS
+             INFORMATIONS
         ================================================== -->
 
         <div class="panels">
@@ -1048,6 +938,7 @@
 
                 </div>
 
+
             </section>
 
 
@@ -1061,14 +952,15 @@
                 </h2>
 
 
-                <div class="empty">
+                <div class="empty-history">
 
                     Aucune transaction enregistrée.
 
                     <br><br>
 
-                    L'historique apparaîtra ici
-                    lorsque les opérations seront disponibles.
+                    Les opérations apparaîtront ici
+                    lorsque le module de transactions
+                    sera connecté.
 
                 </div>
 
@@ -1093,7 +985,7 @@
     import {
         initializeApp
     } from
-        "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
     import {
@@ -1101,12 +993,12 @@
         onAuthStateChanged,
         signOut
     } from
-        "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-    // =====================================================
-    // CONFIGURATION FIREBASE
-    // =====================================================
+    /* =====================================================
+       CONFIGURATION FIREBASE
+    ===================================================== */
 
     const firebaseConfig = {
 
@@ -1131,9 +1023,9 @@
     };
 
 
-    // =====================================================
-    // INITIALISATION
-    // =====================================================
+    /* =====================================================
+       INITIALISATION
+    ===================================================== */
 
     const app =
         initializeApp(firebaseConfig);
@@ -1142,9 +1034,9 @@
         getAuth(app);
 
 
-    // =====================================================
-    // ÉLÉMENTS
-    // =====================================================
+    /* =====================================================
+       ÉLÉMENTS
+    ===================================================== */
 
     const userName =
         document.getElementById("userName");
@@ -1165,12 +1057,14 @@
         document.getElementById("logoutButton");
 
     const dashboardMessage =
-        document.getElementById("dashboardMessage");
+        document.getElementById(
+            "dashboardMessage"
+        );
 
 
-    // =====================================================
-    // MESSAGE
-    // =====================================================
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
 
     function showMessage(message) {
 
@@ -1180,7 +1074,8 @@
         dashboardMessage.style.display =
             "block";
 
-        setTimeout(function () {
+
+        setTimeout(function() {
 
             dashboardMessage.style.display =
                 "none";
@@ -1190,9 +1085,9 @@
     }
 
 
-    // =====================================================
-    // UTILISATEUR
-    // =====================================================
+    /* =====================================================
+       UTILISATEUR CONNECTÉ
+    ===================================================== */
 
     onAuthStateChanged(
         auth,
@@ -1206,8 +1101,6 @@
                 return;
             }
 
-
-            // NOM
 
             const firebaseName =
                 user.displayName || "";
@@ -1225,14 +1118,10 @@
                 "Utilisateur";
 
 
-            // EMAIL
-
             const email =
                 user.email ||
                 "—";
 
-
-            // TÉLÉPHONE
 
             const phone =
                 localStorage.getItem(
@@ -1240,22 +1129,21 @@
                 ) || "Non renseigné";
 
 
-            // AFFICHAGE
-
             userName.textContent =
                 name;
+
 
             profileName.textContent =
                 name;
 
+
             profileEmail.textContent =
                 email;
+
 
             profilePhone.textContent =
                 phone;
 
-
-            // AVATAR
 
             userAvatar.textContent =
                 name
@@ -1267,9 +1155,9 @@
     );
 
 
-    // =====================================================
-    // DÉCONNEXION
-    // =====================================================
+    /* =====================================================
+       DÉCONNEXION
+    ===================================================== */
 
     logoutButton.addEventListener(
         "click",
@@ -1311,12 +1199,13 @@
             } catch (error) {
 
                 console.error(
-                    "Erreur déconnexion :",
+                    "Erreur de déconnexion :",
                     error
                 );
 
+
                 showMessage(
-                    "❌ Impossible de vous déconnecter."
+                    "❌ Erreur pendant la déconnexion."
                 );
 
             }
@@ -1325,9 +1214,9 @@
     );
 
 
-    // =====================================================
-    // ACTIONS
-    // =====================================================
+    /* =====================================================
+       ACTIONS
+    ===================================================== */
 
     function comingSoon(message) {
 
@@ -1343,7 +1232,7 @@
             function() {
 
                 comingSoon(
-                    "💸 Le module d'envoi sera ajouté prochainement."
+                    "💸 Le module d'envoi sera ajouté dans la prochaine étape."
                 );
 
             }
@@ -1357,7 +1246,7 @@
             function() {
 
                 comingSoon(
-                    "📥 Le module de réception sera ajouté prochainement."
+                    "📥 Le module de réception sera ajouté dans la prochaine étape."
                 );
 
             }
@@ -1371,7 +1260,7 @@
             function() {
 
                 comingSoon(
-                    "📊 Le module historique sera ajouté prochainement."
+                    "📊 Le module historique sera ajouté dans la prochaine étape."
                 );
 
             }
@@ -1385,7 +1274,7 @@
             function() {
 
                 comingSoon(
-                    "👤 Le module profil sera ajouté prochainement."
+                    "👤 Le module profil sera ajouté dans la prochaine étape."
                 );
 
             }
@@ -1433,7 +1322,7 @@
                 event.preventDefault();
 
                 comingSoon(
-                    "📊 Le module historique sera ajouté prochainement."
+                    "📊 L'historique sera ajouté prochainement."
                 );
 
             }
@@ -1449,7 +1338,7 @@
                 event.preventDefault();
 
                 comingSoon(
-                    "👤 Le module profil sera ajouté prochainement."
+                    "👤 Le profil sera ajouté prochainement."
                 );
 
             }
