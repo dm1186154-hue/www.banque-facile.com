@@ -1,50 +1,1402 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord</title>
-    <link rel="stylesheet" href="CSS/style.css">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Tableau de bord | Banque Facile</title>
+
+    <meta
+        name="description"
+        content="Votre espace personnel Banque Facile."
+    >
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0066cc,
+                    #00a8e8
+                );
+
+            color: #172033;
+        }
+
+
+        /* =====================================================
+           CONTENEUR PRINCIPAL
+        ===================================================== */
+
+        .dashboard {
+            min-height: 100vh;
+            display: flex;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            width: 260px;
+
+            background: #ffffff;
+
+            padding: 25px 18px;
+
+            box-shadow:
+                5px 0 25px
+                rgba(0, 0, 0, 0.12);
+
+            display: flex;
+            flex-direction: column;
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            z-index: 100;
+        }
+
+
+        /* LOGO */
+
+        .logo-container {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 85px;
+            height: 85px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto 10px;
+        }
+
+        .brand {
+            color: #006dcc;
+
+            font-size: 21px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .nav {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .nav a {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 14px 15px;
+
+            border-radius: 12px;
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .nav a:hover {
+            background: #eff8ff;
+
+            color: #006dcc;
+
+            transform: translateX(3px);
+        }
+
+
+        .nav a.active {
+            background:
+                linear-gradient(
+                    90deg,
+                    #006dcc,
+                    #008fe5
+                );
+
+            color: white;
+        }
+
+
+        .nav-icon {
+            font-size: 21px;
+
+            width: 25px;
+
+            text-align: center;
+        }
+
+
+        /* =====================================================
+           DÉCONNEXION
+        ===================================================== */
+
+        .logout-container {
+            margin-top: auto;
+        }
+
+
+        #logoutButton {
+            width: 100%;
+
+            border: none;
+
+            background: #fff1f0;
+
+            color: #b42318;
+
+            padding: 13px;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        #logoutButton:hover {
+            background: #fee4e2;
+        }
+
+
+        /* =====================================================
+           CONTENU
+        ===================================================== */
+
+        .main {
+            margin-left: 260px;
+
+            width: calc(100% - 260px);
+
+            padding: 30px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+            background: rgba(255,255,255,0.96);
+
+            border-radius: 20px;
+
+            padding: 20px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.10);
+        }
+
+
+        .welcome h1 {
+            font-size: 28px;
+
+            color: #0067b9;
+
+            margin-bottom: 5px;
+        }
+
+
+        .welcome p {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        .user-badge {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #006dcc,
+                    #00a8e8
+                );
+
+            color: white;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-weight: 800;
+
+            font-size: 18px;
+        }
+
+
+        /* =====================================================
+           SOLDE
+        ===================================================== */
+
+        .balance-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    #005bbb,
+                    #008fe5
+                );
+
+            color: white;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 15px 35px
+                rgba(0, 80, 180, 0.30);
+
+            margin-bottom: 25px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .balance-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 230px;
+            height: 230px;
+
+            border-radius: 50%;
+
+            border: 35px solid
+                rgba(255,255,255,0.08);
+
+            right: -80px;
+
+            top: -100px;
+        }
+
+
+        .balance-label {
+            font-size: 14px;
+
+            opacity: 0.85;
+
+            margin-bottom: 10px;
+        }
+
+
+        .balance {
+            font-size: 40px;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+        }
+
+
+        .account-status {
+            font-size: 14px;
+
+            opacity: 0.9;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .section-title {
+            color: white;
+
+            font-size: 20px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .action-card {
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            text-decoration: none;
+
+            color: #172033;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.10);
+
+            transition: 0.2s;
+
+            text-align: center;
+        }
+
+
+        .action-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,0,0,0.15);
+        }
+
+
+        .action-icon {
+            font-size: 30px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .action-card h3 {
+            font-size: 15px;
+
+            margin-bottom: 5px;
+
+            color: #006dcc;
+        }
+
+
+        .action-card p {
+            font-size: 12px;
+
+            color: #64748b;
+        }
+
+
+        /* =====================================================
+           INFORMATIONS
+        ===================================================== */
+
+        .bottom-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+
+        .panel {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.10);
+        }
+
+
+        .panel h2 {
+            color: #006dcc;
+
+            font-size: 19px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #eef2f6;
+        }
+
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .info-label {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        .info-value {
+            font-weight: 700;
+
+            font-size: 14px;
+
+            text-align: right;
+        }
+
+
+        .empty-history {
+            color: #64748b;
+
+            font-size: 14px;
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        #dashboardMessage {
+            display: none;
+
+            background: white;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            color: #006dcc;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+
+                width:
+                    calc(100% - 220px);
+            }
+
+            .actions {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .dashboard {
+                display: block;
+            }
+
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                padding: 15px;
+
+                box-shadow:
+                    0 5px 20px
+                    rgba(0,0,0,0.10);
+            }
+
+
+            .logo {
+                width: 65px;
+                height: 65px;
+            }
+
+
+            .logo-container {
+                margin-bottom: 15px;
+            }
+
+
+            .nav {
+                display: grid;
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .nav a {
+                justify-content: center;
+
+                padding: 11px 5px;
+
+                font-size: 12px;
+            }
+
+
+            .nav-icon {
+                font-size: 18px;
+            }
+
+
+            .logout-container {
+                margin-top: 15px;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                width: 100%;
+
+                padding: 15px;
+            }
+
+
+            .topbar {
+                padding: 17px;
+
+                border-radius: 16px;
+            }
+
+
+            .welcome h1 {
+                font-size: 21px;
+            }
+
+
+            .welcome p {
+                font-size: 12px;
+            }
+
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+
+            .balance-card {
+                padding: 25px;
+
+                border-radius: 18px;
+            }
+
+
+            .balance {
+                font-size: 32px;
+            }
+
+
+            .actions {
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+                gap: 10px;
+            }
+
+
+            .action-card {
+                padding: 18px 10px;
+            }
+
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <div class="dashboard">
 
-        <header class="dash-header">
-            <img src="assets/logo.png" class="dash-logo">
+<div class="dashboard">
 
-            <h1>Bienvenue dans votre espace</h1>
+
+    <!-- =====================================================
+         MENU
+    ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                alt="Logo Banque Facile"
+            >
+
+            <div class="brand">
+                Banque Facile
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a
+                href="tableau_de_bord.html"
+                class="active"
+            >
+                <span class="nav-icon">🏠</span>
+                Tableau de bord
+            </a>
+
+
+            <a href="#">
+                <span class="nav-icon">💸</span>
+                Envoyer
+            </a>
+
+
+            <a href="#">
+                <span class="nav-icon">📥</span>
+                Recevoir
+            </a>
+
+
+            <a href="#">
+                <span class="nav-icon">📊</span>
+                Historique
+            </a>
+
+
+            <a href="#">
+                <span class="nav-icon">👤</span>
+                Mon profil
+            </a>
+
+
+            <a href="#">
+                <span class="nav-icon">⚙️</span>
+                Paramètres
+            </a>
+
+        </nav>
+
+
+        <div class="logout-container">
+
+            <button id="logoutButton">
+                🚪 Déconnexion
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="welcome">
+
+                <h1>
+                    Bonjour,
+                    <span id="userName">
+                        Utilisateur
+                    </span>
+                    👋
+                </h1>
+
+                <p>
+                    Bienvenue dans votre espace Banque Facile.
+                </p>
+
+            </div>
+
+
+            <div class="user-badge">
+
+                <div
+                    class="avatar"
+                    id="userAvatar"
+                >
+                    U
+                </div>
+
+            </div>
+
         </header>
 
-        <section class="card balance-card">
-            <h2>Solde actuel</h2>
-            <p class="amount">150 000 FCFA</p>
-        </section>
 
-        <section class="grid">
+        <!-- MESSAGE -->
 
-            <div class="card action-card">
-                <h3>Envoyer de l'argent</h3>
-                <p>Transférez rapidement vers un autre numéro.</p>
+        <div id="dashboardMessage"></div>
+
+
+        <!-- =================================================
+             SOLDE
+        ================================================== -->
+
+        <div class="balance-card">
+
+            <div class="balance-label">
+                Solde disponible
             </div>
 
-            <div class="card action-card">
-                <h3>Historique</h3>
-                <p>Consultez vos transactions.</p>
+
+            <div class="balance">
+                <span id="balance">
+                    150 000
+                </span>
+                FCFA
             </div>
 
-            <div class="card action-card">
-                <h3>Paramètres</h3>
-                <p>Modifier vos informations.</p>
+
+            <div class="account-status">
+                🟢 Compte actif
             </div>
 
-        </section>
+        </div>
 
-        <button id="logout" class="btn-logout">Déconnexion</button>
 
-    </div>
+        <!-- =================================================
+             ACTIONS RAPIDES
+        ================================================== -->
 
-    <script type="module" src="main.js"></script>
+        <h2 class="section-title">
+            Actions rapides
+        </h2>
+
+
+        <div class="actions">
+
+
+            <a
+                href="#"
+                class="action-card"
+                id="sendMoney"
+            >
+
+                <div class="action-icon">
+                    💸
+                </div>
+
+                <h3>
+                    Envoyer de l'argent
+                </h3>
+
+                <p>
+                    Transférez rapidement de l'argent.
+                </p>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="action-card"
+                id="receiveMoney"
+            >
+
+                <div class="action-icon">
+                    📥
+                </div>
+
+                <h3>
+                    Recevoir
+                </h3>
+
+                <p>
+                    Recevez de l'argent facilement.
+                </p>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="action-card"
+                id="history"
+            >
+
+                <div class="action-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Historique
+                </h3>
+
+                <p>
+                    Consultez vos transactions.
+                </p>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="action-card"
+                id="profile"
+            >
+
+                <div class="action-icon">
+                    👤
+                </div>
+
+                <h3>
+                    Mon profil
+                </h3>
+
+                <p>
+                    Gérez vos informations.
+                </p>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             INFORMATIONS
+        ================================================== -->
+
+        <div class="bottom-grid">
+
+
+            <!-- PROFIL -->
+
+            <section class="panel">
+
+                <h2>
+                    👤 Mes informations
+                </h2>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Nom complet
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profileName"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Adresse e-mail
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profileEmail"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Téléphone
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profilePhone"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- HISTORIQUE -->
+
+            <section class="panel">
+
+                <h2>
+                    📊 Dernières opérations
+                </h2>
+
+
+                <div class="empty-history">
+
+                    Aucune transaction récente.
+
+                    <br><br>
+
+                    Vos opérations apparaîtront ici.
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
+<script type="module">
+
+    import {
+        initializeApp
+    } from
+        "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from
+        "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    // =====================================================
+    // CONFIGURATION
+    // =====================================================
+
+    const firebaseConfig = {
+
+        apiKey:
+            "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
+
+        authDomain:
+            "banque-app-66bf9.firebaseapp.com",
+
+        projectId:
+            "banque-app-66bf9",
+
+        storageBucket:
+            "banque-app-66bf9.firebasestorage.app",
+
+        messagingSenderId:
+            "833823730245",
+
+        appId:
+            "1:833823730245:web:8141ce1171c93040f9912c"
+
+    };
+
+
+    // =====================================================
+    // FIREBASE
+    // =====================================================
+
+    const app =
+        initializeApp(firebaseConfig);
+
+    const auth =
+        getAuth(app);
+
+
+    // =====================================================
+    // ÉLÉMENTS
+    // =====================================================
+
+    const userName =
+        document.getElementById("userName");
+
+    const userAvatar =
+        document.getElementById("userAvatar");
+
+    const profileName =
+        document.getElementById("profileName");
+
+    const profileEmail =
+        document.getElementById("profileEmail");
+
+    const profilePhone =
+        document.getElementById("profilePhone");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    const dashboardMessage =
+        document.getElementById("dashboardMessage");
+
+
+    // =====================================================
+    // MESSAGE
+    // =====================================================
+
+    function showMessage(message) {
+
+        dashboardMessage.textContent =
+            message;
+
+        dashboardMessage.style.display =
+            "block";
+
+        setTimeout(function () {
+
+            dashboardMessage.style.display =
+                "none";
+
+        }, 3000);
+
+    }
+
+
+    // =====================================================
+    // UTILISATEUR CONNECTÉ
+    // =====================================================
+
+    onAuthStateChanged(
+        auth,
+        function(user) {
+
+            if (!user) {
+
+                window.location.href =
+                    "connexion.html";
+
+                return;
+            }
+
+
+            // NOM FIREBASE
+
+            const firebaseName =
+                user.displayName || "";
+
+
+            // NOM LOCAL
+
+            const localName =
+                localStorage.getItem(
+                    "banqueFacileFullname"
+                ) || "";
+
+
+            const name =
+                firebaseName ||
+                localName ||
+                "Utilisateur";
+
+
+            // EMAIL
+
+            const email =
+                user.email ||
+                localStorage.getItem(
+                    "banqueFacileEmail"
+                ) ||
+                "—";
+
+
+            // TELEPHONE
+
+            const phone =
+                localStorage.getItem(
+                    "banqueFacilePhone"
+                ) || "Non renseigné";
+
+
+            // AFFICHAGE
+
+            userName.textContent =
+                name;
+
+            profileName.textContent =
+                name;
+
+            profileEmail.textContent =
+                email;
+
+            profilePhone.textContent =
+                phone;
+
+
+            // PREMIÈRE LETTRE
+
+            userAvatar.textContent =
+                name
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            console.log(
+                "Utilisateur connecté :",
+                user.email
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // DÉCONNEXION
+    // =====================================================
+
+    logoutButton.addEventListener(
+        "click",
+        async function() {
+
+            const confirmation =
+                confirm(
+                    "Voulez-vous vraiment vous déconnecter ?"
+                );
+
+
+            if (!confirmation) {
+                return;
+            }
+
+
+            try {
+
+                await signOut(auth);
+
+
+                localStorage.removeItem(
+                    "banqueFacileEmail"
+                );
+
+                localStorage.removeItem(
+                    "banqueFacileFullname"
+                );
+
+                localStorage.removeItem(
+                    "banqueFacilePhone"
+                );
+
+
+                window.location.href =
+                    "connexion.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur de déconnexion :",
+                    error
+                );
+
+                showMessage(
+                    "❌ Impossible de vous déconnecter."
+                );
+
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // ACTIONS
+    // =====================================================
+
+    document
+        .getElementById("sendMoney")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showMessage(
+                    "💸 Le service d'envoi d'argent sera bientôt disponible."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("receiveMoney")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showMessage(
+                    "📥 Le service de réception sera bientôt disponible."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("history")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showMessage(
+                    "📊 L'historique des transactions sera bientôt disponible."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("profile")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showMessage(
+                    "👤 La gestion du profil sera bientôt disponible."
+                );
+
+            }
+        );
+
+</script>
+
+
 </body>
 </html>
