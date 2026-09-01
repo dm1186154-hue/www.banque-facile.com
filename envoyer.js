@@ -5,12 +5,12 @@
 
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
     getFirestore,
@@ -20,7 +20,7 @@ import {
     addDoc,
     collection,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 // ============================================================
@@ -28,21 +28,20 @@ import {
 // ============================================================
 
 const firebaseConfig = {
-    apiKey: "TON_API_KEY",
-    authDomain: "TON_PROJET.firebaseapp.com",
-    projectId: "TON_PROJECT_ID",
-    storageBucket: "TON_PROJET.firebasestorage.app",
-    messagingSenderId: "TON_SENDER_ID",
-    appId: "TON_APP_ID"
+    apiKey: "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
+    authDomain: "banque-app-66bf9.firebaseapp.com",
+    projectId: "banque-app-66bf9",
+    storageBucket: "banque-app-66bf9.firebasestorage.app",
+    messagingSenderId: "833823730245",
+    appId: "1:833823730245:web:8141ce1171c93040f9912c"
 };
 
 
 // ============================================================
-// INITIALISATION
+// INITIALISATION FIREBASE
 // ============================================================
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
 const db = getFirestore(app);
 
@@ -51,13 +50,16 @@ const db = getFirestore(app);
 // ELEMENTS HTML
 // ============================================================
 
-const form = document.getElementById("sendForm");
+const form = document.getElementById("sendMoneyForm");
+
+const currentUserElement =
+    document.getElementById("currentUser");
 
 const beneficiaryInput =
-    document.getElementById("beneficiary");
+    document.getElementById("recipientName");
 
 const phoneInput =
-    document.getElementById("phone");
+    document.getElementById("recipientPhone");
 
 const amountInput =
     document.getElementById("amount");
@@ -84,8 +86,7 @@ function showMessage(text, type = "error") {
     }
 
     message.textContent = text;
-
-    message.className = "form-message " + type;
+    message.className = type;
 }
 
 
@@ -108,7 +109,7 @@ function setLoading(loading) {
 
 
 // ============================================================
-// UTILITAIRE : NETTOYAGE
+// NETTOYAGE DU TEXTE
 // ============================================================
 
 function cleanText(value) {
@@ -120,18 +121,12 @@ function cleanText(value) {
 
 
 // ============================================================
-// UTILITAIRE : MONTANT
+// CONVERSION DU MONTANT
 // ============================================================
 
 function getAmount(value) {
 
-    // Autorise :
-    // 1000
-    // 1 000
-    // 1.000
-    // 1000.50
-
-    const cleaned = String(value)
+    const cleaned = String(value || "")
         .replace(/\s/g, "")
         .replace(",", ".");
 
@@ -140,7 +135,7 @@ function getAmount(value) {
 
 
 // ============================================================
-// VERIFICATION UTILISATEUR CONNECTE
+// UTILISATEUR CONNECTÉ
 // ============================================================
 
 let currentUser = null;
@@ -150,6 +145,11 @@ onAuthStateChanged(auth, (user) => {
     if (!user) {
 
         currentUser = null;
+
+        if (currentUserElement) {
+            currentUserElement.textContent =
+                "Aucun utilisateur connecté";
+        }
 
         showMessage(
             "⚠️ Vous devez être connecté pour effectuer un transfert.",
@@ -164,6 +164,12 @@ onAuthStateChanged(auth, (user) => {
     }
 
     currentUser = user;
+
+    if (currentUserElement) {
+
+        currentUserElement.textContent =
+            user.email || "Utilisateur connecté";
+    }
 
     if (sendButton) {
         sendButton.disabled = false;
@@ -195,7 +201,9 @@ function validateForm() {
         cleanText(reasonInput?.value);
 
 
-    // Nom du bénéficiaire
+    // ----------------------------------------------------------
+    // BENEFICIAIRE
+    // ----------------------------------------------------------
 
     if (!beneficiary) {
 
@@ -223,7 +231,9 @@ function validateForm() {
     }
 
 
-    // Téléphone
+    // ----------------------------------------------------------
+    // TELEPHONE
+    // ----------------------------------------------------------
 
     if (!phone) {
 
@@ -255,7 +265,9 @@ function validateForm() {
     }
 
 
-    // Montant
+    // ----------------------------------------------------------
+    // MONTANT
+    // ----------------------------------------------------------
 
     if (!Number.isFinite(amount)) {
 
@@ -283,8 +295,6 @@ function validateForm() {
     }
 
 
-    // Limite de sécurité
-
     if (amount > 100000000) {
 
         showMessage(
@@ -298,7 +308,9 @@ function validateForm() {
     }
 
 
-    // Motif facultatif
+    // ----------------------------------------------------------
+    // MOTIF
+    // ----------------------------------------------------------
 
     if (reason.length > 200) {
 
@@ -323,7 +335,7 @@ function validateForm() {
 
 
 // ============================================================
-// RECHERCHE DU COMPTE UTILISATEUR
+// RECUPERATION DU COMPTE
 // ============================================================
 
 async function getUserAccount(uid) {
@@ -364,19 +376,20 @@ async function sendMoney(data) {
     }
 
 
-    // Récupération du compte
+    // ----------------------------------------------------------
+    // RECUPERATION DU COMPTE
+    // ----------------------------------------------------------
 
     const account =
         await getUserAccount(currentUser.uid);
-
 
     const userData =
         account.data;
 
 
-    // ========================================================
+    // ----------------------------------------------------------
     // RECUPERATION DU SOLDE
-    // ========================================================
+    // ----------------------------------------------------------
 
     let balance = 0;
 
@@ -393,14 +406,18 @@ async function sendMoney(data) {
 
         balance =
             Number(
-                userData.solde.replace(/\s/g, "")
+                userData.solde
+                    .replace(/\s/g, "")
+                    .replace(",", ".")
             );
 
     } else if (typeof userData.balance === "string") {
 
         balance =
             Number(
-                userData.balance.replace(/\s/g, "")
+                userData.balance
+                    .replace(/\s/g, "")
+                    .replace(",", ".")
             );
     }
 
@@ -413,9 +430,9 @@ async function sendMoney(data) {
     }
 
 
-    // ========================================================
+    // ----------------------------------------------------------
     // VERIFICATION DU SOLDE
-    // ========================================================
+    // ----------------------------------------------------------
 
     if (data.amount > balance) {
 
@@ -425,17 +442,17 @@ async function sendMoney(data) {
     }
 
 
-    // ========================================================
-    // NOUVEAU SOLDE
-    // ========================================================
+    // ----------------------------------------------------------
+    // CALCUL DU NOUVEAU SOLDE
+    // ----------------------------------------------------------
 
     const newBalance =
         balance - data.amount;
 
 
-    // ========================================================
+    // ----------------------------------------------------------
     // ENREGISTREMENT DE LA TRANSACTION
-    // ========================================================
+    // ----------------------------------------------------------
 
     const transaction = {
 
@@ -469,9 +486,9 @@ async function sendMoney(data) {
     );
 
 
-    // ========================================================
+    // ----------------------------------------------------------
     // MISE A JOUR DU SOLDE
-    // ========================================================
+    // ----------------------------------------------------------
 
     if ("solde" in userData) {
 
@@ -510,18 +527,16 @@ if (form) {
         event.preventDefault();
 
 
-        // Nettoyage ancien message
+        // Nettoyage du message précédent
 
         if (message) {
 
             message.textContent = "";
-
-            message.className =
-                "form-message";
+            message.className = "";
         }
 
 
-        // Vérification connexion
+        // Vérification de connexion
 
         if (!currentUser) {
 
@@ -573,9 +588,9 @@ if (form) {
                 await sendMoney(data);
 
 
-            // ==================================================
+            // --------------------------------------------------
             // SUCCES
-            // ==================================================
+            // --------------------------------------------------
 
             showMessage(
                 `✅ Transfert effectué avec succès ! ${data.amount.toLocaleString("fr-FR")} FCFA ont été envoyés à ${data.beneficiary}. Nouveau solde : ${result.newBalance.toLocaleString("fr-FR")} FCFA.`,
@@ -583,7 +598,7 @@ if (form) {
             );
 
 
-            // Nettoyage
+            // Nettoyage du formulaire
 
             if (beneficiaryInput)
                 beneficiaryInput.value = "";
@@ -606,18 +621,9 @@ if (form) {
             );
 
 
-            let errorMessage =
-                "❌ Une erreur est survenue pendant le transfert.";
-
-
-            if (error.message) {
-                errorMessage =
-                    "❌ " + error.message;
-            }
-
-
             showMessage(
-                errorMessage,
+                "❌ " + (error.message ||
+                "Une erreur est survenue pendant le transfert."),
                 "error"
             );
 
@@ -632,6 +638,6 @@ if (form) {
 } else {
 
     console.error(
-        "❌ Le formulaire #sendForm est introuvable."
+        "❌ Le formulaire #sendMoneyForm est introuvable."
     );
 }
