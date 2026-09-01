@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Envoyer de l'argent | Banque Facile</title>
+
+    <meta
+        name="description"
+        content="Envoyez de l'argent rapidement avec Banque Facile."
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0066cc, #00a8e8);
+            padding: 30px 15px;
+            color: #172033;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.20);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0067b9;
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .user-box {
+            background: #eff8ff;
+            border: 1px solid #b2ddff;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .user-box strong {
+            color: #0067b9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #172033;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #d5dce5;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+            background: #fff;
+        }
+
+        input {
+            height: 55px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #0074d9;
+            box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.12);
+        }
+
+        .hint {
+            display: block;
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .amount-box {
+            position: relative;
+        }
+
+        .amount-box input {
+            padding-right: 75px;
+        }
+
+        .currency {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0067b9;
+            font-weight: 700;
+        }
+
+        #sendButton {
+            width: 100%;
+            height: 56px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #006dcc, #008fe5);
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        #sendButton:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        #sendButton:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .message.error {
+            display: block;
+            color: #b42318;
+            background: #fef3f2;
+            border: 1px solid #fecdca;
+        }
+
+        .message.success {
+            display: block;
+            color: #067647;
+            background: #ecfdf3;
+            border: 1px solid #abefc6;
+        }
+
+        .message.loading {
+            display: block;
+            color: #175cd3;
+            background: #eff8ff;
+            border: 1px solid #b2ddff;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #006dcc;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        .security {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 25px 20px;
+                border-radius: 18px;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <!-- LOGO -->
+        <div class="logo-container">
+            <img
+                class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                alt="Logo Banque Facile"
+            >
+        </div>
+
+        <!-- TITRE -->
+        <h1>💸 Envoyer de l'argent</h1>
+
+        <p class="subtitle">
+            Effectuez un transfert rapidement et simplement
+            avec Banque Facile.
+        </p>
+
+        <!-- UTILISATEUR CONNECTÉ -->
+        <div class="user-box">
+            👤 Compte connecté :
+            <strong id="currentUser">Vérification...</strong>
+        </div>
+
+        <!-- FORMULAIRE -->
+        <form id="sendMoneyForm" novalidate>
+
+            <!-- BENEFICIAIRE -->
+            <div class="form-group">
+
+                <label for="recipientName">
+                    Nom du bénéficiaire
+                </label>
+
+                <input
+                    type="text"
+                    id="recipientName"
+                    name="recipientName"
+                    placeholder="Exemple : Amadou Traoré"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+            <!-- TELEPHONE -->
+            <div class="form-group">
+
+                <label for="recipientPhone">
+                    Numéro du bénéficiaire
+                </label>
+
+                <input
+                    type="tel"
+                    id="recipientPhone"
+                    name="recipientPhone"
+                    placeholder="Exemple : 0507192851"
+                    autocomplete="tel"
+                    required
+                >
+
+                <span class="hint">
+                    Entrez le numéro associé au compte du bénéficiaire.
+                </span>
+
+            </div>
+
+            <!-- MONTANT -->
+            <div class="form-group">
+
+                <label for="amount">
+                    Montant à envoyer
+                </label>
+
+                <div class="amount-box">
+
+                    <input
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Exemple : 10000"
+                        min="1"
+                        step="1"
+                        required
+                    >
+
+                    <span class="currency">
+                        FCFA
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- MOTIF -->
+            <div class="form-group">
+
+                <label for="reason">
+                    Motif du transfert
+                    <span style="font-weight: normal;">
+                        (facultatif)
+                    </span>
+                </label>
+
+                <textarea
+                    id="reason"
+                    name="reason"
+                    placeholder="Exemple : Aide familiale, paiement..."
+                    maxlength="150"
+                ></textarea>
+
+            </div>
+
+            <!-- MESSAGE -->
+            <div
+                id="sendMessage"
+                class="message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <!-- BOUTON -->
+            <button
+                type="submit"
+                id="sendButton"
+            >
+                💸 Continuer le transfert
+            </button>
+
+        </form>
+
+        <!-- SECURITE -->
+        <div class="security">
+            🔐 <strong>Transfert sécurisé</strong><br>
+            Vérifiez attentivement les informations du bénéficiaire
+            avant de confirmer l'opération.
+        </div>
+
+        <!-- RETOUR -->
+        <a
+            href="tableau_de_bord.html"
+            class="back"
+        >
+            ← Retour au tableau de bord
+        </a>
+
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script type="module" src="envoyer.js"></script>
+
+</body>
+</html>
