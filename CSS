@@ -1,48 +1,116 @@
-.form-group {
-    width: 100%;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d0f13;
+    color: white;
+}
+
+/* --- Container Page Login --- */
+.container {
+    width: 90%;
+    max-width: 350px;
+    margin: auto;
+    margin-top: 60px;
+    text-align: center;
+    padding: 25px;
+    background: #13171f;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00000060;
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 15px;
+}
+
+.input-group {
     text-align: left;
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 17px;
-    font-weight: 600;
-    color: #333;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 16px;
-    border: 1px solid #d5dce7;
-    border-radius: 12px;
-    font-size: 16px;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: #087ee8;
-}
-
-.forgot-password {
-    text-align: right;
-    margin-bottom: 25px;
-}
-
-.forgot-password a {
-    color: #087ee8;
-    text-decoration: none;
-}
-
-.form-message {
     margin-top: 15px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #c9c9c9;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 8px;
+    background: #1e222b;
+    color: white;
     font-size: 15px;
 }
 
-.back-home {
-    display: inline-block;
-    margin-top: 25px;
-    color: #087ee8;
-    text-decoration: none;
+.btn-primary, .btn-success, .btn-logout {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    margin-top: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
 }
+
+.btn-primary {
+    background: #007bff;
+}
+
+.btn-success {
+    background: #28a745;
+}
+
+.btn-logout {
+    background: #ff4444;
+}
+
+/* --- Dashboard --- */
+.dashboard {
+    width: 90%;
+    max-width: 450px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.dash-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dash-logo {
+    width: 100px;
+}
+
+.balance-card {
+    background: #1e222b;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.amount {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.grid {
+    display: grid;
+    gap: 15px;
+}
+
+.action-card {
+    background: #161a20;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.action-card:hover {
+    background: #1f2430;
+    }
