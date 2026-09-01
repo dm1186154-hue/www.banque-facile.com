@@ -1,568 +1,637 @@
-// ============================================
+// ============================================================
 // BANQUE FACILE
-// Envoi d'argent
-// Firebase Authentication + Firestore
-// ============================================
+// MODULE : ENVOYER DE L'ARGENT
+// ============================================================
 
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 
 import {
     getAuth,
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 import {
     getFirestore,
     doc,
     getDoc,
+    updateDoc,
     addDoc,
     collection,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 
-// ============================================
+// ============================================================
 // CONFIGURATION FIREBASE
-// ============================================
+// ============================================================
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
-    authDomain: "banque-app-66bf9.firebaseapp.com",
-    projectId: "banque-app-66bf9",
-    storageBucket: "banque-app-66bf9.firebasestorage.app",
-    messagingSenderId: "833823730245",
-    appId: "1:833823730245:web:8141ce1171c93040f9912c"
+    apiKey: "TON_API_KEY",
+    authDomain: "TON_PROJET.firebaseapp.com",
+    projectId: "TON_PROJECT_ID",
+    storageBucket: "TON_PROJET.firebasestorage.app",
+    messagingSenderId: "TON_SENDER_ID",
+    appId: "TON_APP_ID"
 };
 
 
-// ============================================
+// ============================================================
 // INITIALISATION
-// ============================================
+// ============================================================
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
 
-// ============================================
-// RÉCUPÉRATION DES ÉLÉMENTS HTML
-// ============================================
+// ============================================================
+// ELEMENTS HTML
+// ============================================================
 
-const sendForm =
-    document.getElementById("sendForm");
-
-const sendMessage =
-    document.getElementById("sendMessage");
+const form = document.getElementById("sendForm");
 
 const beneficiaryInput =
     document.getElementById("beneficiary");
 
+const phoneInput =
+    document.getElementById("phone");
+
 const amountInput =
     document.getElementById("amount");
 
-const descriptionInput =
-    document.getElementById("description");
+const reasonInput =
+    document.getElementById("reason");
+
+const message =
+    document.getElementById("sendMessage");
+
+const sendButton =
+    document.getElementById("sendButton");
 
 
-// ============================================
-// UTILISATEUR CONNECTÉ
-// ============================================
+// ============================================================
+// UTILITAIRE : MESSAGE
+// ============================================================
 
-let currentUser = null;
+function showMessage(text, type = "error") {
 
-
-// ============================================
-// FONCTION MESSAGE
-// ============================================
-
-function showMessage(message, type = "error") {
-
-    if (!sendMessage) {
+    if (!message) {
+        alert(text);
         return;
     }
 
-    sendMessage.textContent = message;
+    message.textContent = text;
 
-    if (type === "success") {
+    message.className = "form-message " + type;
+}
 
-        sendMessage.style.color = "green";
 
-    } else if (type === "info") {
+// ============================================================
+// UTILITAIRE : BOUTON
+// ============================================================
 
-        sendMessage.style.color = "#0d6efd";
+function setLoading(loading) {
 
+    if (!sendButton) return;
+
+    sendButton.disabled = loading;
+
+    if (loading) {
+        sendButton.textContent = "Traitement...";
     } else {
-
-        sendMessage.style.color = "red";
+        sendButton.textContent = "Envoyer l'argent";
     }
 }
 
 
-// ============================================
-// VÉRIFICATION DE L'UTILISATEUR
-// ============================================
+// ============================================================
+// UTILITAIRE : NETTOYAGE
+// ============================================================
+
+function cleanText(value) {
+
+    return String(value || "")
+        .trim()
+        .replace(/\s+/g, " ");
+}
+
+
+// ============================================================
+// UTILITAIRE : MONTANT
+// ============================================================
+
+function getAmount(value) {
+
+    // Autorise :
+    // 1000
+    // 1 000
+    // 1.000
+    // 1000.50
+
+    const cleaned = String(value)
+        .replace(/\s/g, "")
+        .replace(",", ".");
+
+    return Number(cleaned);
+}
+
+
+// ============================================================
+// VERIFICATION UTILISATEUR CONNECTE
+// ============================================================
+
+let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
 
-    if (user) {
-
-        currentUser = user;
-
-        console.log(
-            "Utilisateur connecté :",
-            user.uid
-        );
-
-    } else {
+    if (!user) {
 
         currentUser = null;
 
         showMessage(
-            "Vous devez être connecté pour envoyer de l'argent."
+            "⚠️ Vous devez être connecté pour effectuer un transfert.",
+            "error"
         );
 
-        setTimeout(() => {
+        if (sendButton) {
+            sendButton.disabled = true;
+        }
 
-            window.location.href =
-                "connexion.html";
-
-        }, 1500);
+        return;
     }
+
+    currentUser = user;
+
+    if (sendButton) {
+        sendButton.disabled = false;
+    }
+
+    console.log(
+        "Utilisateur connecté :",
+        user.uid
+    );
 });
 
 
-// ============================================
-// ENVOI D'ARGENT
-// ============================================
+// ============================================================
+// VALIDATION DU FORMULAIRE
+// ============================================================
 
-if (sendForm) {
+function validateForm() {
 
-    sendForm.addEventListener(
-        "submit",
-        async function (event) {
+    const beneficiary =
+        cleanText(beneficiaryInput?.value);
 
-            event.preventDefault();
+    const phone =
+        cleanText(phoneInput?.value);
+
+    const amount =
+        getAmount(amountInput?.value);
+
+    const reason =
+        cleanText(reasonInput?.value);
 
 
-            // ----------------------------------------
-            // VÉRIFICATION DE CONNEXION
-            // ----------------------------------------
+    // Nom du bénéficiaire
 
-            if (!currentUser) {
+    if (!beneficiary) {
 
-                showMessage(
-                    "Vous devez être connecté."
-                );
+        showMessage(
+            "⚠️ Veuillez entrer le nom du bénéficiaire.",
+            "error"
+        );
 
-                return;
+        beneficiaryInput?.focus();
+
+        return null;
+    }
+
+
+    if (beneficiary.length < 2) {
+
+        showMessage(
+            "⚠️ Le nom du bénéficiaire est trop court.",
+            "error"
+        );
+
+        beneficiaryInput?.focus();
+
+        return null;
+    }
+
+
+    // Téléphone
+
+    if (!phone) {
+
+        showMessage(
+            "⚠️ Veuillez entrer le numéro du bénéficiaire.",
+            "error"
+        );
+
+        phoneInput?.focus();
+
+        return null;
+    }
+
+
+    const phoneClean =
+        phone.replace(/[\s\-+()]/g, "");
+
+
+    if (!/^\d{8,15}$/.test(phoneClean)) {
+
+        showMessage(
+            "⚠️ Veuillez entrer un numéro de téléphone valide.",
+            "error"
+        );
+
+        phoneInput?.focus();
+
+        return null;
+    }
+
+
+    // Montant
+
+    if (!Number.isFinite(amount)) {
+
+        showMessage(
+            "⚠️ Veuillez entrer un montant valide.",
+            "error"
+        );
+
+        amountInput?.focus();
+
+        return null;
+    }
+
+
+    if (amount <= 0) {
+
+        showMessage(
+            "⚠️ Le montant doit être supérieur à 0 FCFA.",
+            "error"
+        );
+
+        amountInput?.focus();
+
+        return null;
+    }
+
+
+    // Limite de sécurité
+
+    if (amount > 100000000) {
+
+        showMessage(
+            "⚠️ Le montant demandé est trop élevé.",
+            "error"
+        );
+
+        amountInput?.focus();
+
+        return null;
+    }
+
+
+    // Motif facultatif
+
+    if (reason.length > 200) {
+
+        showMessage(
+            "⚠️ Le motif ne doit pas dépasser 200 caractères.",
+            "error"
+        );
+
+        reasonInput?.focus();
+
+        return null;
+    }
+
+
+    return {
+        beneficiary,
+        phone: phoneClean,
+        amount,
+        reason
+    };
+}
+
+
+// ============================================================
+// RECHERCHE DU COMPTE UTILISATEUR
+// ============================================================
+
+async function getUserAccount(uid) {
+
+    const userRef =
+        doc(db, "users", uid);
+
+    const userSnapshot =
+        await getDoc(userRef);
+
+
+    if (!userSnapshot.exists()) {
+
+        throw new Error(
+            "Votre compte bancaire n'a pas été trouvé."
+        );
+    }
+
+
+    return {
+        ref: userRef,
+        data: userSnapshot.data()
+    };
+}
+
+
+// ============================================================
+// ENVOI DE L'ARGENT
+// ============================================================
+
+async function sendMoney(data) {
+
+    if (!currentUser) {
+
+        throw new Error(
+            "Vous devez être connecté."
+        );
+    }
+
+
+    // Récupération du compte
+
+    const account =
+        await getUserAccount(currentUser.uid);
+
+
+    const userData =
+        account.data;
+
+
+    // ========================================================
+    // RECUPERATION DU SOLDE
+    // ========================================================
+
+    let balance = 0;
+
+
+    if (typeof userData.solde === "number") {
+
+        balance = userData.solde;
+
+    } else if (typeof userData.balance === "number") {
+
+        balance = userData.balance;
+
+    } else if (typeof userData.solde === "string") {
+
+        balance =
+            Number(
+                userData.solde.replace(/\s/g, "")
+            );
+
+    } else if (typeof userData.balance === "string") {
+
+        balance =
+            Number(
+                userData.balance.replace(/\s/g, "")
+            );
+    }
+
+
+    if (!Number.isFinite(balance)) {
+
+        throw new Error(
+            "Impossible de déterminer le solde de votre compte."
+        );
+    }
+
+
+    // ========================================================
+    // VERIFICATION DU SOLDE
+    // ========================================================
+
+    if (data.amount > balance) {
+
+        throw new Error(
+            `Solde insuffisant. Votre solde disponible est de ${balance.toLocaleString("fr-FR")} FCFA.`
+        );
+    }
+
+
+    // ========================================================
+    // NOUVEAU SOLDE
+    // ========================================================
+
+    const newBalance =
+        balance - data.amount;
+
+
+    // ========================================================
+    // ENREGISTREMENT DE LA TRANSACTION
+    // ========================================================
+
+    const transaction = {
+
+        userId: currentUser.uid,
+
+        type: "transfert",
+
+        operation: "envoi",
+
+        beneficiary: data.beneficiary,
+
+        beneficiaryPhone: data.phone,
+
+        amount: data.amount,
+
+        reason: data.reason || "",
+
+        status: "effectue",
+
+        previousBalance: balance,
+
+        newBalance: newBalance,
+
+        createdAt: serverTimestamp()
+    };
+
+
+    await addDoc(
+        collection(db, "transactions"),
+        transaction
+    );
+
+
+    // ========================================================
+    // MISE A JOUR DU SOLDE
+    // ========================================================
+
+    if ("solde" in userData) {
+
+        await updateDoc(
+            account.ref,
+            {
+                solde: newBalance
             }
+        );
 
+    } else {
 
-            // ----------------------------------------
-            // RÉCUPÉRATION DES DONNÉES
-            // ----------------------------------------
-
-            const beneficiary =
-                beneficiaryInput
-                    ? beneficiaryInput.value.trim()
-                    : "";
-
-            const amountValue =
-                amountInput
-                    ? amountInput.value.trim()
-                    : "";
-
-            const description =
-                descriptionInput
-                    ? descriptionInput.value.trim()
-                    : "";
-
-
-            // ----------------------------------------
-            // CONVERSION DU MONTANT
-            // ----------------------------------------
-
-            const amount =
-                Number(amountValue);
-
-
-            // ----------------------------------------
-            // VALIDATION DU BÉNÉFICIAIRE
-            // ----------------------------------------
-
-            if (!beneficiary) {
-
-                showMessage(
-                    "Veuillez saisir le numéro ou l'identifiant du bénéficiaire."
-                );
-
-                if (beneficiaryInput) {
-                    beneficiaryInput.focus();
-                }
-
-                return;
+        await updateDoc(
+            account.ref,
+            {
+                balance: newBalance
             }
+        );
+    }
 
 
-            // ----------------------------------------
-            // VALIDATION DU MONTANT
-            // ----------------------------------------
-
-            if (
-                !amountValue ||
-                !Number.isFinite(amount) ||
-                amount <= 0
-            ) {
-
-                showMessage(
-                    "Veuillez saisir un montant valide supérieur à 0."
-                );
-
-                if (amountInput) {
-                    amountInput.focus();
-                }
-
-                return;
-            }
+    return {
+        newBalance
+    };
+}
 
 
-            // ----------------------------------------
-            // LIMITE DE DÉCIMALES
-            // ----------------------------------------
+// ============================================================
+// SOUMISSION DU FORMULAIRE
+// ============================================================
 
-            if (
-                Math.round(amount * 100) / 100 !== amount
-            ) {
+if (form) {
 
-                showMessage(
-                    "Le montant ne peut pas dépasser deux décimales."
-                );
+    form.addEventListener("submit", async (event) => {
 
-                return;
-            }
+        event.preventDefault();
 
 
-            // ----------------------------------------
-            // EMPÊCHER L'ENVOI À SOI-MÊME
-            // ----------------------------------------
+        // Nettoyage ancien message
 
-            if (
-                beneficiary === currentUser.uid ||
-                beneficiary === currentUser.email
-            ) {
+        if (message) {
 
-                showMessage(
-                    "Vous ne pouvez pas envoyer de l'argent à votre propre compte."
-                );
+            message.textContent = "";
 
-                return;
-            }
+            message.className =
+                "form-message";
+        }
 
 
-            // ----------------------------------------
-            // ÉTAT DE CHARGEMENT
-            // ----------------------------------------
+        // Vérification connexion
 
-            const submitButton =
-                sendForm.querySelector(
-                    'button[type="submit"]'
-                );
-
-            if (submitButton) {
-
-                submitButton.disabled = true;
-
-                submitButton.dataset.originalText =
-                    submitButton.textContent;
-
-                submitButton.textContent =
-                    "Traitement en cours...";
-            }
+        if (!currentUser) {
 
             showMessage(
-                "Vérification de l'opération...",
-                "info"
+                "⚠️ Veuillez vous connecter avant d'effectuer un transfert.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Validation
+
+        const data =
+            validateForm();
+
+
+        if (!data) {
+            return;
+        }
+
+
+        // Confirmation
+
+        const confirmation =
+            confirm(
+                `Confirmer l'envoi de ${data.amount.toLocaleString("fr-FR")} FCFA à ${data.beneficiary} ?`
             );
 
 
-            try {
-
-                // ====================================
-                // RÉCUPÉRATION DU COMPTE EXPÉDITEUR
-                // ====================================
-
-                const senderRef =
-                    doc(
-                        db,
-                        "users",
-                        currentUser.uid
-                    );
-
-                const senderSnapshot =
-                    await getDoc(senderRef);
-
-
-                if (!senderSnapshot.exists()) {
-
-                    throw new Error(
-                        "Compte utilisateur introuvable."
-                    );
-                }
-
-
-                const senderData =
-                    senderSnapshot.data();
-
-
-                // ====================================
-                // RECHERCHE DU BÉNÉFICIAIRE
-                // ====================================
-                //
-                // Cette partie recherche uniquement
-                // par UID si le bénéficiaire correspond
-                // à un UID Firebase.
-                //
-                // Pour une recherche par numéro de
-                // téléphone, il faudra mettre en place
-                // une requête Firestore sécurisée.
-                // ====================================
-
-                let receiverUser = null;
-
-                try {
-
-                    const receiverRef =
-                        doc(
-                            db,
-                            "users",
-                            beneficiary
-                        );
-
-                    const receiverSnapshot =
-                        await getDoc(receiverRef);
-
-
-                    if (
-                        receiverSnapshot.exists()
-                    ) {
-
-                        receiverUser = {
-                            uid: beneficiary,
-                            ...receiverSnapshot.data()
-                        };
-                    }
-
-                } catch (receiverError) {
-
-                    console.warn(
-                        "Recherche du bénéficiaire impossible :",
-                        receiverError
-                    );
-                }
-
-
-                // ====================================
-                // INFORMATIONS DESTINATAIRE
-                // ====================================
-
-                const receiverUid =
-                    receiverUser
-                        ? receiverUser.uid
-                        : beneficiary;
-
-
-                const receiverName =
-                    receiverUser
-                        ? (
-                            receiverUser.nomComplet ||
-                            receiverUser.displayName ||
-                            "Bénéficiaire"
-                        )
-                        : "Bénéficiaire";
-
-
-                // ====================================
-                // CRÉATION DE L'OPÉRATION
-                // ====================================
-
-                const transactionData = {
-
-                    // Expéditeur
-                    expediteurUid:
-                        currentUser.uid,
-
-                    expediteurNom:
-                        senderData.nomComplet ||
-                        currentUser.displayName ||
-                        "",
-
-                    expediteurEmail:
-                        currentUser.email || "",
-
-
-                    // Destinataire
-                    beneficiaire:
-                        beneficiary,
-
-                    beneficiaireUid:
-                        receiverUid,
-
-                    beneficiaireNom:
-                        receiverName,
-
-
-                    // Montant
-                    montant:
-                        amount,
-
-
-                    // Description
-                    description:
-                        description || "",
-
-
-                    // Type
-                    type:
-                        "envoi",
-
-
-                    // Statut
-                    statut:
-                        "en_attente",
-
-
-                    // Date
-                    date:
-                        serverTimestamp(),
-
-
-                    // Informations techniques
-                    devise:
-                        "XOF"
-                };
-
-
-                // ====================================
-                // ENREGISTREMENT DANS FIRESTORE
-                // ====================================
-
-                const transactionRef =
-                    await addDoc(
-                        collection(
-                            db,
-                            "transactions"
-                        ),
-                        transactionData
-                    );
-
-
-                console.log(
-                    "Transaction créée :",
-                    transactionRef.id
-                );
-
-
-                // ====================================
-                // SUCCÈS
-                // ====================================
-
-                showMessage(
-                    "Demande d'envoi enregistrée avec succès.",
-                    "success"
-                );
-
-
-                // ====================================
-                // RÉINITIALISATION DU FORMULAIRE
-                // ====================================
-
-                sendForm.reset();
-
-
-                // ====================================
-                // REDIRECTION
-                // ====================================
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        "tableau_de_bord.html";
-
-                }, 1800);
-
-
-            } catch (error) {
-
-                console.error(
-                    "Erreur lors de l'envoi :",
-                    error
-                );
-
-
-                // ====================================
-                // MESSAGES D'ERREUR
-                // ====================================
-
-                let message =
-                    "Impossible d'effectuer l'opération. Veuillez réessayer.";
-
-
-                if (
-                    error.code ===
-                    "permission-denied"
-                ) {
-
-                    message =
-                        "Vous n'avez pas l'autorisation d'effectuer cette opération.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "unavailable"
-                ) {
-
-                    message =
-                        "Le service est temporairement indisponible.";
-
-                }
-
-                else if (
-                    error.message ===
-                    "Compte utilisateur introuvable."
-                ) {
-
-                    message =
-                        "Votre compte Banque Facile est introuvable.";
-
-                }
-
-
-                showMessage(
-                    message,
-                    "error"
-                );
-
-
-            } finally {
-
-                // ====================================
-                // RÉACTIVER LE BOUTON
-                // ====================================
-
-                if (submitButton) {
-
-                    submitButton.disabled = false;
-
-                    submitButton.textContent =
-                        submitButton.dataset.originalText ||
-                        "Envoyer";
-                }
-            }
+        if (!confirmation) {
+            return;
         }
+
+
+        try {
+
+            setLoading(true);
+
+
+            showMessage(
+                "⏳ Traitement du transfert en cours...",
+                "loading"
+            );
+
+
+            const result =
+                await sendMoney(data);
+
+
+            // ==================================================
+            // SUCCES
+            // ==================================================
+
+            showMessage(
+                `✅ Transfert effectué avec succès ! ${data.amount.toLocaleString("fr-FR")} FCFA ont été envoyés à ${data.beneficiary}. Nouveau solde : ${result.newBalance.toLocaleString("fr-FR")} FCFA.`,
+                "success"
+            );
+
+
+            // Nettoyage
+
+            if (beneficiaryInput)
+                beneficiaryInput.value = "";
+
+            if (phoneInput)
+                phoneInput.value = "";
+
+            if (amountInput)
+                amountInput.value = "";
+
+            if (reasonInput)
+                reasonInput.value = "";
+
+
+        } catch (error) {
+
+            console.error(
+                "Erreur transfert :",
+                error
+            );
+
+
+            let errorMessage =
+                "❌ Une erreur est survenue pendant le transfert.";
+
+
+            if (error.message) {
+                errorMessage =
+                    "❌ " + error.message;
+            }
+
+
+            showMessage(
+                errorMessage,
+                "error"
+            );
+
+
+        } finally {
+
+            setLoading(false);
+        }
+
+    });
+
+} else {
+
+    console.error(
+        "❌ Le formulaire #sendForm est introuvable."
     );
 }
