@@ -16,65 +16,106 @@
 
         <section class="welcome-card">
 
-            <!-- LOGO -->
+            <!-- =========================================
+                 LOGO BANQUE FACILE
+            ========================================== -->
+
             <img
-                src="assets/banque_app_logo_final.jpg"
+                src="actifs/banque_app_logo_final.jpg"
                 alt="Logo Banque Facile"
                 class="logo"
             >
 
-            <!-- TITRE -->
+
+            <!-- =========================================
+                 TITRE
+            ========================================== -->
+
             <h1>
                 Créer un compte<br>
                 <span>Banque Facile</span>
             </h1>
 
+
             <p class="description">
                 Créez votre compte et commencez à gérer
-                vos opérations simplement.
+                vos opérations simplement et en toute sécurité.
             </p>
 
-            <!-- FORMULAIRE -->
+
+            <!-- =========================================
+                 FORMULAIRE
+            ========================================== -->
+
             <form id="registerForm">
 
+                <!-- NOM COMPLET -->
+
                 <div class="form-group">
-                    <label for="fullname">Nom complet</label>
+
+                    <label for="fullname">
+                        Nom complet
+                    </label>
 
                     <input
                         type="text"
                         id="fullname"
                         name="fullname"
                         placeholder="Votre nom complet"
+                        autocomplete="name"
                         required
                     >
+
                 </div>
 
+
+                <!-- EMAIL -->
+
                 <div class="form-group">
-                    <label for="email">Adresse e-mail</label>
+
+                    <label for="email">
+                        Adresse e-mail
+                    </label>
 
                     <input
                         type="email"
                         id="email"
                         name="email"
                         placeholder="Votre adresse e-mail"
+                        autocomplete="email"
                         required
                     >
+
                 </div>
 
+
+                <!-- TELEPHONE -->
+
                 <div class="form-group">
-                    <label for="phone">Numéro de téléphone</label>
+
+                    <label for="phone">
+                        Numéro de téléphone
+                    </label>
 
                     <input
                         type="tel"
                         id="phone"
                         name="phone"
-                        placeholder="Votre numéro de téléphone"
+                        placeholder="+225 07 XX XX XX XX"
+                        autocomplete="tel"
                         required
                     >
+
                 </div>
 
+
+                <!-- MOT DE PASSE -->
+
                 <div class="form-group">
-                    <label for="password">Mot de passe</label>
+
+                    <label for="password">
+                        Mot de passe
+                    </label>
 
                     <input
                         type="password"
@@ -82,11 +123,17 @@
                         name="password"
                         placeholder="Créer un mot de passe"
                         minlength="6"
+                        autocomplete="new-password"
                         required
                     >
+
                 </div>
 
+
+                <!-- CONFIRMATION MOT DE PASSE -->
+
                 <div class="form-group">
+
                     <label for="confirmPassword">
                         Confirmer le mot de passe
                     </label>
@@ -97,25 +144,38 @@
                         name="confirmPassword"
                         placeholder="Confirmer votre mot de passe"
                         minlength="6"
+                        autocomplete="new-password"
                         required
                     >
+
                 </div>
 
-                <button
-                    type="submit"
-                    class="btn-login"
-                >
-                    Créer mon compte
-                </button>
+
+                <!-- MESSAGE FIREBASE -->
 
                 <div
                     id="registerMessage"
                     class="form-message"
+                    role="alert"
                 ></div>
+
+
+                <!-- BOUTON -->
+
+                <button
+                    type="submit"
+                    class="btn-login"
+                    id="registerButton"
+                >
+                    Créer mon compte
+                </button>
 
             </form>
 
-            <!-- CONNEXION -->
+
+            <!-- =========================================
+                 CONNEXION
+            ========================================== -->
 
             <p class="register-text">
 
@@ -127,7 +187,10 @@
 
             </p>
 
-            <!-- RETOUR -->
+
+            <!-- =========================================
+                 RETOUR ACCUEIL
+            ========================================== -->
 
             <a
                 href="index.html"
@@ -140,9 +203,232 @@
 
     </main>
 
-    <!-- JAVASCRIPT -->
 
-    <script type="module" src="js/auth.js"></script>
+    <!-- =========================================
+         FIREBASE / AUTHENTIFICATION
+    ========================================== -->
+
+    <script
+        type="module"
+        src="js/auth.js"
+    ></script>
+
+</body>
+
+</html><!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Créer un compte | Banque Facile</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="page">
+
+        <section class="welcome-card">
+
+            <!-- =========================================
+                 LOGO BANQUE FACILE
+            ========================================== -->
+
+            <img
+                src="actifs/banque_app_logo_final.jpg"
+                alt="Logo Banque Facile"
+                class="logo"
+            >
+
+
+            <!-- =========================================
+                 TITRE
+            ========================================== -->
+
+            <h1>
+                Créer un compte<br>
+                <span>Banque Facile</span>
+            </h1>
+
+
+            <p class="description">
+                Créez votre compte et commencez à gérer
+                vos opérations simplement et en toute sécurité.
+            </p>
+
+
+            <!-- =========================================
+                 FORMULAIRE
+            ========================================== -->
+
+            <form id="registerForm">
+
+                <!-- NOM COMPLET -->
+
+                <div class="form-group">
+
+                    <label for="fullname">
+                        Nom complet
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Votre nom complet"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Votre adresse e-mail"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- TELEPHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Numéro de téléphone
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="+225 07 XX XX XX XX"
+                        autocomplete="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MOT DE PASSE -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Créer un mot de passe"
+                        minlength="6"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CONFIRMATION MOT DE PASSE -->
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirmer le mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirmer votre mot de passe"
+                        minlength="6"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE FIREBASE -->
+
+                <div
+                    id="registerMessage"
+                    class="form-message"
+                    role="alert"
+                ></div>
+
+
+                <!-- BOUTON -->
+
+                <button
+                    type="submit"
+                    class="btn-login"
+                    id="registerButton"
+                >
+                    Créer mon compte
+                </button>
+
+            </form>
+
+
+            <!-- =========================================
+                 CONNEXION
+            ========================================== -->
+
+            <p class="register-text">
+
+                Vous avez déjà un compte ?
+
+                <a href="connexion.html">
+                    Se connecter
+                </a>
+
+            </p>
+
+
+            <!-- =========================================
+                 RETOUR ACCUEIL
+            ========================================== -->
+
+            <a
+                href="index.html"
+                class="back-home"
+            >
+                ← Retour à l'accueil
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         FIREBASE / AUTHENTIFICATION
+    ========================================== -->
+
+    <script
+        type="module"
+        src="js/auth.js"
+    ></script>
 
 </body>
 
