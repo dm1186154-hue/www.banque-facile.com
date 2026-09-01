@@ -1,18 +1,17 @@
 // =====================================================
 // BANQUE FACILE
-// CONNEXION AVEC FIREBASE AUTHENTICATION
+// INSCRIPTION AVEC FIREBASE AUTHENTICATION
 // =====================================================
 
-// Import Firebase
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    createUserWithEmailAndPassword,
+    updateProfile
+} from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
 // =====================================================
@@ -39,402 +38,494 @@ const auth = getAuth(app);
 
 
 // =====================================================
-// RÉCUPÉRATION DES ÉLÉMENTS HTML
+// ÉLÉMENTS DU FORMULAIRE
 // =====================================================
 
-const loginForm =
-    document.getElementById("loginForm");
+const registerForm =
+    document.getElementById("registerForm");
+
+const fullnameInput =
+    document.getElementById("fullname");
 
 const emailInput =
     document.getElementById("email");
 
+const phoneInput =
+    document.getElementById("phone");
+
 const passwordInput =
     document.getElementById("password");
 
-const loginButton =
-    document.getElementById("loginButton");
+const confirmPasswordInput =
+    document.getElementById("confirmPassword");
 
-const loginMessage =
-    document.getElementById("loginMessage");
+const registerButton =
+    document.getElementById("registerButton");
 
-const togglePassword =
-    document.getElementById("togglePassword");
+const registerMessage =
+    document.getElementById("registerMessage");
 
 
 // =====================================================
-// FONCTION POUR AFFICHER UN MESSAGE
+// MESSAGE
 // =====================================================
 
 function showMessage(message, type) {
 
-    if (!loginMessage) {
+    if (!registerMessage) {
+        console.error(message);
         return;
     }
 
-    loginMessage.textContent = message;
+    registerMessage.textContent = message;
 
-    loginMessage.className =
+    registerMessage.className =
         "form-message " + type;
 }
 
 
 // =====================================================
-// AFFICHER / MASQUER LE MOT DE PASSE
+// AFFICHER / MASQUER MOT DE PASSE
 // =====================================================
+
+const togglePassword =
+    document.getElementById("togglePassword");
+
+const toggleConfirmPassword =
+    document.getElementById("toggleConfirmPassword");
+
 
 if (togglePassword && passwordInput) {
 
-    togglePassword.addEventListener(
-        "click",
-        function () {
+    togglePassword.addEventListener("click", () => {
 
-            if (
-                passwordInput.type === "password"
-            ) {
+        if (passwordInput.type === "password") {
 
-                passwordInput.type = "text";
+            passwordInput.type = "text";
+            togglePassword.textContent = "🙈";
 
-                togglePassword.textContent = "🙈";
+        } else {
 
-                togglePassword.setAttribute(
-                    "aria-label",
-                    "Masquer le mot de passe"
-                );
-
-            } else {
-
-                passwordInput.type = "password";
-
-                togglePassword.textContent = "👁️";
-
-                togglePassword.setAttribute(
-                    "aria-label",
-                    "Afficher le mot de passe"
-                );
-
-            }
+            passwordInput.type = "password";
+            togglePassword.textContent = "👁️";
 
         }
-    );
 
+    });
+}
+
+
+if (toggleConfirmPassword && confirmPasswordInput) {
+
+    toggleConfirmPassword.addEventListener("click", () => {
+
+        if (confirmPasswordInput.type === "password") {
+
+            confirmPasswordInput.type = "text";
+            toggleConfirmPassword.textContent = "🙈";
+
+        } else {
+
+            confirmPasswordInput.type = "password";
+            toggleConfirmPassword.textContent = "👁️";
+
+        }
+
+    });
 }
 
 
 // =====================================================
-// VÉRIFICATION DES CHAMPS
+// INSCRIPTION
 // =====================================================
 
-function validateForm(email, password) {
+if (registerForm) {
 
-    if (!email) {
+    registerForm.addEventListener("submit", async function(event) {
 
-        showMessage(
-            "⚠️ Veuillez entrer votre adresse e-mail.",
-            "error"
-        );
-
-        emailInput.focus();
-
-        return false;
-    }
+        // IMPORTANT :
+        // Empêche le navigateur de recharger la page
+        // et d'afficher les informations dans l'URL.
+        event.preventDefault();
 
 
-    if (!email.includes("@")) {
+        // -------------------------------------------------
+        // RÉCUPÉRATION DES DONNÉES
+        // -------------------------------------------------
 
-        showMessage(
-            "⚠️ Veuillez entrer une adresse e-mail valide.",
-            "error"
-        );
+        const fullname =
+            fullnameInput ? fullnameInput.value.trim() : "";
 
-        emailInput.focus();
+        const email =
+            emailInput ? emailInput.value.trim() : "";
 
-        return false;
-    }
+        const phone =
+            phoneInput ? phoneInput.value.trim() : "";
 
+        const password =
+            passwordInput ? passwordInput.value : "";
 
-    if (!password) {
-
-        showMessage(
-            "⚠️ Veuillez entrer votre mot de passe.",
-            "error"
-        );
-
-        passwordInput.focus();
-
-        return false;
-    }
+        const confirmPassword =
+            confirmPasswordInput
+                ? confirmPasswordInput.value
+                : "";
 
 
-    return true;
-}
+        // -------------------------------------------------
+        // VALIDATION DU NOM
+        // -------------------------------------------------
 
-
-// =====================================================
-// CONNEXION
-// =====================================================
-
-if (loginForm) {
-
-    loginForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            // Empêche le navigateur
-            // d'envoyer le formulaire dans l'URL
-            event.preventDefault();
-
-
-            // -------------------------------------------------
-            // RÉCUPÉRATION DES INFORMATIONS
-            // -------------------------------------------------
-
-            const email =
-                emailInput.value.trim();
-
-            const password =
-                passwordInput.value;
-
-
-            // -------------------------------------------------
-            // VALIDATION
-            // -------------------------------------------------
-
-            if (
-                !validateForm(
-                    email,
-                    password
-                )
-            ) {
-
-                return;
-            }
-
-
-            // -------------------------------------------------
-            // BOUTON EN CHARGEMENT
-            // -------------------------------------------------
-
-            loginButton.disabled = true;
-
-            loginButton.textContent =
-                "Connexion en cours...";
-
+        if (!fullname) {
 
             showMessage(
-                "⏳ Connexion à votre espace...",
-                "loading"
+                "⚠️ Veuillez entrer votre nom complet.",
+                "error"
+            );
+
+            if (fullnameInput) {
+                fullnameInput.focus();
+            }
+
+            return;
+        }
+
+
+        if (fullname.length < 2) {
+
+            showMessage(
+                "⚠️ Votre nom doit contenir au moins 2 caractères.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // VALIDATION E-MAIL
+        // -------------------------------------------------
+
+        if (!email) {
+
+            showMessage(
+                "⚠️ Veuillez entrer votre adresse e-mail.",
+                "error"
+            );
+
+            if (emailInput) {
+                emailInput.focus();
+            }
+
+            return;
+        }
+
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+        if (!emailPattern.test(email)) {
+
+            showMessage(
+                "⚠️ Veuillez entrer une adresse e-mail valide.",
+                "error"
+            );
+
+            if (emailInput) {
+                emailInput.focus();
+            }
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // VALIDATION TÉLÉPHONE
+        // -------------------------------------------------
+
+        if (phone && phone.length < 8) {
+
+            showMessage(
+                "⚠️ Veuillez entrer un numéro de téléphone valide.",
+                "error"
+            );
+
+            if (phoneInput) {
+                phoneInput.focus();
+            }
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // VALIDATION MOT DE PASSE
+        // -------------------------------------------------
+
+        if (!password) {
+
+            showMessage(
+                "⚠️ Veuillez entrer un mot de passe.",
+                "error"
+            );
+
+            if (passwordInput) {
+                passwordInput.focus();
+            }
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            showMessage(
+                "⚠️ Le mot de passe doit contenir au moins 6 caractères.",
+                "error"
+            );
+
+            if (passwordInput) {
+                passwordInput.focus();
+            }
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // CONFIRMATION MOT DE PASSE
+        // -------------------------------------------------
+
+        if (!confirmPassword) {
+
+            showMessage(
+                "⚠️ Veuillez confirmer votre mot de passe.",
+                "error"
+            );
+
+            if (confirmPasswordInput) {
+                confirmPasswordInput.focus();
+            }
+
+            return;
+        }
+
+
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "❌ Les deux mots de passe ne correspondent pas.",
+                "error"
+            );
+
+            if (confirmPasswordInput) {
+                confirmPasswordInput.focus();
+            }
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // BOUTON
+        // -------------------------------------------------
+
+        if (registerButton) {
+
+            registerButton.disabled = true;
+
+            registerButton.textContent =
+                "Création du compte...";
+
+        }
+
+
+        showMessage(
+            "⏳ Création de votre compte...",
+            "loading"
+        );
+
+
+        try {
+
+            // =================================================
+            // CRÉATION DU COMPTE FIREBASE
+            // =================================================
+
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            const user =
+                userCredential.user;
+
+
+            // =================================================
+            // ENREGISTRER LE NOM DANS FIREBASE
+            // =================================================
+
+            await updateProfile(user, {
+                displayName: fullname
+            });
+
+
+            // =================================================
+            // INFORMATIONS NON SENSIBLES
+            // =================================================
+
+            localStorage.setItem(
+                "banqueFacileEmail",
+                email
+            );
+
+            localStorage.setItem(
+                "banqueFacileFullname",
+                fullname
+            );
+
+            localStorage.setItem(
+                "banqueFacileUID",
+                user.uid
+            );
+
+            localStorage.setItem(
+                "banqueFacilePhone",
+                phone
             );
 
 
-            try {
+            // =================================================
+            // SUCCÈS
+            // =================================================
 
-                // =============================================
-                // CONNEXION FIREBASE
-                // =============================================
+            showMessage(
+                "✅ Compte créé avec succès ! Redirection...",
+                "success"
+            );
 
-                const userCredential =
-                    await signInWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
 
+            // =================================================
+            // REDIRECTION
+            // =================================================
 
-                // =============================================
-                // UTILISATEUR CONNECTÉ
-                // =============================================
+            setTimeout(() => {
 
-                const user =
-                    userCredential.user;
+                window.location.href =
+                    "tableau_de_bord.html";
 
+            }, 1200);
 
-                console.log(
-                    "Utilisateur connecté :",
-                    user.uid
-                );
 
+        } catch (error) {
 
-                // =============================================
-                // STOCKAGE DES INFORMATIONS NON SENSIBLES
-                // =============================================
+            console.error(
+                "Erreur inscription Firebase :",
+                error
+            );
 
-                localStorage.setItem(
-                    "banqueFacileEmail",
-                    user.email || ""
-                );
 
+            let message =
+                "❌ Impossible de créer le compte.";
 
-                localStorage.setItem(
-                    "banqueFacileUID",
-                    user.uid || ""
-                );
 
+            // =================================================
+            // ERREURS FIREBASE
+            // =================================================
 
-                localStorage.setItem(
-                    "banqueFacileFullname",
-                    user.displayName || ""
-                );
+            switch (error.code) {
 
+                case "auth/email-already-in-use":
 
-                // =============================================
-                // MESSAGE DE SUCCÈS
-                // =============================================
+                    message =
+                        "❌ Cette adresse e-mail possède déjà un compte.";
 
-                showMessage(
-                    "✅ Connexion réussie !",
-                    "success"
-                );
+                    break;
 
 
-                // =============================================
-                // REDIRECTION
-                // =============================================
+                case "auth/invalid-email":
 
-                setTimeout(
-                    function () {
+                    message =
+                        "❌ L'adresse e-mail n'est pas valide.";
 
-                        window.location.href =
-                            "tableau_de_bord.html";
+                    break;
 
-                    },
-                    1000
-                );
 
+                case "auth/weak-password":
 
-            } catch (error) {
+                    message =
+                        "❌ Le mot de passe est trop faible. Utilisez au moins 6 caractères.";
 
-                console.error(
-                    "Erreur Firebase :",
-                    error
-                );
+                    break;
 
 
-                // =============================================
-                // MESSAGE D'ERREUR
-                // =============================================
+                case "auth/network-request-failed":
 
-                let message =
-                    "❌ Impossible de vous connecter.";
+                    message =
+                        "❌ Problème de connexion Internet.";
 
+                    break;
 
-                switch (error.code) {
 
-                    case "auth/invalid-email":
+                case "auth/operation-not-allowed":
 
-                        message =
-                            "❌ L'adresse e-mail n'est pas valide.";
+                    message =
+                        "❌ L'inscription par e-mail/mot de passe n'est pas activée dans Firebase.";
 
-                        break;
+                    break;
 
 
-                    case "auth/invalid-credential":
+                case "auth/too-many-requests":
 
-                        message =
-                            "❌ E-mail ou mot de passe incorrect.";
+                    message =
+                        "⚠️ Trop de tentatives. Réessayez plus tard.";
 
-                        break;
+                    break;
 
 
-                    case "auth/user-not-found":
+                default:
 
-                        message =
-                            "❌ Aucun compte ne correspond à cette adresse e-mail.";
+                    message =
+                        "❌ " +
+                        (
+                            error.message ||
+                            "Une erreur est survenue."
+                        );
 
-                        break;
+                    break;
+            }
 
 
-                    case "auth/wrong-password":
+            showMessage(
+                message,
+                "error"
+            );
 
-                        message =
-                            "❌ Mot de passe incorrect.";
 
-                        break;
+            // -------------------------------------------------
+            // RÉACTIVER LE BOUTON
+            // -------------------------------------------------
 
+            if (registerButton) {
 
-                    case "auth/user-disabled":
+                registerButton.disabled = false;
 
-                        message =
-                            "❌ Ce compte a été désactivé.";
-
-                        break;
-
-
-                    case "auth/too-many-requests":
-
-                        message =
-                            "⚠️ Trop de tentatives. Veuillez réessayer plus tard.";
-
-                        break;
-
-
-                    case "auth/network-request-failed":
-
-                        message =
-                            "❌ Problème de connexion Internet.";
-
-                        break;
-
-
-                    default:
-
-                        message =
-                            "❌ Une erreur est survenue. Veuillez réessayer.";
-
-                        break;
-                }
-
-
-                showMessage(
-                    message,
-                    "error"
-                );
-
-
-                // -------------------------------------------------
-                // RÉACTIVER LE BOUTON
-                // -------------------------------------------------
-
-                loginButton.disabled = false;
-
-                loginButton.textContent =
-                    "Se connecter";
+                registerButton.textContent =
+                    "Créer mon compte";
 
             }
 
         }
-    );
+
+    });
 
 } else {
 
     console.error(
-        "❌ Le formulaire #loginForm est introuvable."
+        "❌ Le formulaire #registerForm est introuvable."
     );
 
 }
-
-
-// =====================================================
-// SURVEILLANCE DE LA SESSION FIREBASE
-// =====================================================
-
-onAuthStateChanged(
-    auth,
-    function (user) {
-
-        if (user) {
-
-            console.log(
-                "Session Firebase active :",
-                user.email
-            );
-
-        } else {
-
-            console.log(
-                "Aucun utilisateur connecté."
-            );
-
-        }
-
-    }
-);
