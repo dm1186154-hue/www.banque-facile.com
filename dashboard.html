@@ -1,35 +1,1367 @@
-// =====================================================
-// BANQUE FACILE
-// Tableau de bord
-// =====================================================
+<!DOCTYPE html>
+<html lang="fr">
 
-import {
-    onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+<head>
 
-import {
-    auth
-} from "./firebase.js";
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-onAuthStateChanged(
-    auth,
-    function (user) {
+    <title>Tableau de bord | Banque Facile</title>
 
-        if (!user) {
+    <meta
+        name="description"
+        content="Votre espace personnel Banque Facile."
+    >
 
-            window.location.href =
-                "connexion.html";
+    <style>
 
-            return;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0066cc, #00a8e8);
+            color: #172033;
+        }
 
-        console.log(
-            "Utilisateur connecté :",
-            user.email
+        .dashboard {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* =========================
+           MENU
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 260px;
+
+            background: #ffffff;
+
+            padding: 25px 18px;
+
+            box-shadow:
+                5px 0 25px
+                rgba(0, 0, 0, 0.12);
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 100;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 85px;
+            height: 85px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto 10px;
+        }
+
+        .brand {
+            color: #006dcc;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            background: #eff8ff;
+            color: #006dcc;
+        }
+
+        .nav a.active {
+            background:
+                linear-gradient(
+                    90deg,
+                    #006dcc,
+                    #008fe5
+                );
+
+            color: white;
+        }
+
+        .nav-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        /* =========================
+           DECONNEXION
+        ========================= */
+
+        .logout-area {
+            margin-top: auto;
+        }
+
+        #logoutButton {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #fff1f0;
+
+            color: #b42318;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        #logoutButton:hover {
+            background: #fee4e2;
+        }
+
+        /* =========================
+           CONTENU
+        ========================= */
+
+        .main {
+            width: calc(100% - 260px);
+
+            margin-left: 260px;
+
+            min-height: 100vh;
+
+            padding: 30px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .topbar {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 20px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.10);
+        }
+
+        .welcome h1 {
+            color: #0067b9;
+
+            font-size: 28px;
+
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #006dcc,
+                    #00a8e8
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        #dashboardMessage {
+            display: none;
+
+            background: white;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            color: #006dcc;
+
+            font-weight: 600;
+        }
+
+        /* =========================
+           SOLDE
+        ========================= */
+
+        .balance-card {
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #005bbb,
+                    #008fe5
+                );
+
+            color: white;
+
+            padding: 30px;
+
+            border-radius: 22px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 15px 35px
+                rgba(0, 80, 180, 0.30);
+        }
+
+        .balance-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            border:
+                35px solid
+                rgba(255,255,255,0.08);
+
+            border-radius: 50%;
+
+            right: -90px;
+            top: -110px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+
+            opacity: 0.9;
+
+            margin-bottom: 8px;
+        }
+
+        .balance {
+            font-size: 40px;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 14px;
+
+            opacity: 0.9;
+        }
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .section-title {
+            color: white;
+
+            font-size: 20px;
+
+            margin-bottom: 15px;
+        }
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .action {
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 22px 15px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.10);
+
+            transition: 0.2s;
+        }
+
+        .action:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,0,0,0.15);
+        }
+
+        .action-icon {
+            font-size: 32px;
+
+            margin-bottom: 10px;
+        }
+
+        .action h3 {
+            color: #006dcc;
+
+            font-size: 15px;
+
+            margin-bottom: 5px;
+        }
+
+        .action p {
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           PANELS
+        ========================= */
+
+        .panels {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.10);
+        }
+
+        .panel h2 {
+            color: #006dcc;
+
+            font-size: 19px;
+
+            margin-bottom: 18px;
+        }
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #eef2f6;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+        .info-value {
+            font-size: 14px;
+
+            font-weight: 700;
+
+            text-align: right;
+
+            word-break: break-word;
+        }
+
+        .empty-history {
+            text-align: center;
+
+            padding: 25px 10px;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .actions {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .dashboard {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                padding: 15px;
+            }
+
+            .logo {
+                width: 65px;
+                height: 65px;
+            }
+
+            .logo-container {
+                margin-bottom: 15px;
+            }
+
+            .nav {
+                display: grid;
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .nav a {
+                justify-content: center;
+
+                padding: 11px 5px;
+
+                font-size: 12px;
+            }
+
+            .nav-icon {
+                font-size: 17px;
+            }
+
+            .logout-area {
+                margin-top: 15px;
+            }
+
+            .main {
+                width: 100%;
+
+                margin-left: 0;
+
+                padding: 15px;
+            }
+
+            .topbar {
+                padding: 17px;
+
+                border-radius: 16px;
+            }
+
+            .welcome h1 {
+                font-size: 21px;
+            }
+
+            .welcome p {
+                font-size: 12px;
+            }
+
+            .avatar {
+                width: 42px;
+                height: 42px;
+
+                font-size: 17px;
+            }
+
+            .balance-card {
+                padding: 25px;
+
+                border-radius: 18px;
+            }
+
+            .balance {
+                font-size: 31px;
+            }
+
+            .actions {
+                gap: 10px;
+            }
+
+            .action {
+                padding: 18px 8px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+    <!-- =====================================================
+         MENU
+    ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="logo-container">
+
+            <img
+                class="logo"
+                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+                alt="Logo Banque Facile"
+            >
+
+            <div class="brand">
+                Banque Facile
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a
+                href="tableau_de_bord.html"
+                class="active"
+            >
+                <span class="nav-icon">🏠</span>
+                Tableau de bord
+            </a>
+
+
+            <a
+                href="#"
+                id="sendNav"
+            >
+                <span class="nav-icon">💸</span>
+                Envoyer
+            </a>
+
+
+            <a
+                href="#"
+                id="receiveNav"
+            >
+                <span class="nav-icon">📥</span>
+                Recevoir
+            </a>
+
+
+            <a
+                href="#"
+                id="historyNav"
+            >
+                <span class="nav-icon">📊</span>
+                Historique
+            </a>
+
+
+            <a
+                href="#"
+                id="profileNav"
+            >
+                <span class="nav-icon">👤</span>
+                Mon profil
+            </a>
+
+
+            <a
+                href="#"
+                id="settingsNav"
+            >
+                <span class="nav-icon">⚙️</span>
+                Paramètres
+            </a>
+
+        </nav>
+
+
+        <div class="logout-area">
+
+            <button id="logoutButton">
+                🚪 Déconnexion
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="welcome">
+
+                <h1>
+                    Bonjour,
+                    <span id="userName">
+                        Utilisateur
+                    </span>
+                    👋
+                </h1>
+
+                <p>
+                    Bienvenue dans votre espace Banque Facile.
+                </p>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <div
+                    class="avatar"
+                    id="userAvatar"
+                >
+                    U
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- MESSAGE -->
+
+        <div id="dashboardMessage"></div>
+
+
+
+        <!-- =================================================
+             SOLDE
+        ================================================== -->
+
+        <section class="balance-card">
+
+            <div class="balance-label">
+                Solde disponible
+            </div>
+
+            <div class="balance">
+
+                <span id="balance">
+                    0
+                </span>
+
+                FCFA
+
+            </div>
+
+            <div class="status">
+                🟢 Compte connecté
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACTIONS RAPIDES
+        ================================================== -->
+
+        <h2 class="section-title">
+            Actions rapides
+        </h2>
+
+
+        <div class="actions">
+
+
+            <div
+                class="action"
+                id="sendMoney"
+            >
+
+                <div class="action-icon">
+                    💸
+                </div>
+
+                <h3>
+                    Envoyer de l'argent
+                </h3>
+
+                <p>
+                    Préparer un transfert
+                </p>
+
+            </div>
+
+
+            <div
+                class="action"
+                id="receiveMoney"
+            >
+
+                <div class="action-icon">
+                    📥
+                </div>
+
+                <h3>
+                    Recevoir
+                </h3>
+
+                <p>
+                    Préparer une réception
+                </p>
+
+            </div>
+
+
+            <div
+                class="action"
+                id="history"
+            >
+
+                <div class="action-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Historique
+                </h3>
+
+                <p>
+                    Voir les opérations
+                </p>
+
+            </div>
+
+
+            <div
+                class="action"
+                id="profile"
+            >
+
+                <div class="action-icon">
+                    👤
+                </div>
+
+                <h3>
+                    Mon profil
+                </h3>
+
+                <p>
+                    Mes informations
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             INFORMATIONS
+        ================================================== -->
+
+        <div class="panels">
+
+
+            <!-- PROFIL -->
+
+            <section class="panel">
+
+                <h2>
+                    👤 Mes informations
+                </h2>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Nom complet
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profileName"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Adresse e-mail
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profileEmail"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Téléphone
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="profilePhone"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- HISTORIQUE -->
+
+            <section class="panel">
+
+                <h2>
+                    📊 Dernières opérations
+                </h2>
+
+
+                <div class="empty-history">
+
+                    Aucune transaction enregistrée.
+
+                    <br><br>
+
+                    Les opérations apparaîtront ici
+                    lorsque le module de transactions
+                    sera connecté.
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
+<script type="module">
+
+    import {
+        initializeApp
+    } from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    /* =====================================================
+       CONFIGURATION FIREBASE
+    ===================================================== */
+
+    const firebaseConfig = {
+
+        apiKey:
+            "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
+
+        authDomain:
+            "banque-app-66bf9.firebaseapp.com",
+
+        projectId:
+            "banque-app-66bf9",
+
+        storageBucket:
+            "banque-app-66bf9.firebasestorage.app",
+
+        messagingSenderId:
+            "833823730245",
+
+        appId:
+            "1:833823730245:web:8141ce1171c93040f9912c"
+
+    };
+
+
+    /* =====================================================
+       INITIALISATION
+    ===================================================== */
+
+    const app =
+        initializeApp(firebaseConfig);
+
+    const auth =
+        getAuth(app);
+
+
+    /* =====================================================
+       ÉLÉMENTS
+    ===================================================== */
+
+    const userName =
+        document.getElementById("userName");
+
+    const userAvatar =
+        document.getElementById("userAvatar");
+
+    const profileName =
+        document.getElementById("profileName");
+
+    const profileEmail =
+        document.getElementById("profileEmail");
+
+    const profilePhone =
+        document.getElementById("profilePhone");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    const dashboardMessage =
+        document.getElementById(
+            "dashboardMessage"
         );
 
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function showMessage(message) {
+
+        dashboardMessage.textContent =
+            message;
+
+        dashboardMessage.style.display =
+            "block";
+
+
+        setTimeout(function() {
+
+            dashboardMessage.style.display =
+                "none";
+
+        }, 3500);
+
     }
-);
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTÉ
+    ===================================================== */
+
+    onAuthStateChanged(
+        auth,
+        function(user) {
+
+            if (!user) {
+
+                window.location.href =
+                    "connexion.html";
+
+                return;
+            }
+
+
+            const firebaseName =
+                user.displayName || "";
+
+
+            const localName =
+                localStorage.getItem(
+                    "banqueFacileFullname"
+                ) || "";
+
+
+            const name =
+                firebaseName ||
+                localName ||
+                "Utilisateur";
+
+
+            const email =
+                user.email ||
+                "—";
+
+
+            const phone =
+                localStorage.getItem(
+                    "banqueFacilePhone"
+                ) || "Non renseigné";
+
+
+            userName.textContent =
+                name;
+
+
+            profileName.textContent =
+                name;
+
+
+            profileEmail.textContent =
+                email;
+
+
+            profilePhone.textContent =
+                phone;
+
+
+            userAvatar.textContent =
+                name
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+    );
+
+
+    /* =====================================================
+       DÉCONNEXION
+    ===================================================== */
+
+    logoutButton.addEventListener(
+        "click",
+        async function() {
+
+            const confirmation =
+                confirm(
+                    "Voulez-vous vraiment vous déconnecter ?"
+                );
+
+
+            if (!confirmation) {
+                return;
+            }
+
+
+            try {
+
+                await signOut(auth);
+
+
+                localStorage.removeItem(
+                    "banqueFacileEmail"
+                );
+
+                localStorage.removeItem(
+                    "banqueFacileFullname"
+                );
+
+                localStorage.removeItem(
+                    "banqueFacilePhone"
+                );
+
+
+                window.location.href =
+                    "connexion.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur de déconnexion :",
+                    error
+                );
+
+
+                showMessage(
+                    "❌ Erreur pendant la déconnexion."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ACTIONS
+    ===================================================== */
+
+    function comingSoon(message) {
+
+        showMessage(message);
+
+    }
+
+
+    document
+        .getElementById("sendMoney")
+        .addEventListener(
+            "click",
+            function() {
+
+                comingSoon(
+                    "💸 Le module d'envoi sera ajouté dans la prochaine étape."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("receiveMoney")
+        .addEventListener(
+            "click",
+            function() {
+
+                comingSoon(
+                    "📥 Le module de réception sera ajouté dans la prochaine étape."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("history")
+        .addEventListener(
+            "click",
+            function() {
+
+                comingSoon(
+                    "📊 Le module historique sera ajouté dans la prochaine étape."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("profile")
+        .addEventListener(
+            "click",
+            function() {
+
+                comingSoon(
+                    "👤 Le module profil sera ajouté dans la prochaine étape."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("sendNav")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                comingSoon(
+                    "💸 Le module d'envoi sera ajouté prochainement."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("receiveNav")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                comingSoon(
+                    "📥 Le module de réception sera ajouté prochainement."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("historyNav")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                comingSoon(
+                    "📊 L'historique sera ajouté prochainement."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("profileNav")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                comingSoon(
+                    "👤 Le profil sera ajouté prochainement."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("settingsNav")
+        .addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                comingSoon(
+                    "⚙️ Les paramètres seront ajoutés prochainement."
+                );
+
+            }
+        );
+
+</script>
+
+
+</body>
+</html>
