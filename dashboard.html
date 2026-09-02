@@ -2,7 +2,6 @@
 <html lang="fr">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -28,7 +27,11 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0066cc, #00a8e8);
+            background: linear-gradient(
+                135deg,
+                #0066cc,
+                #00a8e8
+            );
             color: #172033;
         }
 
@@ -607,16 +610,13 @@
 
 <body>
 
-
 <div class="dashboard">
 
-
-    <!-- =====================================================
+    <!-- =========================
          MENU
-    ===================================================== -->
+    ========================= -->
 
     <aside class="sidebar">
-
 
         <div class="logo-container">
 
@@ -645,7 +645,7 @@
 
 
             <a
-                href="#"
+                href="envoyer.html"
                 id="sendNav"
             >
                 <span class="nav-icon">💸</span>
@@ -702,13 +702,11 @@
     </aside>
 
 
-
-    <!-- =====================================================
-         CONTENU PRINCIPAL
-    ===================================================== -->
+    <!-- =========================
+         CONTENU
+    ========================= -->
 
     <main class="main">
-
 
         <!-- HEADER -->
 
@@ -750,10 +748,9 @@
         <div id="dashboardMessage"></div>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              SOLDE
-        ================================================== -->
+        ========================= -->
 
         <section class="balance-card">
 
@@ -778,10 +775,9 @@
         </section>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              ACTIONS RAPIDES
-        ================================================== -->
+        ========================= -->
 
         <h2 class="section-title">
             Actions rapides
@@ -874,15 +870,12 @@
         </div>
 
 
-
-        <!-- =================================================
+        <!-- =========================
              INFORMATIONS
-        ================================================== -->
+        ========================= -->
 
         <div class="panels">
 
-
-            <!-- PROFIL -->
 
             <section class="panel">
 
@@ -942,9 +935,6 @@
             </section>
 
 
-
-            <!-- HISTORIQUE -->
-
             <section class="panel">
 
                 <h2>
@@ -975,16 +965,16 @@
 </div>
 
 
-
-<!-- =====================================================
+<!-- =========================
      FIREBASE
-===================================================== -->
+========================= -->
 
 <script type="module">
 
     import {
         initializeApp
-    } from
+    }
+    from
     "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
@@ -992,13 +982,23 @@
         getAuth,
         onAuthStateChanged,
         signOut
-    } from
+    }
+    from
     "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-    /* =====================================================
+    import {
+        getFirestore,
+        doc,
+        getDoc
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+    /* =========================
        CONFIGURATION FIREBASE
-    ===================================================== */
+    ========================= */
 
     const firebaseConfig = {
 
@@ -1019,13 +1019,12 @@
 
         appId:
             "1:833823730245:web:8141ce1171c93040f9912c"
-
     };
 
 
-    /* =====================================================
+    /* =========================
        INITIALISATION
-    ===================================================== */
+    ========================= */
 
     const app =
         initializeApp(firebaseConfig);
@@ -1033,10 +1032,13 @@
     const auth =
         getAuth(app);
 
+    const db =
+        getFirestore(app);
 
-    /* =====================================================
+
+    /* =========================
        ÉLÉMENTS
-    ===================================================== */
+    ========================= */
 
     const userName =
         document.getElementById("userName");
@@ -1053,18 +1055,19 @@
     const profilePhone =
         document.getElementById("profilePhone");
 
+    const balance =
+        document.getElementById("balance");
+
     const logoutButton =
         document.getElementById("logoutButton");
 
     const dashboardMessage =
-        document.getElementById(
-            "dashboardMessage"
-        );
+        document.getElementById("dashboardMessage");
 
 
-    /* =====================================================
+    /* =========================
        MESSAGE
-    ===================================================== */
+    ========================= */
 
     function showMessage(message) {
 
@@ -1074,8 +1077,7 @@
         dashboardMessage.style.display =
             "block";
 
-
-        setTimeout(function() {
+        setTimeout(function () {
 
             dashboardMessage.style.display =
                 "none";
@@ -1085,13 +1087,13 @@
     }
 
 
-    /* =====================================================
-       UTILISATEUR CONNECTÉ
-    ===================================================== */
+    /* =========================
+       UTILISATEUR
+    ========================= */
 
     onAuthStateChanged(
         auth,
-        function(user) {
+        async function (user) {
 
             if (!user) {
 
@@ -1119,8 +1121,7 @@
 
 
             const email =
-                user.email ||
-                "—";
+                user.email || "—";
 
 
             const phone =
@@ -1132,14 +1133,11 @@
             userName.textContent =
                 name;
 
-
             profileName.textContent =
                 name;
 
-
             profileEmail.textContent =
                 email;
-
 
             profilePhone.textContent =
                 phone;
@@ -1151,17 +1149,74 @@
                     .charAt(0)
                     .toUpperCase();
 
+
+            /* =========================
+               CHARGEMENT DU SOLDE
+            ========================= */
+
+            try {
+
+                const userRef =
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    );
+
+
+                const snapshot =
+                    await getDoc(userRef);
+
+
+                if (snapshot.exists()) {
+
+                    const data =
+                        snapshot.data();
+
+
+                    const userBalance =
+                        Number(
+                            data.solde ??
+                            data.balance ??
+                            0
+                        );
+
+
+                    balance.textContent =
+                        userBalance.toLocaleString(
+                            "fr-FR"
+                        );
+
+                } else {
+
+                    balance.textContent =
+                        "0";
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur chargement solde :",
+                    error
+                );
+
+                balance.textContent =
+                    "0";
+
+            }
+
         }
     );
 
 
-    /* =====================================================
+    /* =========================
        DÉCONNEXION
-    ===================================================== */
+    ========================= */
 
     logoutButton.addEventListener(
         "click",
-        async function() {
+        async function () {
 
             const confirmation =
                 confirm(
@@ -1203,7 +1258,6 @@
                     error
                 );
 
-
                 showMessage(
                     "❌ Erreur pendant la déconnexion."
                 );
@@ -1214,39 +1268,52 @@
     );
 
 
-    /* =====================================================
-       ACTIONS
-    ===================================================== */
-
-    function comingSoon(message) {
-
-        showMessage(message);
-
-    }
-
+    /* =========================
+       ENVOYER
+    ========================= */
 
     document
         .getElementById("sendMoney")
         .addEventListener(
             "click",
-            function() {
+            function () {
 
-                comingSoon(
-                    "💸 Le module d'envoi sera ajouté dans la prochaine étape."
-                );
+                window.location.href =
+                    "envoyer.html";
 
             }
         );
 
 
+    /* =========================
+       MENU ENVOYER
+    ========================= */
+
+    document
+        .getElementById("sendNav")
+        .addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "envoyer.html";
+
+            }
+        );
+
+
+    /* =========================
+       AUTRES MODULES
+    ========================= */
+
     document
         .getElementById("receiveMoney")
         .addEventListener(
             "click",
-            function() {
+            function () {
 
-                comingSoon(
-                    "📥 Le module de réception sera ajouté dans la prochaine étape."
+                showMessage(
+                    "📥 Le module de réception sera ajouté prochainement."
                 );
 
             }
@@ -1257,10 +1324,10 @@
         .getElementById("history")
         .addEventListener(
             "click",
-            function() {
+            function () {
 
-                comingSoon(
-                    "📊 Le module historique sera ajouté dans la prochaine étape."
+                showMessage(
+                    "📊 L'historique sera ajouté prochainement."
                 );
 
             }
@@ -1271,26 +1338,10 @@
         .getElementById("profile")
         .addEventListener(
             "click",
-            function() {
+            function () {
 
-                comingSoon(
-                    "👤 Le module profil sera ajouté dans la prochaine étape."
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById("sendNav")
-        .addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-                comingSoon(
-                    "💸 Le module d'envoi sera ajouté prochainement."
+                showMessage(
+                    "👤 Le module profil sera ajouté prochainement."
                 );
 
             }
@@ -1301,11 +1352,11 @@
         .getElementById("receiveNav")
         .addEventListener(
             "click",
-            function(event) {
+            function (event) {
 
                 event.preventDefault();
 
-                comingSoon(
+                showMessage(
                     "📥 Le module de réception sera ajouté prochainement."
                 );
 
@@ -1317,11 +1368,11 @@
         .getElementById("historyNav")
         .addEventListener(
             "click",
-            function(event) {
+            function (event) {
 
                 event.preventDefault();
 
-                comingSoon(
+                showMessage(
                     "📊 L'historique sera ajouté prochainement."
                 );
 
@@ -1333,11 +1384,11 @@
         .getElementById("profileNav")
         .addEventListener(
             "click",
-            function(event) {
+            function (event) {
 
                 event.preventDefault();
 
-                comingSoon(
+                showMessage(
                     "👤 Le profil sera ajouté prochainement."
                 );
 
@@ -1349,11 +1400,11 @@
         .getElementById("settingsNav")
         .addEventListener(
             "click",
-            function(event) {
+            function (event) {
 
                 event.preventDefault();
 
-                comingSoon(
+                showMessage(
                     "⚙️ Les paramètres seront ajoutés prochainement."
                 );
 
@@ -1362,6 +1413,6 @@
 
 </script>
 
-
 </body>
+
 </html>
