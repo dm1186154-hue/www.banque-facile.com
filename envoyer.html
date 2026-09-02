@@ -1,383 +1,406 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Envoyer de l'argent | Banque Facile</title>
 
-    <meta
-        name="description"
-        content="Envoyez de l'argent rapidement avec Banque Facile."
-    >
-
     <style>
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             min-height: 100vh;
-            background: linear-gradient(135deg, #0066cc, #00a8e8);
-            padding: 30px 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0066cc,
+                    #00a8e8
+                );
+
+            padding: 30px;
+
             color: #172033;
         }
 
+
         .container {
+
             width: 100%;
+
             max-width: 650px;
+
             margin: 0 auto;
         }
 
+
         .card {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.20);
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.15);
         }
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 15px;
-        }
 
         .logo {
-            width: 80px;
-            height: 80px;
+
+            width: 85px;
+
+            height: 85px;
+
             object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto 10px;
         }
 
-        h1 {
+
+        .brand {
+
             text-align: center;
-            color: #0067b9;
-            font-size: 34px;
-            margin-bottom: 8px;
-        }
 
-        .subtitle {
-            text-align: center;
-            color: #64748b;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
+            color: #006dcc;
 
-        .user-box {
-            background: #eff8ff;
-            border: 1px solid #b2ddff;
-            border-radius: 14px;
-            padding: 15px;
+            font-size: 24px;
+
+            font-weight: 800;
+
             margin-bottom: 25px;
         }
 
-        .user-box strong {
-            color: #0067b9;
+
+        h1 {
+
+            text-align: center;
+
+            color: #006dcc;
+
+            margin-bottom: 8px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #64748b;
+
+            margin-bottom: 30px;
         }
+
+
+        .user-box {
+
+            background: #eff8ff;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .user-box strong {
+
+            color: #006dcc;
+        }
+
 
         label {
+
             display: block;
+
+            margin-bottom: 7px;
+
             font-weight: 700;
-            margin-bottom: 8px;
-            color: #172033;
+
+            color: #334155;
         }
+
 
         input,
         textarea {
+
             width: 100%;
-            border: 1px solid #d5dce5;
-            border-radius: 12px;
-            padding: 14px 16px;
-            font-size: 16px;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                #d7dee8;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
             outline: none;
-            transition: 0.2s;
-            background: #fff;
+
+            margin-bottom: 18px;
         }
 
-        input {
-            height: 55px;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
 
         input:focus,
         textarea:focus {
-            border-color: #0074d9;
-            box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.12);
+
+            border-color: #006dcc;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0, 109, 204, 0.10);
         }
 
-        .hint {
-            display: block;
-            margin-top: 6px;
-            color: #64748b;
-            font-size: 13px;
+
+        textarea {
+
+            min-height: 100px;
+
+            resize: vertical;
         }
 
-        .amount-box {
-            position: relative;
-        }
 
-        .amount-box input {
-            padding-right: 75px;
-        }
+        button {
 
-        .currency {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #0067b9;
-            font-weight: 700;
-        }
-
-        #sendButton {
             width: 100%;
-            height: 56px;
+
+            padding: 15px;
+
             border: none;
+
             border-radius: 12px;
-            background: linear-gradient(90deg, #006dcc, #008fe5);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #006dcc,
+                    #008fe5
+                );
+
             color: white;
-            font-size: 17px;
+
+            font-size: 16px;
+
             font-weight: 700;
+
             cursor: pointer;
+
             transition: 0.2s;
-            margin-top: 10px;
         }
 
-        #sendButton:hover {
-            transform: translateY(-1px);
-            opacity: 0.95;
+
+        button:hover {
+
+            opacity: 0.92;
         }
 
-        #sendButton:disabled {
-            opacity: 0.65;
+
+        button:disabled {
+
+            opacity: 0.6;
+
             cursor: not-allowed;
-            transform: none;
         }
 
-        .message {
+
+        #sendMessage {
+
             display: none;
-            margin-top: 18px;
+
             padding: 14px;
+
             border-radius: 10px;
+
+            margin-bottom: 20px;
+
             text-align: center;
-            line-height: 1.4;
+
+            font-weight: 600;
         }
 
-        .message.error {
-            display: block;
-            color: #b42318;
-            background: #fef3f2;
-            border: 1px solid #fecdca;
-        }
-
-        .message.success {
-            display: block;
-            color: #067647;
-            background: #ecfdf3;
-            border: 1px solid #abefc6;
-        }
-
-        .message.loading {
-            display: block;
-            color: #175cd3;
-            background: #eff8ff;
-            border: 1px solid #b2ddff;
-        }
 
         .back {
+
             display: block;
+
             text-align: center;
-            margin-top: 25px;
+
+            margin-top: 20px;
+
             color: #006dcc;
-            font-weight: 700;
+
             text-decoration: none;
+
+            font-weight: 700;
         }
 
+
         .back:hover {
+
             text-decoration: underline;
         }
 
-        .security {
-            margin-top: 25px;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 12px;
-            text-align: center;
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.5;
-        }
 
         @media (max-width: 600px) {
-            .card {
-                padding: 25px 20px;
-                border-radius: 18px;
-            }
-
-            h1 {
-                font-size: 29px;
-            }
 
             body {
+
                 padding: 15px;
             }
+
+
+            .card {
+
+                padding:
+                    25px
+                    20px;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
+
 
     <div class="card">
 
-        <!-- LOGO -->
-        <div class="logo-container">
-            <img
-                class="logo"
-                src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
-                alt="Logo Banque Facile"
-            >
+
+        <img
+            class="logo"
+            src="https://i.postimg.cc/yxKxf5qf/file-000000009b7861f78b615a6a6fe8ae03.png"
+            alt="Logo Banque Facile"
+        >
+
+
+        <div class="brand">
+            Banque Facile
         </div>
 
-        <!-- TITRE -->
-        <h1>💸 Envoyer de l'argent</h1>
+
+        <h1>
+            💸 Envoyer de l'argent
+        </h1>
+
 
         <p class="subtitle">
-            Effectuez un transfert rapidement et simplement
-            avec Banque Facile.
+            Effectuez un transfert depuis votre compte.
         </p>
 
-        <!-- UTILISATEUR CONNECTÉ -->
+
         <div class="user-box">
-            👤 Compte connecté :
-            <strong id="currentUser">Vérification...</strong>
+
+            Compte connecté :
+
+            <strong id="currentUser">
+                Vérification...
+            </strong>
+
         </div>
 
-        <!-- FORMULAIRE -->
-        <form id="sendMoneyForm" novalidate>
 
-            <!-- BENEFICIAIRE -->
-            <div class="form-group">
+        <div id="sendMessage"></div>
 
-                <label for="recipientName">
-                    Nom du bénéficiaire
-                </label>
 
-                <input
-                    type="text"
-                    id="recipientName"
-                    name="recipientName"
-                    placeholder="Exemple : Amadou Traoré"
-                    autocomplete="name"
-                    required
-                >
+        <form id="sendMoneyForm">
 
-            </div>
 
-            <!-- TELEPHONE -->
-            <div class="form-group">
+            <label for="recipientName">
+                Nom du bénéficiaire
+            </label>
 
-                <label for="recipientPhone">
-                    Numéro du bénéficiaire
-                </label>
 
-                <input
-                    type="tel"
-                    id="recipientPhone"
-                    name="recipientPhone"
-                    placeholder="Exemple : 0507192851"
-                    autocomplete="tel"
-                    required
-                >
+            <input
+                type="text"
+                id="recipientName"
+                placeholder="Ex : Jean Kouassi"
+                autocomplete="name"
+                required
+            >
 
-                <span class="hint">
-                    Entrez le numéro associé au compte du bénéficiaire.
-                </span>
 
-            </div>
+            <label for="recipientPhone">
+                Téléphone du bénéficiaire
+            </label>
 
-            <!-- MONTANT -->
-            <div class="form-group">
 
-                <label for="amount">
-                    Montant à envoyer
-                </label>
+            <input
+                type="tel"
+                id="recipientPhone"
+                placeholder="Ex : 0700000000"
+                autocomplete="tel"
+                required
+            >
 
-                <div class="amount-box">
 
-                    <input
-                        type="number"
-                        id="amount"
-                        name="amount"
-                        placeholder="Exemple : 10000"
-                        min="1"
-                        step="1"
-                        required
-                    >
+            <label for="amount">
+                Montant à envoyer
+            </label>
 
-                    <span class="currency">
-                        FCFA
-                    </span>
 
-                </div>
+            <input
+                type="number"
+                id="amount"
+                min="1"
+                step="1"
+                placeholder="Ex : 5000"
+                required
+            >
 
-            </div>
 
-            <!-- MOTIF -->
-            <div class="form-group">
+            <label for="reason">
+                Motif du transfert
+            </label>
 
-                <label for="reason">
-                    Motif du transfert
-                    <span style="font-weight: normal;">
-                        (facultatif)
-                    </span>
-                </label>
 
-                <textarea
-                    id="reason"
-                    name="reason"
-                    placeholder="Exemple : Aide familiale, paiement..."
-                    maxlength="150"
-                ></textarea>
+            <textarea
+                id="reason"
+                placeholder="Ex : Paiement, aide familiale..."
+            ></textarea>
 
-            </div>
 
-            <!-- MESSAGE -->
-            <div
-                id="sendMessage"
-                class="message"
-                role="alert"
-                aria-live="polite"
-            ></div>
-
-            <!-- BOUTON -->
             <button
                 type="submit"
                 id="sendButton"
             >
-                💸 Continuer le transfert
+                💸 Envoyer l'argent
             </button>
+
 
         </form>
 
-        <!-- SECURITE -->
-        <div class="security">
-            🔐 <strong>Transfert sécurisé</strong><br>
-            Vérifiez attentivement les informations du bénéficiaire
-            avant de confirmer l'opération.
-        </div>
 
-        <!-- RETOUR -->
         <a
             href="tableau_de_bord.html"
             class="back"
@@ -385,12 +408,19 @@
             ← Retour au tableau de bord
         </a>
 
+
     </div>
+
 
 </div>
 
-<!-- JAVASCRIPT -->
-<script type="module" src="envoyer.js"></script>
+
+<script
+    type="module"
+    src="envoyer.js"
+></script>
+
 
 </body>
+
 </html>
