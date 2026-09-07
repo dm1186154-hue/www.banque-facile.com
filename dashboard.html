@@ -2,6 +2,7 @@
 <html lang="fr">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -84,19 +85,25 @@
 
         .brand {
             color: #006dcc;
+
             font-size: 21px;
+
             font-weight: 800;
         }
 
         .nav {
             display: flex;
+
             flex-direction: column;
+
             gap: 8px;
         }
 
         .nav a {
             display: flex;
+
             align-items: center;
+
             gap: 12px;
 
             padding: 14px;
@@ -108,6 +115,7 @@
             text-decoration: none;
 
             font-size: 15px;
+
             font-weight: 600;
 
             cursor: pointer;
@@ -117,6 +125,7 @@
 
         .nav a:hover {
             background: #eff8ff;
+
             color: #006dcc;
         }
 
@@ -133,7 +142,9 @@
 
         .nav-icon {
             width: 25px;
+
             text-align: center;
+
             font-size: 20px;
         }
 
@@ -225,6 +236,7 @@
 
         .user-area {
             display: flex;
+
             align-items: center;
         }
 
@@ -246,6 +258,7 @@
             display: flex;
 
             align-items: center;
+
             justify-content: center;
 
             font-size: 20px;
@@ -312,13 +325,13 @@
             width: 240px;
             height: 240px;
 
-            border:
-                35px solid
+            border: 35px solid
                 rgba(255,255,255,0.08);
 
             border-radius: 50%;
 
             right: -90px;
+
             top: -110px;
         }
 
@@ -414,6 +427,18 @@
         }
 
         /* =========================
+           LIEN ACTION ENVOYER
+        ========================= */
+
+        .send-action {
+            text-decoration: none;
+
+            color: inherit;
+
+            display: block;
+        }
+
+        /* =========================
            PANELS
         ========================= */
 
@@ -505,6 +530,7 @@
             .panels {
                 grid-template-columns: 1fr;
             }
+
         }
 
         @media (max-width: 700px) {
@@ -601,6 +627,7 @@
             .action {
                 padding: 18px 8px;
             }
+
         }
 
     </style>
@@ -610,13 +637,16 @@
 
 <body>
 
+
 <div class="dashboard">
 
-    <!-- =========================
+
+    <!-- =====================================================
          MENU
-    ========================= -->
+    ===================================================== -->
 
     <aside class="sidebar">
+
 
         <div class="logo-container">
 
@@ -635,58 +665,102 @@
 
         <nav class="nav">
 
+
+            <!-- TABLEAU DE BORD -->
+
             <a
                 href="tableau_de_bord.html"
                 class="active"
             >
-                <span class="nav-icon">🏠</span>
+
+                <span class="nav-icon">
+                    🏠
+                </span>
+
                 Tableau de bord
+
             </a>
 
+
+            <!-- ENVOYER -->
 
             <a
                 href="envoyer.html"
                 id="sendNav"
             >
-                <span class="nav-icon">💸</span>
+
+                <span class="nav-icon">
+                    💸
+                </span>
+
                 Envoyer
+
             </a>
 
+
+            <!-- RECEVOIR -->
 
             <a
                 href="#"
                 id="receiveNav"
             >
-                <span class="nav-icon">📥</span>
+
+                <span class="nav-icon">
+                    📥
+                </span>
+
                 Recevoir
+
             </a>
 
+
+            <!-- HISTORIQUE -->
 
             <a
                 href="#"
                 id="historyNav"
             >
-                <span class="nav-icon">📊</span>
+
+                <span class="nav-icon">
+                    📊
+                </span>
+
                 Historique
+
             </a>
 
+
+            <!-- PROFIL -->
 
             <a
                 href="#"
                 id="profileNav"
             >
-                <span class="nav-icon">👤</span>
+
+                <span class="nav-icon">
+                    👤
+                </span>
+
                 Mon profil
+
             </a>
 
+
+            <!-- PARAMÈTRES -->
 
             <a
                 href="#"
                 id="settingsNav"
             >
-                <span class="nav-icon">⚙️</span>
+
+                <span class="nav-icon">
+                    ⚙️
+                </span>
+
                 Paramètres
+
             </a>
+
 
         </nav>
 
@@ -694,33 +768,43 @@
         <div class="logout-area">
 
             <button id="logoutButton">
+
                 🚪 Déconnexion
+
             </button>
 
         </div>
 
+
     </aside>
 
 
-    <!-- =========================
-         CONTENU
-    ========================= -->
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ===================================================== -->
 
     <main class="main">
+
 
         <!-- HEADER -->
 
         <header class="topbar">
 
+
             <div class="welcome">
 
                 <h1>
+
                     Bonjour,
+
                     <span id="userName">
                         Utilisateur
                     </span>
+
                     👋
+
                 </h1>
+
 
                 <p>
                     Bienvenue dans votre espace Banque Facile.
@@ -740,6 +824,7 @@
 
             </div>
 
+
         </header>
 
 
@@ -748,15 +833,19 @@
         <div id="dashboardMessage"></div>
 
 
-        <!-- =========================
+        <!-- =================================================
              SOLDE
-        ========================= -->
+        ================================================== -->
 
         <section class="balance-card">
 
+
             <div class="balance-label">
+
                 Solde disponible
+
             </div>
+
 
             <div class="balance">
 
@@ -768,44 +857,60 @@
 
             </div>
 
+
             <div class="status">
+
                 🟢 Compte connecté
+
             </div>
+
 
         </section>
 
 
-        <!-- =========================
+        <!-- =================================================
              ACTIONS RAPIDES
-        ========================= -->
+        ================================================== -->
 
         <h2 class="section-title">
+
             Actions rapides
+
         </h2>
 
 
         <div class="actions">
 
 
-            <div
-                class="action"
+            <!-- =================================================
+                 ENVOYER DE L'ARGENT
+                 REDIRECTION DIRECTE VERS envoyer.html
+            ================================================== -->
+
+            <a
+                class="action send-action"
                 id="sendMoney"
+                href="envoyer.html"
             >
 
                 <div class="action-icon">
                     💸
                 </div>
 
+
                 <h3>
                     Envoyer de l'argent
                 </h3>
+
 
                 <p>
                     Préparer un transfert
                 </p>
 
-            </div>
+            </a>
 
+
+            <!-- RECEVOIR -->
 
             <div
                 class="action"
@@ -816,9 +921,11 @@
                     📥
                 </div>
 
+
                 <h3>
                     Recevoir
                 </h3>
+
 
                 <p>
                     Préparer une réception
@@ -826,6 +933,8 @@
 
             </div>
 
+
+            <!-- HISTORIQUE -->
 
             <div
                 class="action"
@@ -836,9 +945,11 @@
                     📊
                 </div>
 
+
                 <h3>
                     Historique
                 </h3>
+
 
                 <p>
                     Voir les opérations
@@ -846,6 +957,8 @@
 
             </div>
 
+
+            <!-- PROFIL -->
 
             <div
                 class="action"
@@ -856,9 +969,11 @@
                     👤
                 </div>
 
+
                 <h3>
                     Mon profil
                 </h3>
+
 
                 <p>
                     Mes informations
@@ -870,14 +985,17 @@
         </div>
 
 
-        <!-- =========================
+        <!-- =================================================
              INFORMATIONS
-        ========================= -->
+        ================================================== -->
 
         <div class="panels">
 
 
+            <!-- PROFIL -->
+
             <section class="panel">
+
 
                 <h2>
                     👤 Mes informations
@@ -889,6 +1007,7 @@
                     <span class="info-label">
                         Nom complet
                     </span>
+
 
                     <span
                         class="info-value"
@@ -906,6 +1025,7 @@
                         Adresse e-mail
                     </span>
 
+
                     <span
                         class="info-value"
                         id="profileEmail"
@@ -922,6 +1042,7 @@
                         Téléphone
                     </span>
 
+
                     <span
                         class="info-value"
                         id="profilePhone"
@@ -935,7 +1056,10 @@
             </section>
 
 
+            <!-- HISTORIQUE -->
+
             <section class="panel">
+
 
                 <h2>
                     📊 Dernières opérations
@@ -954,6 +1078,7 @@
 
                 </div>
 
+
             </section>
 
 
@@ -962,19 +1087,24 @@
 
     </main>
 
+
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      FIREBASE
-========================= -->
+===================================================== -->
 
 <script type="module">
 
+
+    /* =====================================================
+       IMPORT FIREBASE
+    ===================================================== */
+
     import {
         initializeApp
-    }
-    from
+    } from
     "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
@@ -982,23 +1112,13 @@
         getAuth,
         onAuthStateChanged,
         signOut
-    }
-    from
+    } from
     "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-    import {
-        getFirestore,
-        doc,
-        getDoc
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-    /* =========================
+    /* =====================================================
        CONFIGURATION FIREBASE
-    ========================= */
+    ===================================================== */
 
     const firebaseConfig = {
 
@@ -1019,81 +1139,103 @@
 
         appId:
             "1:833823730245:web:8141ce1171c93040f9912c"
+
     };
 
 
-    /* =========================
+    /* =====================================================
        INITIALISATION
-    ========================= */
+    ===================================================== */
 
     const app =
         initializeApp(firebaseConfig);
 
+
     const auth =
         getAuth(app);
 
-    const db =
-        getFirestore(app);
 
-
-    /* =========================
+    /* =====================================================
        ÉLÉMENTS
-    ========================= */
+    ===================================================== */
 
     const userName =
-        document.getElementById("userName");
+        document.getElementById(
+            "userName"
+        );
+
 
     const userAvatar =
-        document.getElementById("userAvatar");
+        document.getElementById(
+            "userAvatar"
+        );
+
 
     const profileName =
-        document.getElementById("profileName");
+        document.getElementById(
+            "profileName"
+        );
+
 
     const profileEmail =
-        document.getElementById("profileEmail");
+        document.getElementById(
+            "profileEmail"
+        );
+
 
     const profilePhone =
-        document.getElementById("profilePhone");
+        document.getElementById(
+            "profilePhone"
+        );
 
-    const balance =
-        document.getElementById("balance");
 
     const logoutButton =
-        document.getElementById("logoutButton");
+        document.getElementById(
+            "logoutButton"
+        );
+
 
     const dashboardMessage =
-        document.getElementById("dashboardMessage");
+        document.getElementById(
+            "dashboardMessage"
+        );
 
 
-    /* =========================
+    /* =====================================================
        MESSAGE
-    ========================= */
+    ===================================================== */
 
     function showMessage(message) {
 
         dashboardMessage.textContent =
             message;
 
+
         dashboardMessage.style.display =
             "block";
 
-        setTimeout(function () {
 
-            dashboardMessage.style.display =
-                "none";
+        setTimeout(
+            function() {
 
-        }, 3500);
+                dashboardMessage.style.display =
+                    "none";
+
+            },
+            3500
+        );
 
     }
 
 
-    /* =========================
-       UTILISATEUR
-    ========================= */
+    /* =====================================================
+       UTILISATEUR CONNECTÉ
+    ===================================================== */
 
     onAuthStateChanged(
         auth,
-        async function (user) {
+        function(user) {
+
 
             if (!user) {
 
@@ -1101,6 +1243,7 @@
                     "connexion.html";
 
                 return;
+
             }
 
 
@@ -1121,27 +1264,38 @@
 
 
             const email =
-                user.email || "—";
+                user.email ||
+                "—";
 
 
             const phone =
                 localStorage.getItem(
                     "banqueFacilePhone"
-                ) || "Non renseigné";
+                ) ||
+                "Non renseigné";
 
+
+            /* NOM */
 
             userName.textContent =
                 name;
 
+
+            /* PROFIL */
+
             profileName.textContent =
                 name;
+
 
             profileEmail.textContent =
                 email;
 
+
             profilePhone.textContent =
                 phone;
 
+
+            /* AVATAR */
 
             userAvatar.textContent =
                 name
@@ -1150,73 +1304,18 @@
                     .toUpperCase();
 
 
-            /* =========================
-               CHARGEMENT DU SOLDE
-            ========================= */
-
-            try {
-
-                const userRef =
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    );
-
-
-                const snapshot =
-                    await getDoc(userRef);
-
-
-                if (snapshot.exists()) {
-
-                    const data =
-                        snapshot.data();
-
-
-                    const userBalance =
-                        Number(
-                            data.solde ??
-                            data.balance ??
-                            0
-                        );
-
-
-                    balance.textContent =
-                        userBalance.toLocaleString(
-                            "fr-FR"
-                        );
-
-                } else {
-
-                    balance.textContent =
-                        "0";
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Erreur chargement solde :",
-                    error
-                );
-
-                balance.textContent =
-                    "0";
-
-            }
-
         }
     );
 
 
-    /* =========================
+    /* =====================================================
        DÉCONNEXION
-    ========================= */
+    ===================================================== */
 
     logoutButton.addEventListener(
         "click",
-        async function () {
+        async function() {
+
 
             const confirmation =
                 confirm(
@@ -1225,11 +1324,14 @@
 
 
             if (!confirmation) {
+
                 return;
+
             }
 
 
             try {
+
 
                 await signOut(auth);
 
@@ -1238,12 +1340,19 @@
                     "banqueFacileEmail"
                 );
 
+
                 localStorage.removeItem(
                     "banqueFacileFullname"
                 );
 
+
                 localStorage.removeItem(
                     "banqueFacilePhone"
+                );
+
+
+                localStorage.removeItem(
+                    "banqueFacileUid"
                 );
 
 
@@ -1253,10 +1362,12 @@
 
             } catch (error) {
 
+
                 console.error(
                     "Erreur de déconnexion :",
                     error
                 );
+
 
                 showMessage(
                     "❌ Erreur pendant la déconnexion."
@@ -1268,150 +1379,181 @@
     );
 
 
-    /* =========================
-       ENVOYER
-    ========================= */
+    /* =====================================================
+       AUTRES MODULES — TEMPORAIRES
+       
+       IMPORTANT :
+       Aucun événement JavaScript n'est installé
+       sur sendMoney ou sendNav.
+       
+       Envoyer fonctionne directement avec href="envoyer.html".
+    ===================================================== */
 
-    document
-        .getElementById("sendMoney")
-        .addEventListener(
-            "click",
-            function () {
 
-                window.location.href =
-                    "envoyer.html";
-
-            }
+    const receiveMoney =
+        document.getElementById(
+            "receiveMoney"
         );
 
 
-    /* =========================
-       MENU ENVOYER
-    ========================= */
-
-    document
-        .getElementById("sendNav")
-        .addEventListener(
-            "click",
-            function () {
-
-                window.location.href =
-                    "envoyer.html";
-
-            }
+    const history =
+        document.getElementById(
+            "history"
         );
 
 
-    /* =========================
-       AUTRES MODULES
-    ========================= */
-
-    document
-        .getElementById("receiveMoney")
-        .addEventListener(
-            "click",
-            function () {
-
-                showMessage(
-                    "📥 Le module de réception sera ajouté prochainement."
-                );
-
-            }
+    const profile =
+        document.getElementById(
+            "profile"
         );
 
 
-    document
-        .getElementById("history")
-        .addEventListener(
-            "click",
-            function () {
-
-                showMessage(
-                    "📊 L'historique sera ajouté prochainement."
-                );
-
-            }
+    const receiveNav =
+        document.getElementById(
+            "receiveNav"
         );
 
 
-    document
-        .getElementById("profile")
-        .addEventListener(
-            "click",
-            function () {
-
-                showMessage(
-                    "👤 Le module profil sera ajouté prochainement."
-                );
-
-            }
+    const historyNav =
+        document.getElementById(
+            "historyNav"
         );
 
 
-    document
-        .getElementById("receiveNav")
-        .addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                showMessage(
-                    "📥 Le module de réception sera ajouté prochainement."
-                );
-
-            }
+    const profileNav =
+        document.getElementById(
+            "profileNav"
         );
 
 
-    document
-        .getElementById("historyNav")
-        .addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                showMessage(
-                    "📊 L'historique sera ajouté prochainement."
-                );
-
-            }
+    const settingsNav =
+        document.getElementById(
+            "settingsNav"
         );
 
 
-    document
-        .getElementById("profileNav")
-        .addEventListener(
-            "click",
-            function (event) {
+    /* =====================================================
+       RECEVOIR
+    ===================================================== */
 
-                event.preventDefault();
+    receiveMoney.addEventListener(
+        "click",
+        function() {
 
-                showMessage(
-                    "👤 Le profil sera ajouté prochainement."
-                );
+            showMessage(
+                "📥 Le module de réception sera ajouté dans la prochaine étape."
+            );
 
-            }
-        );
+        }
+    );
 
 
-    document
-        .getElementById("settingsNav")
-        .addEventListener(
-            "click",
-            function (event) {
+    /* =====================================================
+       HISTORIQUE
+    ===================================================== */
 
-                event.preventDefault();
+    history.addEventListener(
+        "click",
+        function() {
 
-                showMessage(
-                    "⚙️ Les paramètres seront ajoutés prochainement."
-                );
+            showMessage(
+                "📊 Le module historique sera ajouté dans la prochaine étape."
+            );
 
-            }
-        );
+        }
+    );
+
+
+    /* =====================================================
+       PROFIL
+    ===================================================== */
+
+    profile.addEventListener(
+        "click",
+        function() {
+
+            showMessage(
+                "👤 Le module profil sera ajouté dans la prochaine étape."
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       MENU RECEVOIR
+    ===================================================== */
+
+    receiveNav.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            showMessage(
+                "📥 Le module de réception sera ajouté prochainement."
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       MENU HISTORIQUE
+    ===================================================== */
+
+    historyNav.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            showMessage(
+                "📊 L'historique sera ajouté prochainement."
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       MENU PROFIL
+    ===================================================== */
+
+    profileNav.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            showMessage(
+                "👤 Le profil sera ajouté prochainement."
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       MENU PARAMÈTRES
+    ===================================================== */
+
+    settingsNav.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            showMessage(
+                "⚙️ Les paramètres seront ajoutés prochainement."
+            );
+
+        }
+    );
+
 
 </script>
+
 
 </body>
 
