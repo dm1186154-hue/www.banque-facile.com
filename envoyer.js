@@ -90,14 +90,22 @@ function showMessage(message, success = false) {
 
     sendMessage.style.display = "block";
 
+    sendMessage.style.padding = "12px";
+
+    sendMessage.style.marginBottom = "15px";
+
+    sendMessage.style.borderRadius = "10px";
+
     if (success) {
 
         sendMessage.style.background = "#ecfdf3";
+
         sendMessage.style.color = "#027a48";
 
     } else {
 
         sendMessage.style.background = "#fff1f0";
+
         sendMessage.style.color = "#b42318";
     }
 }
@@ -124,8 +132,9 @@ if (
 
 } else {
 
+
     /* =====================================
-       AUTHENTIFICATION
+       AUTHENTIFICATION FIREBASE
     ===================================== */
 
     onAuthStateChanged(
@@ -141,25 +150,45 @@ if (
                 currentUserElement.textContent =
                     "Non connecté";
 
-                window.location.href =
-                    "connexion.html";
+                showMessage(
+                    "❌ Votre session a expiré. Veuillez vous reconnecter."
+                );
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "connexion.html";
+
+                    },
+                    1500
+                );
 
                 return;
             }
 
+
+            /* ==============================
+               UTILISATEUR TROUVÉ
+            ============================== */
+
             connectedUser = user;
+
 
             currentUserElement.textContent =
                 user.email ||
                 user.displayName ||
                 "Compte connecté";
 
+
             sendButton.disabled = false;
+
 
             console.log(
                 "Utilisateur connecté :",
                 user.uid
             );
+
         }
     );
 
@@ -174,6 +203,7 @@ if (
 
             event.preventDefault();
 
+
             /* =================================
                VÉRIFICATION AUTHENTIFICATION
             ================================= */
@@ -186,6 +216,7 @@ if (
 
                 return;
             }
+
 
             if (!connectedUser) {
 
@@ -215,7 +246,7 @@ if (
 
 
             /* =================================
-               VALIDATION NOM
+               VALIDATION DU NOM
             ================================= */
 
             if (name.length < 2) {
@@ -231,7 +262,7 @@ if (
 
 
             /* =================================
-               VALIDATION TÉLÉPHONE
+               VALIDATION DU TÉLÉPHONE
             ================================= */
 
             const phonePattern =
@@ -250,7 +281,7 @@ if (
 
 
             /* =================================
-               VALIDATION MONTANT
+               VALIDATION DU MONTANT
             ================================= */
 
             if (
@@ -292,6 +323,7 @@ if (
                 " ?"
             );
 
+
             if (!confirmation) {
 
                 return;
@@ -299,7 +331,7 @@ if (
 
 
             /* =================================
-               DÉSACTIVER LE BOUTON
+               CHARGEMENT
             ================================= */
 
             sendButton.disabled = true;
@@ -310,9 +342,10 @@ if (
 
             try {
 
-                /* =============================
-                   RÉFÉRENCE DU COMPTE
-                ============================= */
+
+                /* =================================
+                   RÉFÉRENCE DU COMPTE UTILISATEUR
+                ================================= */
 
                 const userRef =
                     doc(
@@ -322,9 +355,9 @@ if (
                     );
 
 
-                /* =============================
-                   RÉCUPÉRER LE COMPTE
-                ============================= */
+                /* =================================
+                   RÉCUPÉRATION DU COMPTE
+                ================================= */
 
                 const userSnapshot =
                     await getDoc(userRef);
@@ -340,18 +373,217 @@ if (
                 }
 
 
-                /* =============================
+                /* =================================
                    DONNÉES DU COMPTE
-                ============================= */
+                ================================= */
 
                 const userData =
                     userSnapshot.data();
 
 
-                /* =============================
-                   SOLDE ACTUEL
-                ============================= */
+                /* =================================
+                   RÉCUPÉRATION DU SOLDE
+                ================================= */
 
                 const currentBalance =
                     Number(
                         userData.solde ??
+                        userData.balance ??
+                        0
+                    );
+
+
+                /* =================================
+                   VÉRIFICATION DU SOLDE
+                ================================= */
+
+                if (
+                    !Number.isFinite(
+                        currentBalance
+                    )
+                ) {
+
+                    showMessage(
+                        "❌ Le solde de votre compte est invalide."
+                    );
+
+                    return;
+                }
+
+
+                /* =================================
+                   SOLDE INSUFFISANT
+                ================================= */
+
+                if (
+                    currentBalance < money
+                ) {
+
+                    showMessage(
+                        "❌ Solde insuffisant."
+                    );
+
+                    return;
+                }
+
+
+                /* =================================
+                   CALCUL NOUVEAU SOLDE
+                ================================= */
+
+                const newBalance =
+                    currentBalance - money;
+
+
+                /* =================================
+                   MISE À JOUR DU SOLDE
+                ================================= */
+
+                await updateDoc(
+                    userRef,
+                    {
+                        solde: newBalance
+                    }
+                );
+
+
+                /* =================================
+                   ENREGISTREMENT TRANSACTION
+                ================================= */
+
+                await addDoc(
+                    collection(
+                        db,
+                        "transactions"
+                    ),
+                    {
+
+                        userId:
+                            connectedUser.uid,
+
+                        type:
+                            "envoi",
+
+                        beneficiary:
+                            name,
+
+                        beneficiaryPhone:
+                            phone,
+
+                        amount:
+                            money,
+
+                        reason:
+                            transferReason,
+
+                        previousBalance:
+                            currentBalance,
+
+                        newBalance:
+                            newBalance,
+
+                        status:
+                            "completed",
+
+                        createdAt:
+                            serverTimestamp()
+                    }
+                );
+
+
+                /* =================================
+                   MESSAGE DE SUCCÈS
+                ================================= */
+
+                showMessage(
+                    "✅ Transfert enregistré avec succès.",
+                    true
+                );
+
+
+                /* =================================
+                   RÉINITIALISATION FORMULAIRE
+                ================================= */
+
+                form.reset();
+
+
+                /* =================================
+                   RETOUR AU TABLEAU DE BORD
+                ================================= */
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "tableau_de_bord.html";
+
+                    },
+                    2000
+                );
+
+
+            } catch (error) {
+
+
+                /* =================================
+                   GESTION DES ERREURS
+                ================================= */
+
+                console.error(
+                    "Erreur pendant l'envoi :",
+                    error
+                );
+
+
+                let message =
+                    "❌ Une erreur est survenue pendant le transfert.";
+
+
+                if (
+                    error.code ===
+                    "permission-denied"
+                ) {
+
+                    message =
+                        "❌ Permission refusée par Firebase. Vérifiez les règles Firestore.";
+
+                } else if (
+                    error.code ===
+                    "not-found"
+                ) {
+
+                    message =
+                        "❌ Compte bancaire introuvable.";
+
+                } else if (
+                    error.code ===
+                    "failed-precondition"
+                ) {
+
+                    message =
+                        "❌ Firebase nécessite une configuration supplémentaire.";
+
+                }
+
+
+                showMessage(message);
+
+
+            } finally {
+
+
+                /* =================================
+                   RÉACTIVATION DU BOUTON
+                ================================= */
+
+                sendButton.disabled = false;
+
+                sendButton.textContent =
+                    "💸 Envoyer l'argent";
+
+            }
+
+        }
+    );
+}
