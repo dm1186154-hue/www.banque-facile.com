@@ -1,15 +1,11 @@
 import {
     initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
     onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
     getFirestore,
@@ -19,8 +15,7 @@ import {
     addDoc,
     collection,
     serverTimestamp
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 /* =========================================
@@ -28,382 +23,174 @@ import {
 ========================================= */
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
-
-    authDomain:
-        "banque-app-66bf9.firebaseapp.com",
-
-    projectId:
-        "banque-app-66bf9",
-
-    storageBucket:
-        "banque-app-66bf9.firebasestorage.app",
-
-    messagingSenderId:
-        "833823730245",
-
-    appId:
-        "1:833823730245:web:8141ce1171c93040f9912c"
+    apiKey: "AIzaSyCedgq5K2ZR_cvvVnbLvUBKwTjAV_Mnc8U",
+    authDomain: "banque-app-66bf9.firebaseapp.com",
+    projectId: "banque-app-66bf9",
+    storageBucket: "banque-app-66bf9.firebasestorage.app",
+    messagingSenderId: "833823730245",
+    appId: "1:833823730245:web:8141ce1171c93040f9912c"
 };
 
 
 /* =========================================
-   INITIALISATION
+   INITIALISATION FIREBASE
 ========================================= */
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-const auth =
-    getAuth(app);
-
-
-const db =
-    getFirestore(app);
+const db = getFirestore(app);
 
 
 /* =========================================
    ÉLÉMENTS HTML
 ========================================= */
 
-const form =
-    document.getElementById(
-        "sendMoneyForm"
-    );
-
+const form = document.getElementById("sendMoneyForm");
 
 const currentUserElement =
-    document.getElementById(
-        "currentUser"
-    );
-
+    document.getElementById("currentUser");
 
 const recipientName =
-    document.getElementById(
-        "recipientName"
-    );
-
+    document.getElementById("recipientName");
 
 const recipientPhone =
-    document.getElementById(
-        "recipientPhone"
-    );
-
+    document.getElementById("recipientPhone");
 
 const amount =
-    document.getElementById(
-        "amount"
-    );
-
+    document.getElementById("amount");
 
 const reason =
-    document.getElementById(
-        "reason"
-    );
-
+    document.getElementById("reason");
 
 const sendMessage =
-    document.getElementById(
-        "sendMessage"
-    );
-
+    document.getElementById("sendMessage");
 
 const sendButton =
-    document.getElementById(
-        "sendButton"
-    );
-
-
-let connectedUser = null;
-
-
-/* =========================================
-   AFFICHER UN MESSAGE
-========================================= */
-
-function showMessage(
-    message,
-    success = false
-) {
-
-    sendMessage.textContent =
-        message;
-
-
-    sendMessage.style.display =
-        "block";
-
-
-    if (success) {
-
-        sendMessage.style.background =
-            "#ecfdf3";
-
-        sendMessage.style.color =
-            "#027a48";
-
-    } else {
-
-        sendMessage.style.background =
-            "#fff1f0";
-
-        sendMessage.style.color =
-            "#b42318";
-    }
-
-}
+    document.getElementById("sendButton");
 
 
 /* =========================================
    UTILISATEUR CONNECTÉ
 ========================================= */
 
-onAuthStateChanged(
-    auth,
-    function (user) {
+let connectedUser = null;
 
-        if (!user) {
-
-            window.location.href =
-                "connexion.html";
-
-            return;
-        }
-
-
-        connectedUser =
-            user;
-
-
-        currentUserElement.textContent =
-            user.email ||
-            "Compte connecté";
-
-    }
-);
+let authReady = false;
 
 
 /* =========================================
-   FORMULAIRE
+   AFFICHER UN MESSAGE
 ========================================= */
 
-form.addEventListener(
-    "submit",
-    async function (event) {
+function showMessage(message, success = false) {
 
-        event.preventDefault();
+    sendMessage.textContent = message;
 
+    sendMessage.style.display = "block";
 
-        /* =================================
-           VÉRIFICATION CONNEXION
-        ================================= */
+    if (success) {
 
-        if (!connectedUser) {
+        sendMessage.style.background = "#ecfdf3";
+        sendMessage.style.color = "#027a48";
 
-            showMessage(
-                "❌ Aucun utilisateur connecté."
-            );
+    } else {
 
-            return;
-        }
+        sendMessage.style.background = "#fff1f0";
+        sendMessage.style.color = "#b42318";
+    }
+}
 
 
-        /* =================================
-           RÉCUPÉRATION DES DONNÉES
-        ================================= */
+/* =========================================
+   VÉRIFICATION DES ÉLÉMENTS HTML
+========================================= */
 
-        const name =
-            recipientName.value.trim();
+if (
+    !form ||
+    !currentUserElement ||
+    !recipientName ||
+    !recipientPhone ||
+    !amount ||
+    !reason ||
+    !sendMessage ||
+    !sendButton
+) {
 
+    console.error(
+        "Erreur : un ou plusieurs éléments HTML sont introuvables."
+    );
 
-        const phone =
-            recipientPhone.value.trim();
+} else {
 
+    /* =====================================
+       AUTHENTIFICATION
+    ===================================== */
 
-        const money =
-            Number(
-                amount.value
-            );
+    onAuthStateChanged(
+        auth,
+        function (user) {
 
+            authReady = true;
 
-        const transferReason =
-            reason.value.trim();
+            if (!user) {
 
+                connectedUser = null;
 
-        /* =================================
-           VALIDATION NOM
-        ================================= */
+                currentUserElement.textContent =
+                    "Non connecté";
 
-        if (name.length < 2) {
+                window.location.href =
+                    "connexion.html";
 
-            showMessage(
-                "❌ Veuillez saisir le nom du bénéficiaire."
-            );
-
-            recipientName.focus();
-
-            return;
-        }
-
-
-        /* =================================
-           VALIDATION TÉLÉPHONE
-        ================================= */
-
-        const phonePattern =
-            /^[0-9+\s()-]{8,20}$/;
-
-
-        if (!phonePattern.test(phone)) {
-
-            showMessage(
-                "❌ Veuillez saisir un numéro de téléphone valide."
-            );
-
-            recipientPhone.focus();
-
-            return;
-        }
-
-
-        /* =================================
-           VALIDATION MONTANT
-        ================================= */
-
-        if (
-            !Number.isFinite(money) ||
-            money <= 0
-        ) {
-
-            showMessage(
-                "❌ Veuillez saisir un montant valide."
-            );
-
-            amount.focus();
-
-            return;
-        }
-
-
-        if (!Number.isInteger(money)) {
-
-            showMessage(
-                "❌ Le montant doit être un nombre entier."
-            );
-
-            amount.focus();
-
-            return;
-        }
-
-
-        /* =================================
-           CONFIRMATION
-        ================================= */
-
-        const confirmation =
-            confirm(
-                "Confirmer l'envoi de " +
-                money.toLocaleString("fr-FR") +
-                " FCFA à " +
-                name +
-                " ?"
-            );
-
-
-        if (!confirmation) {
-
-            return;
-        }
-
-
-        /* =================================
-           CHARGEMENT
-        ================================= */
-
-        sendButton.disabled =
-            true;
-
-
-        sendButton.textContent =
-            "⏳ Traitement en cours...";
-
-
-        try {
-
-
-            /* =================================
-               RÉFÉRENCE UTILISATEUR
-            ================================= */
-
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    connectedUser.uid
-                );
-
-
-            /* =================================
-               RÉCUPÉRATION DU COMPTE
-            ================================= */
-
-            const userSnapshot =
-                await getDoc(
-                    userRef
-                );
-
-
-            if (!userSnapshot.exists()) {
-
-                throw new Error(
-                    "Compte utilisateur introuvable."
-                );
+                return;
             }
 
+            connectedUser = user;
 
-            const userData =
-                userSnapshot.data();
+            currentUserElement.textContent =
+                user.email ||
+                user.displayName ||
+                "Compte connecté";
+
+            sendButton.disabled = false;
+
+            console.log(
+                "Utilisateur connecté :",
+                user.uid
+            );
+        }
+    );
 
 
-            /* =================================
-               SOLDE ACTUEL
-            ================================= */
+    /* =====================================
+       FORMULAIRE D'ENVOI
+    ===================================== */
 
-            const currentBalance =
-                Number(
-                    userData.solde ??
-                    userData.balance ??
-                    0
-                );
+    form.addEventListener(
+        "submit",
+        async function (event) {
 
-
-            if (
-                !Number.isFinite(
-                    currentBalance
-                )
-            ) {
-
-                throw new Error(
-                    "Solde du compte invalide."
-                );
-            }
-
+            event.preventDefault();
 
             /* =================================
-               VÉRIFICATION SOLDE
+               VÉRIFICATION AUTHENTIFICATION
             ================================= */
 
-            if (
-                currentBalance <
-                money
-            ) {
+            if (!authReady) {
 
                 showMessage(
-                    "❌ Solde insuffisant."
+                    "⏳ Vérification de votre connexion..."
+                );
+
+                return;
+            }
+
+            if (!connectedUser) {
+
+                showMessage(
+                    "❌ Vous devez être connecté pour effectuer un envoi."
                 );
 
                 return;
@@ -411,107 +198,160 @@ form.addEventListener(
 
 
             /* =================================
-               NOUVEAU SOLDE
+               RÉCUPÉRATION DES DONNÉES
             ================================= */
 
-            const newBalance =
-                currentBalance -
-                money;
+            const name =
+                recipientName.value.trim();
+
+            const phone =
+                recipientPhone.value.trim();
+
+            const money =
+                Number(amount.value);
+
+            const transferReason =
+                reason.value.trim();
 
 
             /* =================================
-               MISE À JOUR DU SOLDE
+               VALIDATION NOM
             ================================= */
 
-            await updateDoc(
-                userRef,
-                {
-                    solde:
-                        newBalance
-                }
-            );
+            if (name.length < 2) {
+
+                showMessage(
+                    "❌ Veuillez saisir le nom du bénéficiaire."
+                );
+
+                recipientName.focus();
+
+                return;
+            }
 
 
             /* =================================
-               ENREGISTREMENT TRANSACTION
+               VALIDATION TÉLÉPHONE
             ================================= */
 
-            await addDoc(
-                collection(
-                    db,
-                    "transactions"
-                ),
-                {
+            const phonePattern =
+                /^[0-9+\s()-]{8,20}$/;
 
-                    userId:
-                        connectedUser.uid,
+            if (!phonePattern.test(phone)) {
 
-                    type:
-                        "envoi",
+                showMessage(
+                    "❌ Veuillez saisir un numéro de téléphone valide."
+                );
 
-                    beneficiary:
-                        name,
+                recipientPhone.focus();
 
-                    beneficiaryPhone:
-                        phone,
-
-                    amount:
-                        money,
-
-                    reason:
-                        transferReason,
-
-                    previousBalance:
-                        currentBalance,
-
-                    newBalance:
-                        newBalance,
-
-                    status:
-                        "completed",
-
-                    createdAt:
-                        serverTimestamp()
-                }
-            );
+                return;
+            }
 
 
             /* =================================
-               SUCCÈS
+               VALIDATION MONTANT
             ================================= */
 
-            showMessage(
-                "✅ Transfert enregistré avec succès.",
-                true
+            if (
+                !Number.isFinite(money) ||
+                money <= 0
+            ) {
+
+                showMessage(
+                    "❌ Veuillez saisir un montant valide."
+                );
+
+                amount.focus();
+
+                return;
+            }
+
+
+            if (!Number.isInteger(money)) {
+
+                showMessage(
+                    "❌ Le montant doit être un nombre entier."
+                );
+
+                amount.focus();
+
+                return;
+            }
+
+
+            /* =================================
+               CONFIRMATION
+            ================================= */
+
+            const confirmation = confirm(
+                "Confirmer l'envoi de " +
+                money.toLocaleString("fr-FR") +
+                " FCFA à " +
+                name +
+                " ?"
             );
 
+            if (!confirmation) {
 
-            form.reset();
-
-
-        } catch (error) {
-
-            console.error(
-                "Erreur pendant l'envoi :",
-                error
-            );
+                return;
+            }
 
 
-            showMessage(
-                "❌ Une erreur est survenue pendant le transfert."
-            );
+            /* =================================
+               DÉSACTIVER LE BOUTON
+            ================================= */
 
-
-        } finally {
-
-            sendButton.disabled =
-                false;
-
+            sendButton.disabled = true;
 
             sendButton.textContent =
-                "💸 Envoyer l'argent";
+                "⏳ Traitement en cours...";
 
-        }
 
-    }
-);
+            try {
+
+                /* =============================
+                   RÉFÉRENCE DU COMPTE
+                ============================= */
+
+                const userRef =
+                    doc(
+                        db,
+                        "users",
+                        connectedUser.uid
+                    );
+
+
+                /* =============================
+                   RÉCUPÉRER LE COMPTE
+                ============================= */
+
+                const userSnapshot =
+                    await getDoc(userRef);
+
+
+                if (!userSnapshot.exists()) {
+
+                    showMessage(
+                        "❌ Votre compte bancaire est introuvable."
+                    );
+
+                    return;
+                }
+
+
+                /* =============================
+                   DONNÉES DU COMPTE
+                ============================= */
+
+                const userData =
+                    userSnapshot.data();
+
+
+                /* =============================
+                   SOLDE ACTUEL
+                ============================= */
+
+                const currentBalance =
+                    Number(
+                        userData.solde ??
