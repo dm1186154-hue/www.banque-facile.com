@@ -72,7 +72,7 @@ const sendButton =
 
 
 /* =========================================
-   UTILISATEUR CONNECTÉ
+   VARIABLES
 ========================================= */
 
 let connectedUser = null;
@@ -95,6 +95,8 @@ function showMessage(message, success = false) {
     sendMessage.style.marginBottom = "15px";
 
     sendMessage.style.borderRadius = "10px";
+
+    sendMessage.style.fontWeight = "600";
 
     if (success) {
 
@@ -134,7 +136,7 @@ if (
 
 
     /* =====================================
-       AUTHENTIFICATION FIREBASE
+       AUTHENTIFICATION
     ===================================== */
 
     onAuthStateChanged(
@@ -142,6 +144,11 @@ if (
         function (user) {
 
             authReady = true;
+
+
+            /* =================================
+               AUCUN UTILISATEUR
+            ================================= */
 
             if (!user) {
 
@@ -151,8 +158,9 @@ if (
                     "Non connecté";
 
                 showMessage(
-                    "❌ Votre session a expiré. Veuillez vous reconnecter."
+                    "❌ Votre session n'est pas active."
                 );
+
 
                 setTimeout(
                     function () {
@@ -168,9 +176,9 @@ if (
             }
 
 
-            /* ==============================
-               UTILISATEUR TROUVÉ
-            ============================== */
+            /* =================================
+               UTILISATEUR CONNECTÉ
+            ================================= */
 
             connectedUser = user;
 
@@ -188,13 +196,12 @@ if (
                 "Utilisateur connecté :",
                 user.uid
             );
-
         }
     );
 
 
     /* =====================================
-       FORMULAIRE D'ENVOI
+       FORMULAIRE
     ===================================== */
 
     form.addEventListener(
@@ -205,7 +212,7 @@ if (
 
 
             /* =================================
-               VÉRIFICATION AUTHENTIFICATION
+               VÉRIFICATION AUTH
             ================================= */
 
             if (!authReady) {
@@ -229,7 +236,7 @@ if (
 
 
             /* =================================
-               RÉCUPÉRATION DES DONNÉES
+               RÉCUPÉRATION DES INFORMATIONS
             ================================= */
 
             const name =
@@ -246,7 +253,7 @@ if (
 
 
             /* =================================
-               VALIDATION DU NOM
+               VALIDATION NOM
             ================================= */
 
             if (name.length < 2) {
@@ -262,11 +269,12 @@ if (
 
 
             /* =================================
-               VALIDATION DU TÉLÉPHONE
+               VALIDATION TÉLÉPHONE
             ================================= */
 
             const phonePattern =
                 /^[0-9+\s()-]{8,20}$/;
+
 
             if (!phonePattern.test(phone)) {
 
@@ -281,7 +289,7 @@ if (
 
 
             /* =================================
-               VALIDATION DU MONTANT
+               VALIDATION MONTANT
             ================================= */
 
             if (
@@ -298,6 +306,10 @@ if (
                 return;
             }
 
+
+            /* =================================
+               MONTANT ENTIER
+            ================================= */
 
             if (!Number.isInteger(money)) {
 
@@ -331,7 +343,7 @@ if (
 
 
             /* =================================
-               CHARGEMENT
+               BOUTON CHARGEMENT
             ================================= */
 
             sendButton.disabled = true;
@@ -344,7 +356,7 @@ if (
 
 
                 /* =================================
-                   RÉFÉRENCE DU COMPTE UTILISATEUR
+                   RÉFÉRENCE DU COMPTE
                 ================================= */
 
                 const userRef =
@@ -356,12 +368,22 @@ if (
 
 
                 /* =================================
-                   RÉCUPÉRATION DU COMPTE
+                   RÉCUPÉRER LE COMPTE
                 ================================= */
 
                 const userSnapshot =
                     await getDoc(userRef);
 
+
+                console.log(
+                    "Compte Firestore récupéré :",
+                    userSnapshot.exists()
+                );
+
+
+                /* =================================
+                   COMPTE INTROUVABLE
+                ================================= */
 
                 if (!userSnapshot.exists()) {
 
@@ -381,6 +403,12 @@ if (
                     userSnapshot.data();
 
 
+                console.log(
+                    "Données du compte :",
+                    userData
+                );
+
+
                 /* =================================
                    RÉCUPÉRATION DU SOLDE
                 ================================= */
@@ -393,8 +421,14 @@ if (
                     );
 
 
+                console.log(
+                    "Solde actuel :",
+                    currentBalance
+                );
+
+
                 /* =================================
-                   VÉRIFICATION DU SOLDE
+                   SOLDE INVALIDE
                 ================================= */
 
                 if (
@@ -428,7 +462,7 @@ if (
 
 
                 /* =================================
-                   CALCUL NOUVEAU SOLDE
+                   NOUVEAU SOLDE
                 ================================= */
 
                 const newBalance =
@@ -492,7 +526,7 @@ if (
 
 
                 /* =================================
-                   MESSAGE DE SUCCÈS
+                   SUCCÈS
                 ================================= */
 
                 showMessage(
@@ -502,14 +536,14 @@ if (
 
 
                 /* =================================
-                   RÉINITIALISATION FORMULAIRE
+                   VIDER LE FORMULAIRE
                 ================================= */
 
                 form.reset();
 
 
                 /* =================================
-                   RETOUR AU TABLEAU DE BORD
+                   RETOUR TABLEAU DE BORD
                 ================================= */
 
                 setTimeout(
@@ -527,18 +561,38 @@ if (
 
 
                 /* =================================
-                   GESTION DES ERREURS
+                   AFFICHER L'ERREUR DANS CONSOLE
                 ================================= */
 
                 console.error(
-                    "Erreur pendant l'envoi :",
+                    "Erreur pendant le transfert :",
                     error
                 );
 
 
+                console.error(
+                    "Code Firebase :",
+                    error.code
+                );
+
+
+                console.error(
+                    "Message Firebase :",
+                    error.message
+                );
+
+
+                /* =================================
+                   MESSAGE PAR DÉFAUT
+                ================================= */
+
                 let message =
                     "❌ Une erreur est survenue pendant le transfert.";
 
+
+                /* =================================
+                   PERMISSION FIRESTORE
+                ================================= */
 
                 if (
                     error.code ===
@@ -546,9 +600,16 @@ if (
                 ) {
 
                     message =
-                        "❌ Permission refusée par Firebase. Vérifiez les règles Firestore.";
+                        "❌ Permission refusée par Firebase.";
 
-                } else if (
+                }
+
+
+                /* =================================
+                   DOCUMENT INTROUVABLE
+                ================================= */
+
+                else if (
                     error.code ===
                     "not-found"
                 ) {
@@ -556,7 +617,14 @@ if (
                     message =
                         "❌ Compte bancaire introuvable.";
 
-                } else if (
+                }
+
+
+                /* =================================
+                   FIREBASE NON CONFIGURÉ
+                ================================= */
+
+                else if (
                     error.code ===
                     "failed-precondition"
                 ) {
@@ -567,21 +635,72 @@ if (
                 }
 
 
-                showMessage(message);
+                /* =================================
+                   RÉSEAU
+                ================================= */
+
+                else if (
+                    error.code ===
+                    "unavailable"
+                ) {
+
+                    message =
+                        "❌ Firebase est temporairement indisponible. Vérifiez votre connexion Internet.";
+
+                }
+
+
+                /* =================================
+                   NON AUTORISÉ
+                ================================= */
+
+                else if (
+                    error.code ===
+                    "unauthenticated"
+                ) {
+
+                    message =
+                        "❌ Votre session Firebase n'est plus valide.";
+
+                }
+
+
+                /* =================================
+                   ERREUR FIREBASE GÉNÉRALE
+                ================================= */
+
+                else if (
+                    error.code
+                ) {
+
+                    message =
+                        "❌ Erreur Firebase : " +
+                        error.code;
+                }
+
+
+                /* =================================
+                   AFFICHAGE DU MESSAGE
+                ================================= */
+
+                showMessage(
+                    message +
+                    " Code : " +
+                    (error.code || "inconnu")
+                );
 
 
             } finally {
 
 
                 /* =================================
-                   RÉACTIVATION DU BOUTON
+                   RÉACTIVER LE BOUTON
                 ================================= */
 
                 sendButton.disabled = false;
 
                 sendButton.textContent =
                     "💸 Envoyer l'argent";
-
             }
 
         }
